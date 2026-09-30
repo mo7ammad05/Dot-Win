@@ -1,0 +1,605 @@
+/* ==============================================================
+   Wave Glow Auth Portal
+   ============================================================== */
+
+/* مقيّد بالفورم فقط، حتى ما يأثر على باقي الموقع */
+.cr-auth-switcher,
+.cr-auth-switcher *,
+.cr-auth-switcher *::before,
+.cr-auth-switcher *::after {
+  box-sizing: border-box;
+}
+
+body.auth-page .hidden,
+#cr-auth-modal-root .hidden {
+  display: none !important;
+}
+
+.auth-page {
+  min-width: 320px;
+  margin: 0;
+  background: #faf8f5;
+}
+
+.auth-error {
+  margin: 0 0 10px !important;
+  padding: 9px 11px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fff1f2;
+  color: #be123c;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.optional {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.auth-socials {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  max-width: 285px;
+  margin-top: 12px !important;
+}
+
+.auth-social-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #94a3b8;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.auth-social-divider::before,
+.auth-social-divider::after {
+  height: 1px;
+  flex: 1;
+  background: #e2e8f0;
+  content: "";
+}
+
+.auth-social {
+  min-height: 36px;
+  padding: 7px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #334155;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.auth-social:hover {
+  transform: translateY(-1px);
+  border-color: #94a3b8;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.1);
+}
+
+.auth-social:disabled,
+.cr-auth-submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.auth-google {
+  color: #1e293b;
+}
+
+.auth-google i {
+  color: #c86d51;
+}
+
+.auth-apple {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.is-loading {
+  position: relative;
+}
+
+/* ==============================================================
+   Modal Root
+   ============================================================== */
+#cr-auth-modal-root {
+  padding: 16px !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+}
+
+#cr-auth-modal-root > .cr-auth-switcher {
+  min-height: 0 !important;
+  height: 100%;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+#cr-auth-modal-root .cr-auth-shell {
+  width: min(820px, 100%) !important;
+  height: 490px !important;
+  min-height: 0 !important;
+}
+
+#cr-auth-modal-root .cr-auth-form {
+  height: 100% !important;
+  overflow-y: auto !important;
+  padding: 30px 42px !important;
+  scrollbar-width: thin;
+}
+
+#cr-auth-modal-root .cr-modal-close {
+  z-index: 50 !important;
+}
+
+/* ==============================================================
+   Main Shell
+   ============================================================== */
+.cr-auth-switcher {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background:
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(217, 119, 6, 0.09),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 82% 78%,
+      rgba(200, 109, 81, 0.1),
+      transparent 30%
+    ),
+    #faf8f5;
+  font-family: "Tajawal", "Inter", sans-serif;
+}
+
+.cr-auth-shell {
+  position: relative;
+  width: min(820px, 100%);
+  height: 580px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  border-radius: 16px;
+  box-shadow:
+    0 28px 70px rgba(30, 41, 59, 0.16),
+    0 4px 18px rgba(200, 109, 81, 0.08);
+  direction: ltr;
+}
+
+/* ==============================================================
+   Forms
+   ============================================================== */
+.cr-auth-form {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 42px;
+  color: #111827;
+  transition:
+    opacity 0.42s ease,
+    transform 0.78s cubic-bezier(0.77, 0, 0.18, 1);
+  z-index: 2;
+}
+
+.cr-login-form {
+  left: 0;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.cr-signup-form {
+  right: 0;
+  opacity: 0;
+  transform: translateX(34px);
+  pointer-events: none;
+}
+
+.cr-auth-shell.signup-active .cr-login-form {
+  opacity: 0;
+  transform: translateX(-34px);
+  pointer-events: none;
+}
+
+.cr-auth-shell.signup-active .cr-signup-form {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.cr-form-inner {
+  width: 100%;
+  max-width: 285px;
+  direction: rtl;
+  text-align: right;
+}
+
+.cr-form-inner h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.cr-mini-line {
+  width: 40px;
+  height: 3px;
+  margin: 8px 0 20px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #e5c598, #d97706, #c86d51);
+  box-shadow: 0 0 12px rgba(200, 109, 81, 0.35);
+}
+
+.cr-form-inner > label {
+  display: block;
+  margin: 12px 0 4px;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cr-form-inner input[type="text"],
+.cr-form-inner input[type="email"],
+.cr-form-inner input[type="password"] {
+  width: 100%;
+  height: 38px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid #94a3b8;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  color: #111827;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.cr-form-inner input:focus {
+  border-bottom-color: #c86d51;
+  box-shadow: 0 1px 0 #c86d51;
+}
+
+.cr-form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.cr-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 !important;
+  color: #64748b;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.cr-check input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: #c86d51;
+}
+
+.cr-text-btn {
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.cr-auth-submit {
+  width: 100%;
+  margin-top: 20px;
+  padding: 11px 20px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(100deg, #c86d51, #d97706);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cr-auth-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(200, 109, 81, 0.28);
+}
+
+.cr-form-inner p {
+  margin: 14px 0 0;
+  color: #64748b;
+  font-size: 11px;
+  text-align: center;
+}
+
+.cr-switch-btn {
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+  color: #b45a3e;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* ==============================================================
+   Wave Stage
+   ============================================================== */
+.cr-wave-stage {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  width: 460px;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: center center;
+  transition:
+    right 0.95s cubic-bezier(0.77, 0, 0.18, 1),
+    transform 0.95s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+/* الميديا (فيديو/صورة) مقصوصة بشكل الموجة */
+.cr-wave-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #1e293b 0%,
+    #0f172a 55%,
+    #3b1f17 100%
+  ); /* بديل لو الفيديو ما اشتغل */
+  -webkit-clip-path: url(#crWaveClip);
+  clip-path: url(#crWaveClip);
+}
+
+.cr-wave-media-image,
+.cr-wave-media-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.95s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.cr-wave-media-image[hidden],
+.cr-wave-media-video[hidden] {
+  display: none;
+}
+
+/* الطبقة الملونة + الحافة فوق الميديا */
+.cr-wave-svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+  pointer-events: none;
+}
+
+/* SVG القصّ: موجود بالصفحة لكن غير مرئي (لا تستخدم display:none) */
+.cr-clip-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cr-wave-shape {
+  filter: drop-shadow(-12px 0 22px rgba(0, 0, 0, 0.18));
+}
+
+.cr-wave-edge {
+  opacity: 0.95;
+}
+
+.cr-wave-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: -40px;
+  top: -55px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(217, 119, 6, 0.27),
+    rgba(200, 109, 81, 0.08) 48%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
+/* نصوص الترحيب */
+.cr-panel-content {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  width: 220px;
+  color: #ffffff;
+  direction: rtl;
+  text-align: right;
+  transition: opacity 0.25s ease 0.32s;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45); /* لتبقى النصوص مقروءة فوق الفيديو */
+}
+
+.cr-panel-content h2 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: pre-line;
+}
+
+.cr-panel-content p {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cr-panel-login {
+  right: 42px;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+.cr-panel-signup {
+  left: 225px;
+  width: 200px;
+  transform: translateY(-50%) rotate(180deg);
+  opacity: 0;
+}
+
+/* ==============================================================
+   حالة التبديل (Signup Active)
+   ============================================================== */
+.cr-auth-shell.signup-active .cr-wave-stage {
+  right: calc(100% - 460px) !important;
+  transform: rotate(180deg) !important;
+}
+
+/* نعكس الدوران عشان الفيديو يظل معتدل */
+.cr-auth-shell.signup-active .cr-wave-media-image,
+.cr-auth-shell.signup-active .cr-wave-media-video {
+  transform: rotate(-180deg);
+}
+
+.cr-auth-shell.signup-active .cr-panel-login {
+  opacity: 0;
+}
+
+.cr-auth-shell.signup-active .cr-panel-signup {
+  opacity: 1;
+}
+
+/* ==============================================================
+   Responsive
+   ============================================================== */
+@media (max-width: 800px) {
+  .cr-auth-switcher {
+    min-height: 100svh;
+    padding: 24px 14px;
+  }
+
+  .cr-auth-shell {
+    height: auto;
+    min-height: 0;
+  }
+
+  .cr-wave-stage {
+    display: none !important;
+  }
+
+  .cr-auth-form {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 32px 24px;
+    transform: none !important;
+  }
+
+  .cr-signup-form {
+    display: none;
+  }
+
+  .cr-auth-shell.signup-active .cr-login-form {
+    display: none;
+  }
+
+  .cr-auth-shell.signup-active .cr-signup-form {
+    display: flex;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-socials {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* لمن يفضّل تقليل الحركة: نخفي الفيديو */
+@media (prefers-reduced-motion: reduce) {
+  .cr-wave-media-video {
+    display: none;
+  }
+}
+/* ==============================================================
+   وضع التضمين داخل المودال (iframe)
+   ============================================================== */
+html:has(body.is-embed),
+body.is-embed {
+  height: 100%;
+  background: transparent;
+}
+
+body.is-embed {
+  overflow-x: hidden;
+}
+
+body.is-embed .cr-auth-switcher {
+  min-height: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+}
+
+body.is-embed .cr-auth-shell {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  box-shadow: none; /* الظل بيجي من إطار المودال، وإلا بينقصّ داخل الـ iframe */
+}
+
+@media (max-width: 800px) {
+  body.is-embed .cr-auth-shell {
+    height: auto;
+    min-height: 100%;
+  }
+}

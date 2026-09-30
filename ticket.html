@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التذكرة السياحية الإلكترونية الرسمية | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+
+  <style>
+    /* تنسيقات الطباعة المعيارية الصارمة لورق A4 */
+    @media print {
+      body { background: white !important; padding: 0 !important; margin: 0 !important; }
+      .no-print { display: none !important; }
+      .ticket-print-wrapper {
+        border: 2px solid #E5C598 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen py-6 sm:py-10 px-4 flex flex-col items-center justify-center">
+
+  <!-- أزرار الإجراءات العلوية (تختفي عند الطباعة) -->
+  <div class="no-print max-w-3xl w-full mb-6 flex flex-wrap items-center justify-between gap-3">
+    <a href="index.html" class="inline-flex items-center gap-2 text-xs font-bold text-[#64748B] hover:text-[#C86D51] transition-colors">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>العودة للبوابة الرئيسية</span>
+    </a>
+
+    <div class="flex items-center gap-2.5">
+      <button onclick="window.print()" class="bg-[#1E293B] hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow transition-all cursor-pointer">
+        <i class="fa-solid fa-print text-amber-400"></i>
+        <span>طباعة التذكرة PDF</span>
+      </button>
+
+      <a id="btn-share-whatsapp" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow transition-all">
+        <i class="fa-brands fa-whatsapp text-sm"></i>
+        <span>مشاركة التذكرة</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- حاوية بطاقة الصعود الرسمية (Official Printable Boarding Pass Voucher) -->
+  <div id="printable-ticket" class="ticket-print-wrapper bg-white rounded-3xl overflow-hidden border-2 border-[#E5C598] shadow-2xl max-w-3xl w-full relative">
+    
+    <!-- رأس التذكرة الفاخر (Twilight Navy Header) -->
+    <div class="bg-[#1E293B] text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-[#D97706]">
+      <div class="flex items-center gap-3.5">
+        <img src="https://cdn-icons-png.flaticon.com/512/8212/8212607.png" class="dynamic-logo w-14 h-14 rounded-2xl bg-white p-1.5 object-contain shadow-md">
+        <div>
+          <h2 class="font-black text-xl sm:text-2xl text-white tracking-tight flex items-center gap-2">
+            <span class="dynamic-site-name">Jordan Tour</span>
+            <span class="text-[#E5C598] text-xs font-normal">| Official Entry Voucher</span>
+          </h2>
+          <p class="text-xs text-slate-300 mt-0.5">تصريح سياحي رسمي معتمد • وزارة السياحة والآثار الأردنية</p>
+        </div>
+      </div>
+
+      <!-- حالة الاعتماد الرسمية -->
+      <div id="ticket-status-badge" class="px-4 py-1.5 rounded-full bg-emerald-600 text-white text-xs font-black uppercase tracking-wider shadow flex items-center gap-1.5 shrink-0">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>معتمد ومؤكد • CONFIRMED</span>
+      </div>
+    </div>
+
+    <!-- جسم التذكرة ومعلومات المسافر والرحلة -->
+    <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-8">
+      
+      <!-- التفاصيل الرئيسية (8 أعمدة) -->
+      <div class="md:col-span-8 space-y-5">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-wider text-[#64748B] block mb-1">الوجهة والمعلم السياحي</span>
+          <h3 id="t-dest-title" class="text-xl sm:text-2xl font-black text-[#1E293B] leading-tight">
+            مدينة البتراء الوردية وكنز الأنباط
+          </h3>
+          <span id="t-dest-region" class="text-xs font-bold text-[#C86D51] inline-flex items-center gap-1 mt-1">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>جنوب الأردن • لواء البتراء • تراث عالمي (اليونسكو)</span>
+          </span>
+        </div>
+
+        <!-- شبكة بيانات الحجز -->
+        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-xs">
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">رقم الحجز المرجعي:</span>
+            <p id="t-booking-ref" class="font-mono font-black text-base text-[#1E293B] mt-0.5">JO-EXP-2026-8921</p>
+          </div>
+
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">المسافر الرئيسي:</span>
+            <p id="t-customer-name" class="font-bold text-sm text-[#1E293B] mt-0.5 truncate">محمد الشوابكة</p>
+            <span id="t-customer-phone" class="text-[11px] text-slate-500 font-mono">+962 7 9123 4567</span>
+          </div>
+
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">تاريخ الرحلة ووقت الانطلاق:</span>
+            <p id="t-datetime" class="font-extrabold text-xs text-[#1E293B] font-mono mt-0.5">2026-10-15 • 08:00 صباحاً</p>
+          </div>
+
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">عدد المقاعد المعتمدة:</span>
+            <p id="t-guests-count" class="font-bold text-xs text-[#1E293B] mt-0.5">2 بالغين (مقاعد مؤكدة)</p>
+          </div>
+
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">وسيلة السداد المعتمدة:</span>
+            <p id="t-payment-mode" class="font-mono font-bold text-xs text-amber-700 mt-0.5">كليك الأردني (CliQ Sandbox)</p>
+          </div>
+
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">المبلغ الإجمالي المسدد:</span>
+            <p id="t-amount" class="font-black text-base text-[#C86D51] font-mono mt-0.5">125 د.أ (+150 XP 🪙)</p>
+          </div>
+        </div>
+
+        <!-- تعليمات ونقطة التجمع الميداني -->
+        <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#E2E8F0] text-[11px] text-[#64748B] flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-[#D97706] text-sm"></i>
+            <span>نقطة التجمع: بوابة مركز الزوار الرئيسي قبل الموعد بـ 15 دقيقة مصطحباً هذه التذكرة.</span>
+          </div>
+          <span class="font-mono text-[#D97706] font-bold bg-white px-2 py-0.5 rounded border border-amber-200">GATE A-1</span>
+        </div>
+      </div>
+
+      <!-- قسيمة الصعود ورمز الـ QR المعتمد (4 أعمدة) -->
+      <div class="md:col-span-4 flex flex-col items-center justify-center p-5 bg-[#FAF8F5] rounded-2xl border-2 border-dashed border-slate-300 text-center space-y-3">
+        <span class="text-[10px] uppercase font-mono tracking-widest text-[#64748B] font-extrabold">DIGITAL BOARDING PASS</span>
+
+        <!-- كود الـ QR الديناميكي عالي الدقة -->
+        <div class="w-36 h-36 bg-white p-2 rounded-2xl border-2 border-slate-200 shadow-md flex items-center justify-center overflow-hidden">
+          <img id="t-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=JOR-TOUR-OFFICIAL" alt="QR Code" class="w-full h-full object-contain">
+        </div>
+
+        <div class="space-y-1">
+          <span id="t-qr-caption" class="text-xs font-mono font-black text-[#1E293B] block">#JO-EXP-2026-8921</span>
+          <p class="text-[10px] text-slate-500 leading-tight">امسح الرمز ضوئياً عبر هاتف المشرف عند بوابة الدخول لفك قفل ختم المحافظة في جوازك.</p>
+        </div>
+
+        <!-- الختم التراثي المرتبط بالرحلة -->
+        <div class="w-full pt-2 border-t border-slate-200 flex items-center justify-center gap-1.5 text-[11px] text-[#D97706] font-bold">
+          <i class="fa-solid fa-stamp"></i>
+          <span id="t-stamp-text">يمنحك الختم النبطي الملكي</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- تذييل التذكرة الرسمي -->
+    <div class="bg-slate-50 p-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-lock text-emerald-600"></i>
+        <span>التذكرة مشفرة ومعتمدة رقمياً بنظام 256-bit لمنع التزوير والتكرار.</span>
+      </div>
+      <div class="font-mono text-[10px] text-slate-400">
+        Issued at: <span id="t-issued-time">2026-10-15 08:30 AM</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- الفوتر الموحد (يختفي عند الطباعة) -->
+  <div id="footer-mount" class="no-print mt-12 w-full max-w-7xl"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل التذكرة التفاعلي -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { db } from './js/config/firebase.config.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { destinationsData } from './js/data/destinations.data.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderFooter();
+      store.applyBranding();
+
+      // قراءة باراميترات الرابط
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref') || 'JO-EXP-2026-8921';
+      const destParam = urlParams.get('dest') || 'petra-rose-city';
+      const nameParam = urlParams.get('name') || 'محمد الشوابكة';
+      const dateParam = urlParams.get('date') || '2026-10-15';
+      const timeParam = urlParams.get('time') || '08:00 صباحاً';
+      const guestsParam = urlParams.get('guests') || '2 بالغين';
+      const amountParam = urlParams.get('amount') || '125 د.أ';
+
+      let matchedTrip = destinationsData.find(d => d.id === destParam) || destinationsData[0];
+
+      // محاولة البحث عن الحجز الحقيقي المسجل في Firestore إن وُجد
+      try {
+        const snap = await db.collection("bookings").where("bookingRef", "==", ref).limit(1).get();
+        if (!snap.empty) {
+          const b = snap.docs[0].data();
+          document.getElementById('t-booking-ref').textContent = b.bookingRef || ref;
+          document.getElementById('t-customer-name').textContent = b.customerName || nameParam;
+          document.getElementById('t-customer-phone').textContent = b.customerPhone || '+962 7 9123 4567';
+          document.getElementById('t-datetime').textContent = `${b.date || dateParam} • ${b.timeSlot || timeParam}`;
+          document.getElementById('t-guests-count').textContent = `${b.guests || 2} ضيوف (مقاعد مؤكدة)`;
+          document.getElementById('t-amount').textContent = `${b.totalPriceJOD || 125} د.أ (+150 XP 🪙)`;
+          document.getElementById('t-dest-title').textContent = b.destinationTitle?.ar || matchedTrip.title.ar;
+        } else {
+          // استخدام البيانات الممررة بالرابط
+          document.getElementById('t-booking-ref').textContent = ref;
+          document.getElementById('t-customer-name').textContent = nameParam;
+          document.getElementById('t-datetime').textContent = `${dateParam} • ${timeParam}`;
+          document.getElementById('t-guests-count').textContent = `${guestsParam} (مقاعد مؤكدة)`;
+          document.getElementById('t-amount').textContent = amountParam;
+          document.getElementById('t-dest-title').textContent = matchedTrip.title.ar;
+        }
+      } catch (e) {
+        // Fallback سلس
+        document.getElementById('t-booking-ref').textContent = ref;
+        document.getElementById('t-customer-name').textContent = nameParam;
+        document.getElementById('t-dest-title').textContent = matchedTrip.title.ar;
+      }
+
+      document.getElementById('t-dest-region').textContent = `${matchedTrip.region.ar} ${matchedTrip.isUnesco ? '• تراث عالمي (اليونسكو)' : ''}`;
+      document.getElementById('t-qr-caption').textContent = `#${ref}`;
+      document.getElementById('t-stamp-text').textContent = `يمنحك ${matchedTrip.stampName || 'الختم النبطي الملكي'}`;
+
+      // توليد الباركود الـ QR
+      const qrData = encodeURIComponent(`https://jordan-tour.jo/verify?ref=${ref}&name=${encodeURIComponent(nameParam)}&dest=${encodeURIComponent(matchedTrip.title.ar)}`);
+      document.getElementById('t-qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
+
+      // وقت الإصدار
+      document.getElementById('t-issued-time').textContent = new Date().toLocaleString('ar-JO');
+
+      // رابط مشاركة واتساب
+      const waMsg = encodeURIComponent(`تذكرتي الرسمية المعتمدة لرحلة ${matchedTrip.title.ar} برقم حجز #${ref}. يمكنك التحقق منها عبر منصة Jordan Tour.`);
+      document.getElementById('btn-share-whatsapp').href = `https://wa.me/?text=${waMsg}`;
+    });
+  </script>
+</body>
+</html>

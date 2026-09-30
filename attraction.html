@@ -1,0 +1,654 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل التجربة السياحية | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="w-full pb-24">
+
+    <!-- ================= PART A: مسار التنقل ورأس الصفحة وبانر المكافآت ================= -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6">
+      
+      <!-- فتات الخبز (Breadcrumb) -->
+      <nav class="flex items-center gap-2 text-xs font-medium text-[#64748B] mb-4">
+        <a href="index.html" class="hover:text-[#C86D51] transition-colors">الرئيسية</a>
+        <span>/</span>
+        <a href="explore.html" class="hover:text-[#C86D51] transition-colors">الرحلات</a>
+        <span>/</span>
+        <span id="bc-region" class="text-[#64748B]">جنوب الأردن</span>
+        <span>/</span>
+        <span id="bc-title" class="text-[#1E293B] font-semibold truncate max-w-xs md:max-w-md">مدينة البتراء</span>
+      </nav>
+
+      <!-- العنوان الرئيسي والأزرار التفاعلية -->
+      <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-5">
+        <div class="space-y-3 max-w-4xl">
+          <h1 id="trip-main-title" class="text-2xl sm:text-3xl lg:text-[38px] font-black text-[#1E293B] leading-tight tracking-tight">
+            مدينة البتراء الوردية وكنز الأنباط
+          </h1>
+
+          <!-- سطر البيانات الوصفية -->
+          <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-[#64748B]">
+            <div class="flex items-center gap-1.5 font-bold text-[#1E293B]">
+              <div class="flex text-[#D97706] text-xs">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <span id="trip-rating-val">4.95</span>
+              <span class="text-[#64748B] font-normal underline">(1,420 تقييم)</span>
+            </div>
+
+            <span>•</span>
+            <div class="flex items-center gap-1.5 font-bold text-slate-800">
+              <i class="fa-solid fa-location-dot text-[#C86D51]"></i>
+              <span id="trip-region-val">جنوب الأردن • معان</span>
+            </div>
+
+            <span>•</span>
+            <div class="flex items-center gap-1.5">
+              <i class="fa-regular fa-clock text-[#D97706]"></i>
+              <span id="trip-duration-val">يومان / ليلة واحدة</span>
+            </div>
+
+            <span>•</span>
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-language text-[#1E293B]"></i>
+              <span>العربية، الإنجليزية</span>
+            </div>
+
+            <span id="unesco-pill" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1E293B] text-[#E5C598] text-[11px] font-bold">
+              <i class="fa-solid fa-crown text-amber-400"></i>
+              <span>موقع تراث عالمي (اليونسكو)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- أزرار الإجراءات (المفضلة والمشاركة) -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-toggle-wishlist" class="w-11 h-11 rounded-full flex items-center justify-center bg-white border border-[#E2E8F0] text-[#1E293B] hover:text-[#C86D51] shadow-md transition-all cursor-pointer">
+            <i class="fa-regular fa-heart text-lg" id="heart-icon"></i>
+          </button>
+          <button id="btn-share-trip" class="w-11 h-11 rounded-full bg-white text-[#1E293B] hover:text-[#C86D51] border border-[#E2E8F0] flex items-center justify-center shadow-md transition-all cursor-pointer">
+            <i class="fa-solid fa-share-nodes text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- بانر مكافأة النقاط التفاعلية -->
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#D97706] text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+            🪙
+          </div>
+          <div>
+            <p class="font-extrabold text-sm text-[#1E293B]" id="banner-reward-text">
+              اكسب +150 نقطة استكشاف تضاف تلقائياً عند تسجيل وصولك للجولة!
+            </p>
+            <p class="text-xs text-[#64748B]">تؤهلك النقاط للترقية الفورية إلى المستكشف الفضي والحصول على خصومات حصرية على الحجوزات القادمة.</p>
+          </div>
+        </div>
+
+        <div class="bg-white/90 border border-[#D97706]/40 text-[#D97706] px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs shrink-0">
+          <span>🏆</span>
+          <span id="banner-stamp-name">يفتح ختم "الخزينة الملكي النبطي" في جوازك الرقمي</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= العمودين الرئيسيين: المحتوى (8) + الشريط الجانبي (4) ================= -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- العمود الأيمن: المحتوى التفصيلي الكامل -->
+        <div class="lg:col-span-8 space-y-10">
+
+          <!-- PART B: مشغل الفيديو 4K ومعرض الصور الخمس -->
+          <div class="space-y-4">
+            <div class="relative aspect-video w-full rounded-3xl overflow-hidden shadow-warm border border-[#E2E8F0] bg-black group">
+              <video
+                id="trip-video-player"
+                class="w-full h-full object-cover"
+                poster="https://images.unsplash.com/photo-1579606032822-6b99be7f73db?w=1400"
+                loop
+                muted
+                playsinline
+                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+              ></video>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none"></div>
+
+              <!-- شارات علوية للفيديو -->
+              <div class="absolute top-4 start-4 end-4 flex items-center justify-between z-20">
+                <div class="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold border border-white/20">
+                  <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                  <span>4K CINEMATIC PREVIEW</span>
+                </div>
+                <button id="btn-video-sound" class="w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center border border-white/20 cursor-pointer">
+                  <i class="fa-solid fa-volume-xmark text-xs" id="vid-sound-icon"></i>
+                </button>
+              </div>
+
+              <!-- زر التشغيل / الإيقاف الرئيسي في المنتصف -->
+              <div class="absolute inset-0 flex items-center justify-center z-20">
+                <button id="btn-video-play" class="w-20 h-20 rounded-full bg-[#C86D51]/90 hover:bg-[#C86D51] text-white flex items-center justify-center transition-transform hover:scale-110 shadow-2xl border-2 border-white/40 cursor-pointer">
+                  <i class="fa-solid fa-play text-2xl ms-1" id="vid-play-icon"></i>
+                </button>
+              </div>
+
+              <div class="absolute bottom-4 start-4 end-4 flex items-center justify-between text-white text-xs z-20 pointer-events-none">
+                <span class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 font-semibold">
+                  شاهد أبرز لقطات الجولة في 60 ثانية • Watch 60s Tour Highlights
+                </span>
+                <span class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 font-mono text-[11px]">01:00 / 4K UHD</span>
+              </div>
+            </div>
+
+            <!-- شبكة الصور المصغرة الخمس -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="gallery-thumbs-grid">
+              <!-- تُولّد ديناميكياً -->
+            </div>
+          </div>
+
+          <!-- PART B.5: نبذة الجولة والمزايا -->
+          <div class="bg-white rounded-3xl border border-[#E2E8F0] p-6 sm:p-8 shadow-soft-card space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="text-xl font-extrabold text-[#1E293B] flex items-center gap-2">
+                <i class="fa-solid fa-compass text-[#C86D51]"></i>
+                <span>نبذة وتفاصيل الرحلة التاريخية</span>
+              </h3>
+              <span class="text-xs font-bold text-[#D97706] bg-amber-50 px-3 py-1 rounded-full border border-amber-200">رحلة موثقة ومضمونة</span>
+            </div>
+            <p id="trip-long-desc" class="text-sm sm:text-base text-slate-700 leading-relaxed font-arabic">
+              استكشف السيق التاريخي الضيق الممتد بطول 1.2 كم وصولاً إلى الخزنة المنحوتة بأيدي الأنباط في الصخر الوردي، مع تجربة جولة البتراء ليلاً تحت أضواء 1500 شمعة.
+            </p>
+            <div class="pt-2 flex flex-wrap gap-2" id="trip-highlights-pills"></div>
+          </div>
+
+          <!-- PART C: أبرز معالم ومحطات الجولة الأربعة -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-soft-card space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+              <div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-[#1E293B]">أبرز معالم ومحطات الجولة (Key Landmarks Visited)</h3>
+                <p class="text-xs text-[#64748B] mt-0.5">محطات تاريخية رئيسية تشملها هذه الرحلة بصحبة المرشد السياحي المرخص</p>
+              </div>
+              <span class="text-xs font-bold text-[#C86D51] bg-[#C86D51]/10 px-3 py-1 rounded-full">4 محطات رئيسية</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="landmarks-cards-grid">
+              <!-- تُولّد المحطات الأربعة: السيق، الخزينة، القبور الملكية، الدير -->
+            </div>
+          </div>
+
+          <!-- PART D: الجدول الزمني للرحلة خطوة بخطوة -->
+          <div class="space-y-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#1E293B]">الجدول الزمني للرحلة (خطوة بخطوة)</h3>
+                <p class="text-xs text-[#64748B] mt-1">مخطط متوازن ومدروس يضمن لك أفضل تجربة بعيداً عن أوقات الازدحام</p>
+              </div>
+              <span class="text-xs font-bold text-[#D97706] bg-amber-500/10 px-3 py-1 rounded-full border border-[#D97706]/30">مسار منظم 100%</span>
+            </div>
+
+            <div class="relative ps-6 sm:ps-8 border-s-2 border-[#D97706]/40 space-y-6 ms-3" id="itinerary-timeline-container">
+              <!-- يُولّد الخط الزمني خطوة بخطوة -->
+            </div>
+          </div>
+
+          <!-- PART E: ما تشمله وما لا تشمله الرحلة -->
+          <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-soft-card">
+            <h3 class="text-lg font-extrabold text-[#1E293B] mb-5 pb-3 border-b border-[#E2E8F0]">ما تشمله الرحلة وما لا تشمله</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- المشمول -->
+              <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                  <span>مشمول في الحجز (Included)</span>
+                </h4>
+                <ul class="space-y-2.5 text-xs sm:text-sm text-[#1E293B]" id="included-list"></ul>
+              </div>
+              <!-- غير المشمول -->
+              <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-rose-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-circle-xmark text-rose-500"></i>
+                  <span>غير مشمول (Excluded)</span>
+                </h4>
+                <ul class="space-y-2.5 text-xs sm:text-sm text-[#64748B]" id="excluded-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- PART F: ختم المعلم الأثري وجواز السفر الرقمي -->
+          <div class="bg-[#1E293B] text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border border-slate-700 relative overflow-hidden">
+            <div class="space-y-3 max-w-lg z-10">
+              <span class="inline-block bg-[#D97706] text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                ختم أثري حصري • COLLECTIBLE ARCHEOLOGICAL STAMP
+              </span>
+              <h3 class="text-xl sm:text-2xl font-black text-[#FAF8F5] font-serif" id="stamp-section-title">
+                الختم النبطي الملكي المعتمد
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                إتمام هذا الحجز يمنحك تلقائياً ختماً رسمياً معتمداً في جواز سفرك الأردني الرقمي بالإضافة إلى نقاط استكشاف ترفع رتبتك في لوحة متصدري مستكشفي المملكة.
+              </p>
+              <div class="pt-2 flex items-center gap-3 text-xs text-[#E5C598] font-mono">
+                <span id="stamp-gps">GPS: 30.3285° N, 35.4444° E</span>
+                <span>•</span>
+                <span>TIER: ROYAL GOLD</span>
+              </div>
+            </div>
+
+            <!-- شارة الختم الشمعية التراثية -->
+            <div class="shrink-0 z-10 flex items-center justify-center">
+              <div class="relative w-44 h-44 sm:w-48 sm:h-48 rounded-full border-4 border-dashed border-[#D97706] flex items-center justify-center p-3 bg-gradient-to-br from-[#2A3B53] to-[#1E293B] shadow-2xl group hover:scale-105 transition-transform duration-300 cursor-pointer">
+                <div class="w-full h-full rounded-full border-2 border-[#D97706] flex flex-col items-center justify-center p-2 text-center text-[#D97706] space-y-1">
+                  <span class="text-[10px] font-bold tracking-widest uppercase">KINGDOM OF JORDAN</span>
+                  <i class="fa-solid fa-chess-rook text-3xl my-1"></i>
+                  <div class="font-extrabold text-xs text-[#FAF8F5]">مملكة الأنباط • البتراء</div>
+                  <span class="text-[9px] font-mono text-amber-300">OFFICIAL SEAL 2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PART G: المراجعات والتقييمات وبونص المشاركة -->
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-[#D97706]/15 via-[#C86D51]/15 to-[#D97706]/15 border-2 border-[#D97706]/50 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#D97706] text-white flex items-center justify-center font-bold text-xl shadow">🪙</div>
+                <div>
+                  <h4 class="font-extrabold text-sm sm:text-base text-[#1E293B]">شارك تجربتك بعد الرحلة واكسب +25 نقطة إضافية!</h4>
+                  <p class="text-xs text-[#64748B]">تساعد تقييماتك المسافرين وتضاف نقاط المكافأة فوراً إلى محفظتك لترقية رتبتك.</p>
+                </div>
+              </div>
+              <span class="bg-[#D97706] text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0">+25 PTS</span>
+            </div>
+
+            <!-- بطاقة المراجعات -->
+            <div class="bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-soft-card space-y-4">
+              <h4 class="font-bold text-base text-[#1E293B]">تقييمات المسافرين المعتمدة (حجوزات كليك مؤكدة)</h4>
+              <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E2E8F0] space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-[#C86D51] text-white font-bold text-xs flex items-center justify-center">SZ</div>
+                    <span class="font-bold text-xs">سارة الزعبي • Sarah Z.</span>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ حجز مؤكد عبر كليك</span>
+                  </div>
+                  <div class="text-[#D97706] text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+                <p class="text-xs text-[#1E293B] leading-relaxed">
+                  "رحلة استثنائية لا تُنسى! المرشد أبو صخر كان خبيراً بكل حجر ونقش في السيق، وصعود الدير كان مريحاً مع استراحات الشاي البدوية. الدفع عبر كليك كان فورياً وأصدر التذكرة برمز QR مباشرة."
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= العمود الأيسر: الشريط الجانبي الثابت للحجز (400px Sticky) ================= -->
+        <div class="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+          <div class="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-warm space-y-5">
+            
+            <!-- صف السعر والخصم -->
+            <div class="flex items-baseline justify-between pb-4 border-b border-[#E2E8F0]">
+              <div>
+                <span class="text-xs text-[#64748B] block">السعر ابتداءً من:</span>
+                <div class="flex items-baseline gap-1.5">
+                  <span id="side-price-val" class="text-3xl font-black text-[#1E293B] font-mono">65</span>
+                  <span class="text-sm font-bold text-[#1E293B]">د.أ / شخص</span>
+                </div>
+              </div>
+              <div class="text-end">
+                <span id="side-orig-price" class="text-xs line-through text-[#64748B] font-mono block">80 د.أ</span>
+                <span id="side-discount-badge" class="inline-block bg-[#D97706]/15 text-[#D97706] px-2 py-0.5 rounded-md text-xs font-bold">-18% خصم</span>
+              </div>
+            </div>
+
+            <!-- عداد النقاط المكتسبة -->
+            <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1.5 text-[#D97706] font-bold">
+                <span>🪙</span>
+                <span id="side-xp-earn">تكسب: 300 نقطة لـ 2 مسافرين</span>
+              </div>
+              <span class="text-[10px] bg-amber-200/60 text-amber-900 font-bold px-1.5 py-0.5 rounded">+180 XP</span>
+            </div>
+
+            <!-- تفصيل سعر البالغين والأطفال -->
+            <div class="grid grid-cols-2 gap-2 text-xs bg-[#FAF8F5] p-3 rounded-2xl border border-slate-200">
+              <div>
+                <span class="text-[11px] text-[#64748B] block font-medium">سعر البالغين:</span>
+                <span id="side-adult-price" class="font-mono font-bold text-slate-800 text-sm">65 د.أ</span>
+              </div>
+              <div>
+                <span class="text-[11px] text-[#64748B] block font-medium">سعر الأطفال:</span>
+                <span id="side-child-price" class="font-mono font-bold text-slate-800 text-sm">35 د.أ</span>
+              </div>
+            </div>
+
+            <!-- التواريخ المتوفرة -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-[#1E293B] flex items-center justify-between">
+                <span><i class="fa-regular fa-calendar text-[#C86D51]"></i> التواريخ المتوفرة للرحلة:</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2" id="available-dates-grid"></div>
+            </div>
+
+            <!-- مواعيد الانطلاق المتاحة -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-[#1E293B]">
+                <i class="fa-regular fa-clock text-[#D97706]"></i> ساعات ومواعيد الانطلاق المتاحة:
+              </label>
+              <div class="grid grid-cols-3 gap-2" id="departure-times-grid"></div>
+            </div>
+
+            <!-- عداد المسافرين -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-[#1E293B] flex items-center justify-between">
+                <span><i class="fa-solid fa-users text-[#C86D51]"></i> عدد المسافرين:</span>
+                <span id="guests-indicator" class="text-xs text-[#64748B]">2 ضيوف</span>
+              </label>
+              <div class="flex items-center justify-between bg-[#FAF8F5] border border-[#E2E8F0] rounded-2xl p-2">
+                <button type="button" id="side-minus-guests" class="w-10 h-10 rounded-xl bg-white border border-[#E2E8F0] font-bold text-lg cursor-pointer">-</button>
+                <div class="text-center">
+                  <span id="side-guests-count" class="text-base font-extrabold text-[#1E293B] block">2 بالغين</span>
+                  <span id="side-subtotal-calc" class="text-[10px] text-[#64748B]">65 د.أ × 2</span>
+                </div>
+                <button type="button" id="side-plus-guests" class="w-10 h-10 rounded-xl bg-white border border-[#E2E8F0] font-bold text-lg cursor-pointer">+</button>
+              </div>
+            </div>
+
+            <!-- المجموع الإجمالي الحي -->
+            <div class="pt-3 border-t border-dashed border-[#E2E8F0] flex items-baseline justify-between">
+              <span class="text-xs font-bold text-[#1E293B]">المجموع الإجمالي:</span>
+              <div class="text-end">
+                <span id="side-total-price" class="text-2xl font-black text-[#C86D51] font-mono">130 د.أ</span>
+              </div>
+            </div>
+
+            <!-- زر الحجز الفوري والدفع بكليك -->
+            <button type="button" id="btn-proceed-checkout" class="w-full bg-gradient-to-r from-[#D97706] to-[#C86D51] hover:brightness-110 text-white py-4 rounded-full font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer">
+              <span>احجز الآن واكسب الختم</span>
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <!-- ضمانات الأمان -->
+            <div class="flex items-start gap-2.5 pt-2 text-[11px] text-[#64748B]">
+              <i class="fa-solid fa-shield-check text-emerald-600 text-sm shrink-0 mt-0.5"></i>
+              <span>تأكيد فوري عبر كليك (CliQ) • إلغاء مجاني حتى 48 ساعة قبل موعد الرحلة • منظمون محليون معتمدون.</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- منطق تشغيل صفحة تفاصيل الرحلة -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { destinationsService } from './js/services/destinations.service.js';
+    import { firebaseService } from './js/services/firebase.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("explore");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+      const destinationsData = await destinationsService.getAll();
+      const landmarkSettings = await firebaseService.getSettingsDocument('landmarks_data');
+
+      // جلب معرف الرحلة من الرابط (URL Query)
+      const urlParams = new URLSearchParams(window.location.search);
+      const tripId = urlParams.get('id') || 'petra-rose-city';
+      const trip = destinationsData.find(d => d.id === tripId) || destinationsData[0];
+
+      // تعبئة البيانات الأساسية
+      document.title = `${trip.title.ar} | Jordan Tour`;
+      document.getElementById('trip-main-title').textContent = trip.title.ar;
+      document.getElementById('bc-title').textContent = trip.title.ar;
+      document.getElementById('bc-region').textContent = trip.region.ar;
+      document.getElementById('trip-region-val').textContent = trip.region.ar;
+      document.getElementById('trip-duration-val').textContent = trip.duration.ar;
+      document.getElementById('trip-rating-val').textContent = trip.rating;
+      document.getElementById('trip-long-desc').textContent = trip.description.ar;
+
+      if (!trip.isUnesco) document.getElementById('unesco-pill').classList.add('hidden');
+
+      // الأسعار والخصومات
+      const adultPrice = trip.priceJOD;
+      const childPrice = Number(trip.childPriceJOD) || Math.round(adultPrice * 0.6);
+      const origPrice = trip.originalPriceJOD || Math.round(adultPrice * 1.25);
+      const discount = trip.discountPercent || Math.round(((origPrice - adultPrice) / origPrice) * 100);
+
+      document.getElementById('side-price-val').textContent = adultPrice;
+      document.getElementById('side-adult-price').textContent = `${adultPrice} د.أ`;
+      document.getElementById('side-child-price').textContent = `${childPrice} د.أ`;
+      document.getElementById('side-orig-price').textContent = `${origPrice} د.أ`;
+      document.getElementById('side-discount-badge').textContent = `-${discount}% خصم`;
+
+      // الفيديو والمعرض
+      const videoEl = document.getElementById('trip-video-player');
+      if (trip.videoUrl) videoEl.src = trip.videoUrl;
+      videoEl.poster = trip.imageUrl;
+
+      // معرض الصور المصغرة
+      const gallery = trip.gallery && trip.gallery.length > 0 ? trip.gallery : [
+        { url: trip.imageUrl, title: 'الواجهة الرئيسية' },
+        { url: 'https://images.unsplash.com/photo-1544971587-b842c27f8e14?w=800', title: 'مسار السيق' },
+        { url: 'https://images.unsplash.com/photo-1580834341580-8c17a3a632ec?w=800', title: 'صرح الدير' },
+        { url: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800', title: 'شاي بدوي' },
+        { url: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800', title: 'القبور الملكية' },
+      ];
+      document.getElementById('gallery-thumbs-grid').innerHTML = gallery.map((img, i) => `
+        <div onclick="document.getElementById('trip-video-player').poster='${img.url}'" class="aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer border border-slate-200 hover:border-[#C86D51] transition-all">
+          <img src="${img.url}" class="w-full h-full object-cover">
+        </div>
+      `).join("");
+
+      // المزايا السريعة (Highlights)
+      const highlights = trip.highlights?.ar || ['مرشد سياحي مرخص', 'تذكرة الدخول الرسمية', 'وجبة غداء تراثية', 'تنقلات مريحة ومكيفة'];
+      document.getElementById('trip-highlights-pills').innerHTML = highlights.map(h => `
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">
+          <i class="fa-solid fa-sparkles text-[#D97706]"></i> ${h}
+        </span>
+      `).join("");
+
+      // المحطات الأربعة
+      const managedLandmarks = (landmarkSettings?.list || []).filter(lm => lm.governorateId === trip.governorateId);
+      const landmarks = Array.isArray(trip.landmarks) ? trip.landmarks : managedLandmarks.length > 0 ? managedLandmarks.map(lm => ({ ...lm, image: lm.image || lm.img })) : [
+        { name: 'السيق الصخري', tag: 'الممر الطبيعي', desc: 'ممر صخري طبيعي بطول 1.2 كم يلتوي بين جدران بارتفاع 80 متراً نحو الخزينة.', img: 'https://images.unsplash.com/photo-1544971587-b842c27f8e14?w=600' },
+        { name: 'خزينة الفرعون', tag: 'الواجهة الملكية', desc: 'واجهة هلنستية نبطية أسطورية من القرن الأول الميلادي منحوتة بإتقان في الصخر.', img: 'https://images.unsplash.com/photo-1579606032822-6b99be7f73db?w=600' },
+        { name: 'القبور الملكية', tag: 'صروح الملوك', desc: 'ضريح الجرة والقبر الكورنثي المنحوتان في الجروف الصخرية بألوان معدنية بديعة.', img: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600' },
+        { name: 'صرح الدير الأثري', tag: 'قمة الجبل', desc: 'صرح أثري مهيب في قمة الجبل يمكن الوصول إليه عبر 800 درجة صخرية.', img: 'https://images.unsplash.com/photo-1580834341580-8c17a3a632ec?w=600' },
+      ];
+      document.getElementById('landmarks-cards-grid').innerHTML = landmarks.map((lm, i) => `
+        <div class="bg-[#FAF8F5] rounded-2xl border border-slate-200 p-3.5 space-y-2">
+          <div class="aspect-[4/3] rounded-xl overflow-hidden bg-slate-900">
+            <img src="${lm.img || lm.image}" class="w-full h-full object-cover">
+          </div>
+          <span class="text-[10px] font-mono text-[#D97706] font-bold block">${lm.tag?.ar || lm.tag}</span>
+          <h4 class="font-extrabold text-sm text-[#1E293B]">${lm.name?.ar || lm.name}</h4>
+          <p class="text-xs text-[#64748B] line-clamp-3">${lm.desc?.ar || lm.desc}</p>
+        </div>
+      `).join("");
+
+      // الجدول الزمني
+      const itinerary = trip.itinerary && trip.itinerary.length > 0 ? trip.itinerary : [
+        { time: '07:30 ص', activity: { ar: 'الاستقبال والتجمع' }, description: { ar: 'الالتقاء بالسائق المعتمد وصعود الحافلة المريحة.' } },
+        { time: '08:30 ص', activity: { ar: 'عبور السيق مع المرشد' }, description: { ar: 'جولة مشي وشروحات أثرية حصرية حول قنوات المياه النبطية.' } },
+        { time: '10:00 ص', activity: { ar: 'الوصول للخزينة وجلسة التصوير' }, description: { ar: 'استكشاف باحة الخزينة في أفضل توقيت إضاءة وشرح أسرارها.' } },
+        { time: '01:00 م', activity: { ar: 'وجبة الغداء التراثي (المنسف)' }, description: { ar: 'بوفيه غداء أردني فاخر يضم المنسف البلدي والمقبلات.' } },
+        { time: '03:00 م', activity: { ar: 'صعود درجات الدير البانورامية' }, description: { ar: 'تسلق الدرجات الحجرية نحو دير البتراء وإطلالة وادي عربة.' } },
+        { time: '05:30 م', activity: { ar: 'الشاي البدوي وغروب الشمس' }, description: { ar: 'جلسة عربية حول نار الحطب مع الشاي المعطر قبل العودة.' } }
+      ];
+      document.getElementById('itinerary-timeline-container').innerHTML = itinerary.map((step, i) => `
+        <div class="relative">
+          <div class="absolute -start-[31px] sm:-start-[39px] top-1 w-7 h-7 rounded-full bg-[#D97706] text-white flex items-center justify-center font-bold text-xs border-2 border-white ring-2 ring-[#D97706]/40">
+            ${i + 1}
+          </div>
+          <div class="bg-white rounded-2xl p-4 border border-[#E2E8F0] shadow-2xs">
+            <span class="font-mono text-xs font-bold text-[#C86D51] bg-[#C86D51]/10 px-2.5 py-0.5 rounded-md">${step.time}</span>
+            <h4 class="font-bold text-sm sm:text-base text-[#1E293B] mt-1 mb-0.5">${step.activity.ar}</h4>
+            <p class="text-xs text-[#64748B]">${step.description.ar}</p>
+          </div>
+        </div>
+      `).join("");
+
+      // المشمول وغير المشمول
+      const included = trip.includedServices?.ar || ['تذكرة الدخول الرسمية ومحمية الموقع', 'مرشد سياحي محلي مرخص بالعربية والإنجليزية', 'وجبة غداء تقليدية ساخنة من الأكلات الأردنية', 'نقل حديث ومكيف من وإلى نقطة التجمع'];
+      const excluded = trip.excludedServices?.ar || ['ركوب الخيل أو الجمال أو الدواب الخاصة', 'المشتريات والتذكارات الشخصية', 'إكراميات طاقم الإرشاد والخدمة', 'تأمين السفر الصحي الدولي'];
+
+      document.getElementById('included-list').innerHTML = included.map(srv => `
+        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i><span>${srv}</span></li>
+      `).join("");
+      document.getElementById('excluded-list').innerHTML = excluded.map(srv => `
+        <li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-rose-500 mt-1"></i><span>${srv}</span></li>
+      `).join("");
+
+      // الختم التراثي
+      const stampName = trip.stampName || 'الختم النبطي الملكي';
+      document.getElementById('stamp-section-title').textContent = stampName;
+      document.getElementById('banner-stamp-name').textContent = `يفتح ${stampName} في جوازك الرقمي`;
+
+      // التواريخ المتاحة بالشريط الجانبي
+      const dates = trip.availableDates || ['2026-10-15', '2026-10-22', '2026-10-29', '2026-11-05'];
+      let selectedDate = dates[0];
+      const datesContainer = document.getElementById('available-dates-grid');
+      datesContainer.innerHTML = dates.map((d, i) => `
+        <button type="button" class="side-date-btn ${i === 0 ? 'bg-[#C86D51] text-white border-[#C86D51]' : 'bg-[#FAF8F5] text-slate-700 border-slate-200'} p-2 rounded-xl text-xs font-mono font-bold text-center border cursor-pointer" data-date="${d}">
+          ${d}
+        </button>
+      `).join("");
+
+      datesContainer.querySelectorAll('.side-date-btn').forEach(btn => {
+        btn.onclick = () => {
+          datesContainer.querySelectorAll('.side-date-btn').forEach(b => b.className = 'side-date-btn bg-[#FAF8F5] text-slate-700 border-slate-200 p-2 rounded-xl text-xs font-mono font-bold text-center border cursor-pointer');
+          btn.className = 'side-date-btn bg-[#C86D51] text-white border-[#C86D51] p-2 rounded-xl text-xs font-mono font-bold text-center border cursor-pointer';
+          selectedDate = btn.getAttribute('data-date');
+        };
+      });
+
+      // مواعيد الانطلاق المتاحة
+      const times = trip.departureTimes || ['07:00 ص', '08:30 ص', '01:00 م'];
+      let selectedTime = times[0];
+      const timesContainer = document.getElementById('departure-times-grid');
+      timesContainer.innerHTML = times.map((t, i) => `
+        <button type="button" class="side-time-btn ${i === 0 ? 'bg-[#1E293B] text-white' : 'bg-[#FAF8F5] text-slate-700'} py-2 px-1 text-center rounded-xl text-xs font-bold border border-slate-200 cursor-pointer" data-time="${t}">
+          ${t}
+        </button>
+      `).join("");
+
+      timesContainer.querySelectorAll('.side-time-btn').forEach(btn => {
+        btn.onclick = () => {
+          timesContainer.querySelectorAll('.side-time-btn').forEach(b => b.className = 'side-time-btn bg-[#FAF8F5] text-slate-700 py-2 px-1 text-center rounded-xl text-xs font-bold border border-slate-200 cursor-pointer');
+          btn.className = 'side-time-btn bg-[#1E293B] text-white py-2 px-1 text-center rounded-xl text-xs font-bold border border-slate-200 cursor-pointer';
+          selectedTime = btn.getAttribute('data-time');
+        };
+      });
+
+      // عداد المسافرين وحساب المجموع اللحظي
+      let guestsCount = 2;
+      const guestsCountEl = document.getElementById('side-guests-count');
+      const guestsSubtotalEl = document.getElementById('side-subtotal-calc');
+      const guestsIndicatorEl = document.getElementById('guests-indicator');
+      const sideTotalEl = document.getElementById('side-total-price');
+      const sideXpEarnEl = document.getElementById('side-xp-earn');
+
+      const updatePricing = () => {
+        const total = adultPrice * guestsCount;
+        guestsCountEl.textContent = `${guestsCount} بالغين`;
+        guestsSubtotalEl.textContent = `${adultPrice} د.أ × ${guestsCount}`;
+        guestsIndicatorEl.textContent = `${guestsCount} ضيوف`;
+        sideTotalEl.textContent = `${total} د.أ`;
+        sideXpEarnEl.textContent = `تكسب: ${guestsCount * 150} نقطة لـ ${guestsCount} مسافرين`;
+      };
+
+      document.getElementById('side-plus-guests').onclick = () => {
+        if (guestsCount < 10) guestsCount++;
+        updatePricing();
+      };
+      document.getElementById('side-minus-guests').onclick = () => {
+        if (guestsCount > 1) guestsCount--;
+        updatePricing();
+      };
+
+      // زر الانتقال إلى الدفع عبر كليك (Checkout)
+      document.getElementById('btn-proceed-checkout').onclick = () => {
+        // التحقق من تسجيل الدخول قبل الحجز
+        if (!store.user && !window.JordanFirebase?.auth?.currentUser) {
+          alert('يرجى تسجيل الدخول أو إنشاء حساب أولاً لحفظ الحجز وتثبيت أختام جوازك الرقمي!');
+          window.authModal.show('login');
+          return;
+        }
+        window.location.href = `checkout.html?dest=${trip.id}&date=${selectedDate}&time=${encodeURIComponent(selectedTime)}&guests=${guestsCount}`;
+      };
+
+      // مشغل الفيديو
+      const playBtn = document.getElementById('btn-video-play');
+      const playIcon = document.getElementById('vid-play-icon');
+      playBtn.onclick = () => {
+        if (videoEl.paused) {
+          videoEl.play();
+          playIcon.className = 'fa-solid fa-pause text-2xl';
+        } else {
+          videoEl.pause();
+          playIcon.className = 'fa-solid fa-play text-2xl ms-1';
+        }
+      };
+
+      const soundBtn = document.getElementById('btn-video-sound');
+      const soundIcon = document.getElementById('vid-sound-icon');
+      soundBtn.onclick = () => {
+        videoEl.muted = !videoEl.muted;
+        soundIcon.className = videoEl.muted ? 'fa-solid fa-volume-xmark text-xs' : 'fa-solid fa-volume-high text-xs';
+      };
+
+      // زر المفضلة
+      const heartBtn = document.getElementById('btn-toggle-wishlist');
+      const heartIcon = document.getElementById('heart-icon');
+      heartBtn.onclick = () => {
+        heartIcon.classList.toggle('fa-solid');
+        heartIcon.classList.toggle('fa-regular');
+        heartIcon.classList.toggle('text-rose-600');
+      };
+
+      // زر المشاركة
+      document.getElementById('btn-share-trip').onclick = () => {
+        if (navigator.share) {
+          navigator.share({ title: trip.title.ar, url: window.location.href });
+        } else {
+          navigator.clipboard.writeText(window.location.href);
+          alert('تم نسخ رابط الرحلة إلى الحافظة بنجاح!');
+        }
+      };
+    });
+  </script>
+</body>
+</html>

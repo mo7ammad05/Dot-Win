@@ -1,0 +1,691 @@
+/**
+ * 🇯🇴 منصة مستكشف الأردن | Jordan Explorer
+ * MASTER ARCHITECTURAL CUSTOM STYLESHEET
+ * يضمن ثبات المقاسات والأبعاد 100% والتوافق التام مع محركات المتصفحات
+ */
+
+/* ================= 1. متغيرات الألوان والتصميم ================= */
+:root {
+  --brand-terracotta: #c86d51;
+  --brand-terracotta-dark: #b45a3e;
+  --brand-amber: #d97706;
+  --brand-sand: #e5c598;
+  --brand-navy: #1e293b;
+  --brand-navy-dark: #0f172a;
+  --brand-cream: #faf8f5;
+  --brand-slate: #64748b;
+  --brand-success: #10b981;
+}
+
+/* ================= 2. الخطوط المعيارية ================= */
+.font-arabic {
+  font-family:
+    "Tajawal",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+.font-english {
+  font-family: "Manrope", "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.font-serif-display {
+  font-family: "Fraunces", Georgia, serif;
+}
+
+/* ================= 3. تثبيت مقاسات الصور والأبعاد (Aspect Ratios) ================= */
+#navbar-mount,
+#navbar-mount > * {
+  display: block !important;
+  visibility: visible !important;
+}
+
+#navbar-mount {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+#navbar-mount nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  flex: 1 1 auto !important;
+}
+
+#navbar-mount nav a {
+  white-space: nowrap !important;
+}
+
+@media (max-width: 1023px) {
+  #navbar-mount nav {
+    display: none !important;
+  }
+
+  #mobile-menu-drawer {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #mobile-menu-drawer {
+    display: none !important;
+  }
+}
+
+.aspect-4\/3,
+.aspect-\[4\/3\],
+[class*="aspect-4/3"],
+[class*="aspect-[4/3]"] {
+  aspect-ratio: 4 / 3 !important;
+}
+.aspect-3\/4,
+.aspect-\[3\/4\],
+[class*="aspect-3/4"],
+[class*="aspect-[3/4]"] {
+  aspect-ratio: 3 / 4 !important;
+}
+.aspect-16\/9,
+.aspect-video {
+  aspect-ratio: 16 / 9 !important;
+}
+.aspect-square {
+  aspect-ratio: 1 / 1 !important;
+}
+
+/* ================= 4. تدرجات الألوان الفاخرة وخلفية الهيرو ================= */
+.bg-sunset {
+  background: linear-gradient(135deg, #d97706 0%, #c86d51 100%) !important;
+}
+
+.bg-hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(30, 41, 59, 0.55) 0%,
+    rgba(30, 41, 59, 0.2) 40%,
+    rgba(30, 41, 59, 0.85) 100%
+  ) !important;
+}
+
+/* ضمان عمل التدرجات في جميع المتصفحات */
+.bg-linear-to-r,
+.bg-gradient-to-r {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+.bg-linear-to-l,
+.bg-gradient-to-l {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+.bg-linear-to-t,
+.bg-gradient-to-t {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+.bg-linear-to-b,
+.bg-gradient-to-b {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+.bg-linear-to-tr,
+.bg-gradient-to-tr {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+.bg-linear-to-br,
+.bg-gradient-to-br {
+  background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+}
+
+/* بطاقات وتأثيرات فاخرة */
+.luxury-passport-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2a3b53 100%);
+  border: 1px solid rgba(229, 197, 152, 0.35);
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.3);
+}
+
+.luxury-gold-border {
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 8px 30px rgba(217, 119, 6, 0.12);
+}
+
+.shadow-soft-card {
+  box-shadow: 0px 4px 20px rgba(30, 41, 59, 0.06);
+}
+.shadow-warm {
+  box-shadow: 0px 20px 50px -20px rgba(200, 109, 81, 0.4);
+}
+.shadow-floating-modal {
+  box-shadow: 0px 12px 32px rgba(30, 41, 59, 0.15);
+}
+
+/* ================= 5. نافذة المصادقة الموجية ================= */
+.cr-auth-overlay {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.13), transparent 34%),
+    rgba(15, 23, 42, 0.86) !important;
+}
+
+.cr-auth-shell {
+  width: min(860px, 100%);
+  height: min(620px, calc(100vh - 32px));
+  min-height: 520px;
+  max-height: calc(100vh - 32px);
+  direction: rtl;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.88fr);
+  background: var(--brand-cream) !important;
+  border: 1px solid rgba(229, 197, 152, 0.45) !important;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.55), 0 0 35px rgba(200, 109, 81, 0.12) !important;
+}
+
+.cr-auth-forms-column {
+  position: relative;
+  z-index: 2;
+  width: auto !important;
+  grid-column: 1;
+  grid-row: 1;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  align-items: center;
+  justify-content: flex-start !important;
+  box-sizing: border-box;
+  background: rgba(250, 248, 245, 0.96);
+}
+
+.cr-auth-form {
+  width: 100%;
+  max-width: 330px;
+  margin: auto;
+  flex: 0 0 auto;
+  color: var(--brand-navy);
+}
+
+.cr-auth-form h2 {
+  color: var(--brand-navy) !important;
+  font-size: 30px !important;
+  line-height: 1.15;
+}
+
+.cr-auth-form > div:first-child > div {
+  background: linear-gradient(90deg, var(--brand-amber), var(--brand-terracotta)) !important;
+}
+
+.cr-auth-form input:not([type="checkbox"]) {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cr-auth-form input:not([type="checkbox"]):focus {
+  border-color: var(--brand-terracotta) !important;
+  box-shadow: 0 0 0 3px rgba(200, 109, 81, 0.12);
+}
+
+.cr-auth-form button[type="submit"] {
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-terracotta)) !important;
+  border-radius: 999px !important;
+}
+
+.cr-wave-stage {
+  position: relative !important;
+  z-index: 5;
+  top: auto;
+  right: auto;
+  grid-column: 2;
+  grid-row: 1;
+  width: auto !important;
+  height: 100%;
+  min-height: 100%;
+  padding: 38px !important;
+  background: var(--brand-navy) !important;
+  transform: none !important;
+  border-radius: 0 28px 28px 0;
+  overflow: hidden;
+}
+
+.cr-wave-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  pointer-events: none;
+}
+
+.cr-wave-shape {
+  filter: drop-shadow(-12px 0 22px rgba(15, 23, 42, 0.25));
+}
+
+.cr-wave-edge {
+  opacity: 0.95;
+}
+
+.cr-wave-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: -35px;
+  top: -45px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 197, 152, 0.25), rgba(200, 109, 81, 0.08) 48%, transparent 72%);
+  pointer-events: none;
+}
+
+.cr-wave-stage > img,
+.cr-wave-stage > .absolute.inset-0 {
+  display: block !important;
+}
+
+.cr-panel-content {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  width: 220px;
+  color: white;
+  display: none;
+}
+
+.cr-panel-content h3 {
+  margin: 10px 0 12px;
+  color: white;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.cr-panel-content p {
+  margin: 0;
+  color: #d6dee9;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.cr-panel-login {
+  right: 44px;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+.cr-panel-signup {
+  left: 150px;
+  transform: translateY(-50%) rotate(180deg);
+  opacity: 0;
+}
+
+.cr-auth-shell.signup-active .cr-wave-stage {
+  background: var(--brand-navy) !important;
+}
+
+.cr-auth-shell.signup-active .cr-panel-login {
+  opacity: 0;
+}
+
+.cr-auth-shell.signup-active .cr-panel-signup {
+  opacity: 1;
+}
+
+.cr-wave-legacy-content {
+  display: block !important;
+}
+
+@media (max-width: 700px) {
+  .cr-auth-shell {
+    height: min(720px, calc(100vh - 24px));
+    min-height: 0;
+    max-height: calc(100vh - 24px);
+    display: grid !important;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .cr-auth-forms-column {
+    width: 100% !important;
+    grid-column: 1;
+    grid-row: 1;
+    height: 100%;
+    min-height: 0;
+    padding: 30px 22px !important;
+  }
+
+  .cr-wave-stage {
+    display: block;
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 150px;
+    height: 150px;
+    padding: 22px !important;
+    border-radius: 0 0 28px 28px;
+  }
+
+  .cr-wave-stage .cr-wave-legacy-content {
+    display: none !important;
+  }
+}
+
+/* ================= 7. تخطيط المصادقة الموجي المطابق للنموذج المرجعي ================= */
+.cr-auth-switcher {
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: transparent;
+  font-family: "Tajawal", sans-serif;
+}
+
+.cr-auth-shell {
+  position: relative;
+  display: block !important;
+  width: min(820px, 100%) !important;
+  height: 470px !important;
+  min-height: 470px !important;
+  max-height: none;
+  overflow: hidden;
+  background: var(--brand-cream) !important;
+  border: 1px solid rgba(229, 197, 152, 0.45) !important;
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.55), 0 0 35px rgba(200, 109, 81, 0.12) !important;
+}
+
+.cr-auth-forms-column {
+  display: contents !important;
+}
+
+.cr-auth-form {
+  position: absolute;
+  top: 0;
+  width: 50% !important;
+  height: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 42px 44px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  direction: rtl;
+  color: var(--brand-navy);
+  transition: opacity 0.42s ease, transform 0.78s cubic-bezier(0.77, 0, 0.18, 1);
+  box-sizing: border-box;
+}
+
+.cr-auth-form.hidden {
+  display: none !important;
+}
+
+.cr-login-form {
+  left: 0;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.cr-signup-form {
+  right: 0;
+  opacity: 0;
+  transform: translateX(34px);
+  pointer-events: none;
+}
+
+.cr-auth-shell.signup-active .cr-login-form {
+  opacity: 0;
+  transform: translateX(-34px);
+  pointer-events: none;
+}
+
+.cr-auth-shell.signup-active .cr-signup-form {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.cr-auth-form > * {
+  width: 100%;
+  max-width: 285px;
+  flex: 0 0 auto;
+  margin-top: 0 !important;
+}
+
+.cr-auth-form > div:first-child {
+  margin-bottom: 8px;
+}
+
+.cr-auth-form h2 {
+  margin: 0;
+  color: var(--brand-navy) !important;
+  font-size: 30px !important;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.cr-auth-form > div:first-child > div {
+  width: 40px !important;
+  height: 3px !important;
+  margin: 10px 0 18px !important;
+  border-radius: 20px;
+  background: linear-gradient(90deg, var(--brand-amber), var(--brand-terracotta)) !important;
+  box-shadow: 0 0 12px rgba(200, 109, 81, 0.25);
+}
+
+.cr-auth-form form {
+  margin-top: 4px;
+}
+
+.cr-auth-form label {
+  color: #475569;
+}
+
+.cr-auth-form input:not([type="checkbox"]) {
+  min-height: 40px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cr-auth-form input:not([type="checkbox"]):focus {
+  border-color: var(--brand-terracotta) !important;
+  box-shadow: 0 0 0 3px rgba(200, 109, 81, 0.12);
+}
+
+.cr-auth-form button[type="submit"] {
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-terracotta)) !important;
+  border-radius: 999px !important;
+}
+
+.cr-wave-stage {
+  position: absolute !important;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  width: 460px !important;
+  height: 470px !important;
+  min-height: 470px;
+  padding: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  transform-origin: center center;
+  transition: right 0.95s cubic-bezier(0.77, 0, 0.18, 1), transform 0.95s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.cr-wave-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block !important;
+  pointer-events: none;
+}
+
+.cr-wave-stage > img,
+.cr-wave-stage > .absolute.inset-0,
+.cr-wave-legacy-content {
+  display: none !important;
+}
+
+.cr-panel-content {
+  display: block !important;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  width: 220px;
+  color: #fff;
+  direction: rtl;
+  transition: opacity 0.25s ease 0.32s;
+}
+
+.cr-panel-content h3 {
+  margin: 10px 0 14px;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.cr-panel-content p {
+  margin: 0;
+  color: #d6dee9;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.cr-panel-login {
+  right: 42px;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+.cr-panel-signup {
+  left: 42px;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.cr-auth-shell.signup-active .cr-wave-stage {
+  right: 360px;
+  transform: none;
+}
+
+.cr-auth-shell.signup-active .cr-panel-login {
+  opacity: 0;
+}
+
+.cr-auth-shell.signup-active .cr-panel-signup {
+  opacity: 1;
+}
+
+@media (max-width: 700px) {
+  .cr-auth-switcher {
+    padding: 8px;
+  }
+
+  .cr-auth-shell {
+    width: 100%;
+    height: min(720px, calc(100vh - 16px)) !important;
+    min-height: 0;
+    max-height: calc(100vh - 16px);
+  }
+
+  .cr-auth-form {
+    position: relative;
+    left: auto;
+    right: auto;
+    width: 100% !important;
+    height: 100%;
+    min-height: 0;
+    padding: 34px 22px;
+    transform: none;
+  }
+
+  .cr-signup-form {
+    display: none;
+  }
+
+  .cr-auth-shell.signup-active .cr-login-form {
+    display: none;
+  }
+
+  .cr-auth-shell.signup-active .cr-signup-form {
+    display: flex;
+  }
+
+  .cr-wave-stage {
+    display: none;
+  }
+}
+
+/* ================= 6. شريط التمرير التراثي ================= */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #faf8f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5c598;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c86d51;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#mobile-filters-content > aside.mobile-filter-sidebar {
+  display: block !important;
+  position: static !important;
+  top: auto !important;
+  width: 100% !important;
+  max-height: none !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ================= 6. محرك الطباعة A4 ================= */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #1e293b !important;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-ticket,
+  #printable-ticket *,
+  #printable-voucher,
+  #printable-voucher * {
+    visibility: visible !important;
+  }
+  #printable-ticket,
+  #printable-voucher {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 2px solid #e5c598 !important;
+    border-radius: 20px !important;
+  }
+  header,
+  footer,
+  nav,
+  button,
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
+}

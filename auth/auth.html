@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول | Jordan Tour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./auth.css">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="auth-page">
+  <main class="cr-auth-switcher" aria-label="المصادقة">
+    <section class="cr-auth-shell" id="cr-auth-shell">
+      <form class="cr-auth-form cr-login-form" id="login-form">
+        <div class="cr-form-inner">
+          <h2>تسجيل الدخول</h2><div class="cr-mini-line"></div>
+          <p class="auth-error hidden" id="login-error" aria-live="polite"></p>
+          <label for="login-email">البريد الإلكتروني</label>
+          <input id="login-email" name="email" type="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" required>
+          <label for="login-password">كلمة المرور</label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="أدخل كلمة المرور" required>
+          <div class="cr-form-options"><label class="cr-check"><input id="remember-me" type="checkbox" checked><span>تذكرني</span></label><button type="button" class="cr-text-btn" id="forgot-password">نسيت كلمة المرور؟</button></div>
+          <button type="submit" class="cr-auth-submit">تسجيل الدخول</button>
+          <div class="auth-social-divider"><span>أو تابع باستخدام</span></div>
+          <div class="auth-socials"><button type="button" class="auth-social auth-google" id="google-login"><i class="fa-brands fa-google"></i> الدخول عبر Google</button><button type="button" class="auth-social auth-apple" id="apple-login"><i class="fa-brands fa-apple"></i> الدخول عبر Apple</button></div>
+          <p>ليس لديك حساب؟ <button type="button" class="cr-switch-btn" data-target="signup">إنشاء حساب</button></p>
+        </div>
+      </form>
+
+      <form class="cr-auth-form cr-signup-form" id="signup-form">
+        <div class="cr-form-inner">
+          <h2>إنشاء حساب</h2><div class="cr-mini-line"></div>
+          <p class="auth-error hidden" id="signup-error" aria-live="polite"></p>
+          <label for="signup-name">الاسم الكامل</label>
+          <input id="signup-name" name="name" type="text" autocomplete="name" placeholder="أدخل اسمك الكامل" required>
+          <label for="signup-email">البريد الإلكتروني</label>
+          <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" required>
+          <label for="signup-password">كلمة المرور</label>
+          <input id="signup-password" name="password" type="password" autocomplete="new-password" minlength="6" placeholder="أنشئ كلمة مرور قوية" required>
+          <label for="signup-referral">كود الإحالة <span class="optional">اختياري</span></label>
+          <input id="signup-referral" type="text" placeholder="مثال: SH3SHER2026">
+          <button type="submit" class="cr-auth-submit">إنشاء الحساب</button>
+          <div class="auth-social-divider"><span>أو أنشئ حسابك باستخدام</span></div>
+          <div class="auth-socials"><button type="button" class="auth-social auth-google" id="google-signup"><i class="fa-brands fa-google"></i> التسجيل عبر Google</button><button type="button" class="auth-social auth-apple" id="apple-signup"><i class="fa-brands fa-apple"></i> التسجيل عبر Apple</button></div>
+          <p>لديك حساب بالفعل؟ <button type="button" class="cr-switch-btn" data-target="login">تسجيل الدخول</button></p>
+        </div>
+      </form>
+
+      <div class="cr-wave-stage" aria-hidden="true">
+
+        <!-- الميديا: عنصر HTML عادي مقصوص بشكل الموجة (بدون foreignObject) -->
+        <div class="cr-wave-media">
+          <img class="cr-wave-media-image" id="auth-panel-image" alt="" hidden>
+          <video class="cr-wave-media-video" id="auth-panel-video"
+                 muted autoplay loop playsinline disablepictureinpicture
+                 preload="auto" hidden></video>
+        </div>
+
+        <!-- الطبقة الملونة + الحافة المضيئة -->
+        <svg class="cr-wave-svg" viewBox="0 0 460 470" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="crWaveOverlay" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1e293b" stop-opacity=".34"/>
+              <stop offset="55%" stop-color="#0f172a" stop-opacity=".46"/>
+              <stop offset="100%" stop-color="#07101e" stop-opacity=".58"/>
+            </linearGradient>
+            <linearGradient id="crWaveEdge" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e5c598"/>
+              <stop offset="45%" stop-color="#d97706"/>
+              <stop offset="100%" stop-color="#c86d51"/>
+            </linearGradient>
+            <filter id="crWaveGlow" x="-60%" y="-30%" width="220%" height="160%">
+              <feGaussianBlur stdDeviation="7" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path class="cr-wave-shape" d="M150 0 C200 45 210 90 168 126 C120 168 115 210 158 247 C205 287 205 335 158 375 C125 403 125 438 155 470 L460 470 L460 0 Z" fill="url(#crWaveOverlay)"/>
+          <path class="cr-wave-edge" d="M150 0 C200 45 210 90 168 126 C120 168 115 210 158 247 C205 287 205 335 158 375 C125 403 125 438 155 470" fill="none" stroke="url(#crWaveEdge)" stroke-width="5" filter="url(#crWaveGlow)"/>
+        </svg>
+
+        <!-- القصّ: نفس مسار الموجة بإحداثيات نسبية (0..1) عشان يتمدد مع حجم الصندوق.
+             1/460 = 0.0021739 ، 1/470 = 0.0021277 -->
+        <svg class="cr-clip-defs" width="0" height="0" aria-hidden="true" focusable="false">
+          <defs>
+            <clipPath id="crWaveClip" clipPathUnits="objectBoundingBox">
+              <path transform="scale(0.0021739 0.0021277)" d="M150 0 C200 45 210 90 168 126 C120 168 115 210 158 247 C205 287 205 335 158 375 C125 403 125 438 155 470 L460 470 L460 0 Z"/>
+            </clipPath>
+          </defs>
+        </svg>
+
+        <div class="cr-panel-content cr-panel-login"><h2 id="auth-login-title">مرحباً<br>بعودتك!</h2><p id="auth-login-message">سجّل الدخول لمتابعة رحلتك واستكشاف الأردن.</p></div>
+        <div class="cr-panel-content cr-panel-signup"><h2 id="auth-signup-title">أهلاً<br>بك معنا!</h2><p id="auth-signup-message">أنشئ حسابك واجمع أختام المحافظات في جوازك الرقمي.</p></div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./auth.js"></script>
+</body>
+</html>

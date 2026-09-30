@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جواز السفر الأردني الرقمي والأختام الـ 12 | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- رأس الصفحة -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-[#D97706]/30 text-[#D97706] text-xs font-bold mb-3">
+        <i class="fa-solid fa-passport"></i>
+        <span>نظام التلعيب التراثي الوطني (Gamified Tourism Passport)</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-[#1E293B] tracking-tight mb-2">
+        جواز السفر الرقمي وأختام المحافظات الـ 12
+      </h1>
+      <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+        وثّق زياراتك الميدانية في ربوع الأردن، واجمع أختام المحافظات الـ 12 بنظام شارات جواكر الفاخر لترقية رتبتك وكسب جوائز ونقاط ولاء حقيقية.
+      </p>
+    </div>
+
+    <!-- بطاقة دفتر الجواز الأردني الملكي (Royal Jordanian Passport Booklet) -->
+    <div class="rounded-3xl p-6 sm:p-8 border-2 shadow-xl mb-10 relative overflow-hidden" style="background: linear-gradient(110deg, #FFFFFF 0%, #F8FAFC 62%, #FFF7ED 100%); border-color: #D6B779; color: #1E293B;">
+      <!-- نقش التاج الهاشمي في الخلفية -->
+      <div class="absolute -top-10 -end-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        
+        <!-- معلومات المستكشف وهوية الجواز -->
+        <div class="flex items-center gap-5">
+          <div class="relative shrink-0">
+            <img id="pass-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-[#D97706] shadow-xl">
+            <span id="passport-verification-badge" class="hidden absolute -bottom-2 -end-2"></span>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#475569] font-mono">HASHEMITE KINGDOM OF JORDAN</span>
+              <span id="pass-verified-label" class="hidden px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold border border-emerald-300">مستكشف معتمد</span>
+            </div>
+            <h2 id="pass-user-name" class="text-xl sm:text-2xl font-black text-[#1E293B]">محمد الشوابكة</h2>
+            <p class="text-xs text-slate-600 font-mono">رقم الجواز الرقمي: <span id="pass-number" class="text-[#8A4B08] font-bold">JOR-EXP-2026-9041</span></p>
+            <div class="flex items-center gap-2 pt-1 text-xs">
+              <span class="text-[#8A4B08] font-bold"><i class="fa-solid fa-award"></i> <span id="pass-rank-title">مستكشف فضي (Silver)</span></span>
+              <span class="text-slate-400">•</span>
+              <span class="text-slate-600 font-mono"><strong id="pass-xp-points" class="text-[#1E293B] font-black text-sm">1,450</strong> XP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التقدم ونسبة اكتمال الأختام الـ 12 -->
+        <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white/90 shadow-sm w-full lg:w-80 space-y-3 shrink-0">
+          <div class="flex items-center justify-between text-xs font-bold">
+            <span class="text-[#334155] flex items-center gap-1.5">
+              <i class="fa-solid fa-stamp"></i>
+              <span>نسبة جمع الأختام:</span>
+            </span>
+            <span id="pass-stamps-ratio" class="font-mono text-[#1E293B] text-sm">3 / 12</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-3 rounded-full overflow-hidden p-0.5 border border-slate-300" style="background: #E2E8F0;">
+            <div id="pass-progress-bar" class="h-full rounded-full transition-all duration-700 shadow-md" style="width: 25%; background: linear-gradient(90deg, #F59E0B, #C86D51);"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-300 font-semibold">
+            <span>اجمع 12 ختماً لفتح شارة التوثيق الملكية 🥇</span>
+            <span id="pass-percent-text" class="font-mono text-[#8A4B08] font-bold">25%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- أزرار تصفية الأختام -->
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <div class="flex items-center gap-2 text-xs font-bold">
+        <button id="filter-all-stamps" class="px-4 py-2 rounded-xl bg-[#1E293B] text-white shadow-xs cursor-pointer">جميع الأختام (12)</button>
+        <button id="filter-unlocked-stamps" class="px-4 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:border-[#C86D51] cursor-pointer">الأختام المفتوحة ✓</button>
+        <button id="filter-locked-stamps" class="px-4 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:border-[#C86D51] cursor-pointer">الأختام المقفلة 🔒</button>
+      </div>
+
+      <a href="explore.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#C86D51] hover:underline">
+        <span>احجز رحلة لفك قفل ختم جديد</span>
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+    </div>
+
+    <!-- ================= شبكة أختام المحافظات الـ 12 بنمط كروت جواكر الفاخرة ================= -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6" id="jawaker-stamps-grid">
+      <!-- تُولّد كروت أختام المحافظات الـ 12 بالكامل برمجياً -->
+    </div>
+
+  </main>
+
+  <!-- نافذة منبثقة تفاعلية لمعاينة تفاصيل وسر الختم (Stamp Details Modal) -->
+  <div id="stamp-detail-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border-2 border-[#E5C598] animate-in zoom-in-95 text-center relative">
+      <button id="btn-close-stamp-modal" class="absolute top-4 end-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">&times;</button>
+      
+      <!-- الأيقونة الشمعية المكبرة -->
+      <div id="modal-stamp-badge-wrap" class="w-28 h-28 mx-auto rounded-full border-4 border-dashed border-[#D97706] flex items-center justify-center text-4xl text-[#D97706] bg-amber-50 shadow-inner">
+        <i id="modal-stamp-icon" class="fa-solid fa-chess-rook"></i>
+      </div>
+
+      <div>
+        <span id="modal-stamp-gov" class="text-xs font-bold text-[#C86D51] uppercase tracking-wider block mb-1">محافظة معان</span>
+        <h3 id="modal-stamp-name" class="text-xl font-black text-[#1E293B]">ختم خزنة البتراء الوردية الأسطوري</h3>
+        <span id="modal-stamp-rarity" class="inline-block mt-1 text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">Legendary Seal (+200 XP)</span>
+      </div>
+
+      <p id="modal-stamp-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed bg-[#FAF8F5] p-3.5 rounded-2xl border border-slate-200">
+        يُمنح لمن يكمل مسار السيق ويشهد إشراقة الشمس على واجهة الخزينة المنحوتة في الصخر الوردي.
+      </p>
+
+      <div class="pt-2 flex items-center justify-between text-xs border-t border-slate-100">
+        <div class="text-start">
+          <span class="text-[10px] text-slate-400 block">حالة الختم:</span>
+          <strong id="modal-stamp-status" class="text-emerald-600 font-bold">✓ مفتوح في جوازك</strong>
+        </div>
+        <a id="modal-stamp-book-btn" href="explore.html" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-4 py-2 rounded-xl font-bold text-xs shadow">
+          استكشف رحلات المحافظة
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل جواز السفر والأختام الـ 12 -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { db } from './js/config/firebase.config.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { officialStampsData } from './js/data/stamps.data.js';
+    import { defaultExplorerStampIds, hasCollectedAllOfficialStamps, renderJordanVerificationBadge } from './js/components/jordan-verification-badge.js';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderHeader("stamps");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+
+      // قائمة معرفات الأختام المفتوحة للمستخدم (تُقرأ من Firestore أو الحساب النشط)
+      let unlockedIds = Array.isArray(store.user?.stamps) ? store.user.stamps : [...defaultExplorerStampIds];
+      let activeStampFilter = 'all';
+
+      const grid = document.getElementById('jawaker-stamps-grid');
+      const ratioEl = document.getElementById('pass-stamps-ratio');
+      const progBar = document.getElementById('pass-progress-bar');
+      const percentEl = document.getElementById('pass-percent-text');
+
+      const syncPassportUser = (event) => {
+        const user = event ? event.detail : store.user;
+        if (event) store.user = user;
+        unlockedIds = user
+          ? (Array.isArray(user.stamps) ? user.stamps : [])
+          : [...defaultExplorerStampIds];
+        if (user) {
+          document.getElementById('pass-user-name').textContent = user.displayName || user.name || 'مستكشف الأردن';
+          document.getElementById('pass-avatar').src = user.photoURL || user.avatar || document.getElementById('pass-avatar').src;
+          document.getElementById('pass-xp-points').textContent = (user.xp || 0).toLocaleString();
+          document.getElementById('pass-rank-title').textContent = user.rank || 'مستكشف فضي (Silver)';
+        }
+
+        const count = unlockedIds.length;
+        const total = officialStampsData.length;
+        const pct = Math.round((count / total) * 100);
+        ratioEl.textContent = `${count} / ${total}`;
+        progBar.style.width = `${pct}%`;
+        percentEl.textContent = `${pct}%`;
+
+        const isVerified = hasCollectedAllOfficialStamps(unlockedIds);
+        const badgeMount = document.getElementById('passport-verification-badge');
+        badgeMount.innerHTML = isVerified ? renderJordanVerificationBadge('h-9 w-9') : '';
+        badgeMount.classList.toggle('hidden', !isVerified);
+        document.getElementById('pass-verified-label').classList.toggle('hidden', !isVerified);
+        renderStamps(activeStampFilter);
+      };
+      syncPassportUser();
+      window.addEventListener('user-state-changed', syncPassportUser);
+
+      // حساب نسبة الإنجاز
+      const count = unlockedIds.length;
+      const total = officialStampsData.length;
+      const pct = Math.round((count / total) * 100);
+      ratioEl.textContent = `${count} / ${total}`;
+      progBar.style.width = `${pct}%`;
+      percentEl.textContent = `${pct}%`;
+
+      // دالة رسم الأختام بنمط بطاقات جواكر الفاخرة
+      function renderStamps(filterMode = 'all') {
+        let list = [...officialStampsData];
+        if (filterMode === 'unlocked') list = list.filter(s => unlockedIds.includes(s.id));
+        if (filterMode === 'locked') list = list.filter(s => !unlockedIds.includes(s.id));
+
+        grid.innerHTML = list.map(stamp => {
+          const isUnlocked = unlockedIds.includes(stamp.id);
+          return `
+            <div onclick="window.showStampDetails('${stamp.id}')" class="group relative bg-white rounded-3xl p-5 border-2 transition-all duration-300 flex flex-col items-center text-center cursor-pointer select-none ${
+              isUnlocked
+                ? 'border-[#D97706] shadow-md hover:shadow-xl hover:scale-105 bg-gradient-to-b from-white to-amber-50/30'
+                : 'border-slate-200 grayscale opacity-60 hover:opacity-80 hover:border-slate-300'
+            }">
+              <!-- شارة الحالة العلوية (مفتوح / مقفول) -->
+              <div class="w-full flex items-center justify-between text-[10px] font-bold mb-2">
+                <span class="px-2 py-0.5 rounded-full ${isUnlocked ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-500'}">
+                  ${stamp.rarity || 'Heritage'}
+                </span>
+                <span class="font-mono text-slate-400">#${stamp.id.replace('stamp-', '').substring(0, 4).toUpperCase()}</span>
+              </div>
+
+              <!-- الختم الشمعي التراثي المحفور بنمط جواكر -->
+              <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-3 border-dashed flex items-center justify-center p-2 mb-3 transition-transform group-hover:scale-105" style="border-color: ${isUnlocked ? (stamp.color || '#D97706') : '#CBD5E1'}; color: ${isUnlocked ? (stamp.color || '#D97706') : '#94A3B8'};">
+                <div class="absolute inset-1 rounded-full border border-dashed opacity-70 pointer-events-none" style="border-color: ${isUnlocked ? (stamp.color || '#D97706') : '#CBD5E1'};"></div>
+                <div class="relative z-10 flex flex-col items-center justify-center text-center">
+                  <i class="fa-solid ${stamp.icon || 'fa-stamp'} text-2xl sm:text-3xl mb-1"></i>
+                  <span class="text-[8px] font-bold tracking-widest uppercase block">JORDAN</span>
+                </div>
+                ${isUnlocked ? `
+                  <div class="absolute -top-1 -end-1 w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold border-2 border-white shadow">
+                    ✓
+                  </div>
+                ` : `
+                  <div class="absolute -top-1 -end-1 w-6 h-6 rounded-full bg-slate-400 text-white flex items-center justify-center text-[9px] border-2 border-white">
+                    <i class="fa-solid fa-lock"></i>
+                  </div>
+                `}
+              </div>
+
+              <h4 class="font-extrabold text-xs sm:text-sm text-[#1E293B] line-clamp-1 mb-1 group-hover:text-[#C86D51]">
+                ${stamp.name.ar}
+              </h4>
+              <span class="text-[11px] text-[#64748B] font-semibold block mb-2">${stamp.gov}</span>
+
+              <div class="mt-auto w-full pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-bold">
+                <span class="${isUnlocked ? 'text-[#D97706]' : 'text-slate-400'}">+${stamp.xp} XP</span>
+                <span class="${isUnlocked ? 'text-emerald-700' : 'text-slate-400'}">${isUnlocked ? 'مفتوح رسمياً' : 'مغلق'}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // تشغيل العرض المبدئي
+      activeStampFilter = 'all';
+      renderStamps(activeStampFilter);
+
+      // ربط أزرار الفلترة
+      const btnAll = document.getElementById('filter-all-stamps');
+      const btnUnlocked = document.getElementById('filter-unlocked-stamps');
+      const btnLocked = document.getElementById('filter-locked-stamps');
+
+      const resetBtnClasses = () => {
+        [btnAll, btnUnlocked, btnLocked].forEach(b => b.className = "px-4 py-2 rounded-xl bg-white text-slate-700 border border-slate-200 hover:border-[#C86D51] cursor-pointer text-xs font-bold");
+      };
+
+      btnAll.onclick = () => { resetBtnClasses(); btnAll.className = "px-4 py-2 rounded-xl bg-[#1E293B] text-white shadow-xs cursor-pointer text-xs font-bold"; activeStampFilter = 'all'; renderStamps(activeStampFilter); };
+      btnUnlocked.onclick = () => { resetBtnClasses(); btnUnlocked.className = "px-4 py-2 rounded-xl bg-[#1E293B] text-white shadow-xs cursor-pointer text-xs font-bold"; activeStampFilter = 'unlocked'; renderStamps(activeStampFilter); };
+      btnLocked.onclick = () => { resetBtnClasses(); btnLocked.className = "px-4 py-2 rounded-xl bg-[#1E293B] text-white shadow-xs cursor-pointer text-xs font-bold"; activeStampFilter = 'locked'; renderStamps(activeStampFilter); };
+
+      // نافذة تفاصيل الختم
+      const modal = document.getElementById('stamp-detail-modal');
+      document.getElementById('btn-close-stamp-modal').onclick = () => modal.classList.add('hidden');
+
+      window.showStampDetails = (stampId) => {
+        const s = officialStampsData.find(st => st.id === stampId) || officialStampsData[0];
+        const isUnlocked = unlockedIds.includes(s.id);
+
+        document.getElementById('modal-stamp-gov').textContent = s.gov;
+        document.getElementById('modal-stamp-name').textContent = s.name.ar;
+        document.getElementById('modal-stamp-rarity').textContent = `${s.rarity || 'Heritage'} Seal (+${s.xp} XP)`;
+        document.getElementById('modal-stamp-desc').textContent = s.description.ar;
+        document.getElementById('modal-stamp-icon').className = `fa-solid ${s.icon || 'fa-stamp'}`;
+        
+        const badgeWrap = document.getElementById('modal-stamp-badge-wrap');
+        badgeWrap.style.borderColor = isUnlocked ? (s.color || '#D97706') : '#94A3B8';
+        badgeWrap.style.color = isUnlocked ? (s.color || '#D97706') : '#94A3B8';
+
+        const statusEl = document.getElementById('modal-stamp-status');
+        if (isUnlocked) {
+          statusEl.textContent = '✓ مفتوح ومعتمد في جوازك';
+          statusEl.className = 'text-emerald-600 font-bold';
+        } else {
+          statusEl.textContent = '🔒 مغلق (يتطلب زيارة المحافظة)';
+          statusEl.className = 'text-slate-400 font-bold';
+        }
+
+        document.getElementById('modal-stamp-book-btn').href = `explore.html?dest=${encodeURIComponent(s.gov.replace('محافظة ', ''))}`;
+        modal.classList.remove('hidden');
+      };
+    });
+  </script>
+</body>
+</html>

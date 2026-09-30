@@ -1,0 +1,752 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي وجواز السفر الرقمي | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- ================= بطاقة الهوية الملكية وأختام المحافظات الـ 12 المميزة ================= -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-soft-card mb-8 relative overflow-hidden">
+      <!-- تدرج ديكوري علوي -->
+      <div class="absolute top-0 inset-x-0 h-24 bg-gradient-to-r from-[#1E293B] via-[#2A3B53] to-[#C86D51] opacity-90 -z-0"></div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6" style="padding-top: clamp(72px, 5.6vw, 80px);">
+        
+        <!-- صورة المسافر والبيانات الشخصية وشارة التوثيق -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+          <div class="relative">
+            <img id="user-profile-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250" class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-4 border-white shadow-xl">
+            <div id="profile-verification-badge" class="absolute -bottom-2 -end-2"></div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 id="user-profile-name" class="text-xl sm:text-2xl font-black text-[#1E293B]">
+                محمد الشوابكة • Mohammad Al-Shawabkeh
+              </h1>
+              <span id="profile-verification-label" class="hidden inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold border border-amber-300">
+                <span>شارة التوثيق الأردنية</span>
+              </span>
+            </div>
+
+            <span id="user-profile-handle" class="text-xs font-mono font-bold text-[#C86D51] block">@sh3sher</span>
+            <span id="user-profile-country" class="hidden items-center gap-1 text-xs font-bold text-slate-500" aria-label="بلد المستخدم">
+              <i class="fa-solid fa-location-dot text-[#C86D51]" aria-hidden="true"></i>
+              <span id="user-profile-country-name"></span>
+            </span>
+
+            <p id="user-profile-bio" class="text-xs text-slate-600 max-w-lg leading-relaxed pt-1">
+              عاشق لصحراء وادي رم ودروب البتراء الوردية. أسعى لجمع كافة أختام محافظات المملكة الـ 12 وتوثيق كل زاوية في الأردن الحبيب 🇯🇴✨
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 text-xs font-bold text-slate-700 pt-1">
+              <button id="show-followers-btn" type="button" class="hover:text-[#C86D51] cursor-pointer">
+                <strong id="profile-followers-count" class="text-[#1E293B] font-mono text-sm">0</strong>
+                <span class="text-slate-500 font-normal">متابعون</span>
+              </button>
+              <button id="show-following-btn" type="button" class="hover:text-[#C86D51] cursor-pointer">
+                <strong id="profile-following-count" class="text-[#1E293B] font-mono text-sm">0</strong>
+                <span class="text-slate-500 font-normal">يتابع</span>
+              </button>
+              <span>•</span>
+              <span class="text-[#D97706] font-mono"><strong id="user-profile-points">1,450</strong> نقطة ولاء 🪙</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- أزرار الإجراءات السريعة (تعديل الملف وكود الإحالة) -->
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <button id="profile-follow-toggle" type="button" class="hidden rounded-xl bg-[#C86D51] hover:bg-[#B45A3E] px-4 py-2.5 text-xs font-bold text-white cursor-pointer"></button>
+          <button id="btn-open-edit-profile" class="bg-[#FAF8F5] hover:bg-slate-100 text-[#1E293B] border border-slate-200 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>تعديل الملف الشخصي</span>
+          </button>
+
+          <button onclick="switchTab('referral')" class="bg-[#D97706] hover:bg-[#B45309] text-white px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer">
+            <i class="fa-solid fa-gift"></i>
+            <span>رمز الإحالة والمكافآت</span>
+          </button>
+
+          <button id="btn-profile-logout" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>تسجيل الخروج</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ================= عرض أختام المحافظات الـ 12 التراثية بجانب الاسم والصورة بشكل مميز ================= -->
+      <div id="profile-stamp-shelf" class="mt-8 pt-6 border-t border-slate-100">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-award text-[#D97706]"></i>
+            <h3 class="font-extrabold text-sm sm:text-base text-[#1E293B]">
+              أختام محافظات الأردن الـ 12 المجمعة في جوازك
+            </h3>
+            <span class="text-xs font-mono font-bold bg-[#D97706]/10 text-[#D97706] px-2.5 py-0.5 rounded-full" id="stamps-count-badge">
+              3 / 12
+            </span>
+          </div>
+
+          <a href="passport.html" class="text-xs font-bold text-[#C86D51] hover:underline">
+            عرض دفتر الجواز الرقمي الكامل ←
+          </a>
+        </div>
+
+        <!-- شريط كروت جواكر الأفقي المتميز للأختام الـ 12 (Collector Shelf) -->
+        <div class="flex items-center gap-4 overflow-x-auto pb-3 pt-1 scrollbar-thin" id="profile-stamps-strip">
+          <!-- تُولّد شارات الأختام الـ 12 المحفورة بنمط جواكر هنا -->
+        </div>
+      </div>
+
+    </div>
+
+    <section id="other-profile-summary" class="hidden border-b border-slate-200 pb-6 mb-6">
+      <p class="text-sm text-slate-600">هذا الملف الشخصي العام لمستكشف الأردن.</p>
+    </section>
+
+    <!-- ================= تبويبات أقسام الملف الشخصي ================= -->
+    <div class="flex items-center gap-2 border-b border-slate-200 mb-8 overflow-x-auto text-xs sm:text-sm font-bold">
+      <button data-tab="stamps" class="prof-tab-btn active px-4 py-3 border-b-2 border-[#C86D51] text-[#C86D51] flex items-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-stamp"></i>
+        <span>أختام المحافظات الـ 12</span>
+      </button>
+
+      <button data-tab="referral" class="prof-tab-btn px-4 py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-gift text-amber-500"></i>
+        <span>رمز الإحالة الخاص بي 🎁</span>
+      </button>
+
+      <button data-tab="bookings" class="prof-tab-btn px-4 py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-ticket"></i>
+        <span>حجوزاتي وتذاكري الرسمية</span>
+      </button>
+
+      <button data-tab="ledger" class="prof-tab-btn px-4 py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-wallet"></i>
+        <span>سجل نقاط المستكشف (XP)</span>
+      </button>
+    </div>
+
+    <!-- ================= محتوى التبويبات ================= -->
+
+    <!-- 1. تبويب شبكة الأختام الكاملة -->
+    <div id="pane-stamps" class="prof-pane space-y-6">
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-5 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h4 class="font-extrabold text-base text-amber-900">نظام أختام المحافظات الأردنية الرسمي</h4>
+          <p class="text-xs text-amber-800 mt-1 max-w-2xl leading-relaxed">
+            تضم المملكة 12 محافظة تاريخية، لكل محافظة ختم تراثي خاص بها بتصميم مستوحى من هويتها وأصالتها مثل ألعاب التجميع الكبرى (جواكر). عند زيارة رحلات كل محافظة، يُختم جوازك الرقمي وتحصل على شارة التوثيق الذهبية!
+          </p>
+        </div>
+        <div class="text-center bg-white px-5 py-3 rounded-2xl border border-amber-300 shadow-sm shrink-0">
+          <span class="text-xs font-bold text-amber-800 block">نسبة الإنجاز</span>
+          <span class="text-2xl font-black font-mono text-[#D97706]" id="stamps-completion-rate">25%</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6" id="profile-stamps-grid">
+        <!-- تُولّد الأختام بنمط جواكر -->
+      </div>
+    </div>
+
+    <!-- 2. تبويب رمز الإحالة والمكافآت -->
+    <div id="pane-referral" class="prof-pane max-w-3xl mx-auto space-y-6 hidden">
+      <!-- كرت رمز الإحالة الذهبي الخاص بالمستخدم -->
+      <div class="bg-gradient-to-br from-[#1E293B] via-[#2A3B53] to-[#1E293B] text-white rounded-3xl p-6 sm:p-8 border-2 border-[#E5C598] shadow-2xl space-y-5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-[#D97706]/20 border border-[#D97706] text-amber-400 flex items-center justify-center text-xl shadow">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">رمز الإحالة الخاص بك (حصري لك)</h3>
+            <span class="text-xs text-[#E5C598]">شارك هذا الرمز مع أصدقائك عند تسجيلهم في المنصة</span>
+          </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span id="my-referral-code" class="font-mono text-2xl sm:text-3xl font-black tracking-widest text-[#FDE68A]">
+            SH3SHER2026
+          </span>
+          <button id="btn-copy-ref" class="bg-[#D97706] hover:bg-[#B45309] text-white px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow cursor-pointer">
+            <i class="fa-regular fa-copy"></i>
+            <span id="copy-ref-text">نسخ رمز الإحالة</span>
+          </button>
+        </div>
+
+        <!-- مزايا كود الإحالة -->
+        <div class="pt-4 border-t border-white/10 space-y-3">
+          <h4 class="font-extrabold text-sm text-[#E5C598] flex items-center gap-2">
+            <i class="fa-solid fa-sparkles text-[#D97706]"></i>
+            <span>ما الفائدة من رمز الإحالة هذا؟</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div class="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+              <span class="text-[#FDE68A] font-bold block">+150 نقطة ولاء 🪙</span>
+              <p class="text-slate-300 text-[11px]">لكل صديق يسجل برمزك في منصة مستكشف الأردن.</p>
+            </div>
+            <div class="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+              <span class="text-[#FDE68A] font-bold block">خصم 5 دنانير 🏷️</span>
+              <p class="text-slate-300 text-[11px]">رصيد خصم مباشر يُطبق في صفحة الدفع لحجزك القادم.</p>
+            </div>
+            <div class="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1">
+              <span class="text-[#FDE68A] font-bold block">هدية ترحيب لصديقك 🎁</span>
+              <p class="text-slate-300 text-[11px]">صديقك يحصل فوراً على خصم 5 د.أ و +100 نقطة هدية.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- إدخال كود إحالة صديق -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-soft-card space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div>
+            <h4 class="font-extrabold text-sm text-slate-900">هل تمت دعوتك من قِبل صديق؟ أدخل رمز الإحالة هنا</h4>
+            <p class="text-xs text-slate-400">أدخل كود صديقك لتحصل فوراً على +100 نقطة ترحيبية وخصم 5 دنانير على حجزك القادم!</p>
+          </div>
+        </div>
+
+        <form id="form-redeem-friend-ref" class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <input type="text" id="friend-ref-input" placeholder="مثال: JOR-AMMAN-99" class="flex-1 w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-slate-900 focus:border-[#C86D51] uppercase">
+          <button type="submit" class="w-full sm:w-auto bg-[#1E293B] hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 shadow cursor-pointer shrink-0">
+            <i class="fa-solid fa-sparkles text-amber-400"></i>
+            <span>تفعيل الرمز وكسب النقاط</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3. تبويب سجل الحجوزات والتذاكر -->
+    <div id="pane-bookings" class="prof-pane space-y-4 hidden">
+      <div id="user-bookings-list" class="space-y-4">
+        <!-- تُولّد حجوزات وتذاكر المستخدم هنا -->
+      </div>
+    </div>
+
+    <!-- 4. تبويب سجل النقاط التنافسية (XP Ledger) -->
+    <div id="pane-ledger" class="prof-pane bg-white rounded-3xl border border-slate-200 shadow-soft-card overflow-hidden hidden">
+      <div class="divide-y divide-slate-100" id="user-ledger-list">
+        <!-- تُولّد حركات النقاط هنا -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= نافذة تعديل الملف الشخصي ================= -->
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-4 shadow-2xl animate-in zoom-in-95">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-lg text-[#1E293B]">تعديل الملف الشخصي</h3>
+        <button id="btn-close-edit-modal" class="text-slate-400 hover:text-black">&times;</button>
+      </div>
+
+      <form id="form-edit-profile" class="space-y-4 text-xs">
+        <div>
+          <label class="font-bold text-slate-600 block mb-1">الاسم الكامل الظاهر:</label>
+          <input type="text" id="edit-name" value="محمد الشوابكة" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2 font-bold text-slate-900">
+        </div>
+        <div>
+          <label class="font-bold text-slate-600 block mb-1">اسم المستخدم (@username):</label>
+          <input type="text" id="edit-username" value="sh3sher" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2 font-mono font-bold text-slate-900">
+        </div>
+        <div>
+          <label class="font-bold text-slate-600 block mb-1">النبذة التعريفية (Bio):</label>
+          <textarea id="edit-bio" rows="3" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900">عاشق لصحراء وادي رم ودروب البتراء الوردية. أسعى لجمع كافة أختام محافظات المملكة الـ 12 وتوثيق كل زاوية في الأردن الحبيب 🇯🇴✨</textarea>
+        </div>
+        <div>
+          <label for="edit-country" class="font-bold text-slate-600 block mb-1">البلد:</label>
+          <select id="edit-country" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-3 py-2 text-slate-900" required>
+            <option value="">اختر البلد</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold text-slate-600 block mb-1">رابط الصورة الشخصية (Avatar URL):</label>
+          <div class="flex items-center gap-3">
+            <img id="edit-avatar-preview" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250" alt="معاينة الصورة الشخصية" class="h-12 w-12 rounded-xl border border-slate-200 object-cover">
+            <div class="min-w-0 flex-1 space-y-2">
+              <input type="url" id="edit-avatar" value="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-3 py-1.5 font-mono">
+              <input type="file" id="edit-avatar-file" accept="image/*" class="hidden">
+              <label for="edit-avatar-file" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 font-bold text-slate-700 cursor-pointer hover:bg-slate-50"><i class="fa-solid fa-upload" aria-hidden="true"></i>رفع صورة من الجهاز</label>
+              <span id="edit-avatar-upload-status" class="text-[10px] text-slate-500" aria-live="polite"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2 border-t">
+          <button type="button" id="btn-cancel-edit" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">إلغاء</button>
+          <button type="submit" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-5 py-2 rounded-xl font-bold text-xs shadow">حفظ التعديلات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="follow-list-modal" class="fixed inset-0 z-50 hidden flex bg-black/60 backdrop-blur-sm p-4 items-center justify-center">
+    <section class="w-full max-w-md max-h-[80vh] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col" role="dialog" aria-modal="true" aria-labelledby="follow-list-title">
+      <div class="flex items-center justify-between border-b border-slate-200 p-4">
+        <h2 id="follow-list-title" class="font-extrabold text-base text-slate-900"></h2>
+        <button id="close-follow-list-btn" type="button" class="h-9 w-9 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" aria-label="إغلاق">&times;</button>
+      </div>
+      <div id="follow-list-content" class="overflow-y-auto p-3 space-y-1" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل صفحة الملف الشخصي والأختام -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { db, auth } from './js/config/firebase.config.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { officialStampsData } from './js/data/stamps.data.js';
+    import { defaultExplorerStampIds, hasCollectedAllOfficialStamps, renderJordanVerificationBadge } from './js/components/jordan-verification-badge.js';
+    import { initialBookings, initialPointsLedger } from './js/data/mock.data.js';
+    import { uploaderService } from './js/services/uploader.service.js';
+    import { countries, normalizeCountryCode } from './js/data/countries.data.js';
+    import { socialService } from './js/services/social.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("profile");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+
+      const firebaseUser = auth ? await new Promise((resolve) => auth.onAuthStateChanged(resolve)) : null;
+      const viewerUid = firebaseUser?.uid || store.user?.uid || null;
+      const requestedUid = new URLSearchParams(window.location.search).get('uid');
+      const viewedUid = requestedUid || viewerUid;
+      const isViewingOther = Boolean(requestedUid && requestedUid !== viewerUid);
+      let viewedProfile = null;
+      if (viewedUid && db) {
+        try {
+          if (isViewingOther) {
+            viewedProfile = await socialService.getProfile(viewedUid);
+          } else {
+            const userSnapshot = await db.collection('users').doc(viewedUid).get();
+            const userData = userSnapshot.exists ? userSnapshot.data() : {};
+            viewedProfile = {
+              uid: viewedUid,
+              displayName: firebaseUser?.displayName || userData.name || store.user?.displayName || 'مستكشف الأردن',
+              username: userData.username || store.user?.username || '',
+              avatar: firebaseUser?.photoURL || userData.avatar || store.user?.photoURL || '',
+              bio: userData.bio || '',
+              country: userData.country || '',
+            };
+          }
+        } catch (error) {
+          console.warn('Could not load profile:', error);
+        }
+      }
+      const profileUid = viewedProfile?.uid || viewedUid;
+
+      // الأختام المفتوحة للمستخدم
+      let myUnlockedStamps = Array.isArray(store.user?.stamps) ? store.user.stamps : [...defaultExplorerStampIds];
+
+      const syncStampCollectionUi = () => {
+        const unlockedIds = new Set(myUnlockedStamps);
+        document.querySelectorAll('[data-profile-stamp-id]').forEach((card) => {
+          const isUnlocked = unlockedIds.has(card.dataset.profileStampId);
+          const seal = card.querySelector('[data-profile-stamp-seal]');
+          if (!seal) return;
+
+          if (card.dataset.profileStampView === 'strip') {
+            seal.className = `profile-stamp-seal relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed flex items-center justify-center p-2 shadow-sm ${isUnlocked ? 'border-[#D97706] bg-amber-50 text-[#D97706]' : 'border-slate-300 bg-slate-100 text-slate-400 grayscale opacity-50'}`;
+          } else {
+            card.className = `profile-stamp-grid-card bg-white rounded-3xl p-5 border-2 transition-all flex flex-col items-center text-center cursor-pointer select-none ${isUnlocked ? 'border-[#D97706] shadow-md hover:shadow-xl bg-gradient-to-b from-white to-amber-50/30' : 'border-slate-200 grayscale opacity-60'}`;
+            seal.style.borderColor = isUnlocked ? '#D97706' : '#CBD5E1';
+            seal.style.color = isUnlocked ? '#D97706' : '#94A3B8';
+            const xp = card.querySelector('[data-profile-stamp-xp]');
+            if (xp) xp.className = `text-[10px] font-bold mt-2 ${isUnlocked ? 'text-[#D97706]' : 'text-slate-400'}`;
+          }
+
+          let marker = seal.querySelector('[data-profile-stamp-unlocked]');
+          if (isUnlocked && !marker) {
+            marker = document.createElement('span');
+            marker.dataset.profileStampUnlocked = 'true';
+            marker.className = 'absolute -top-1 -end-1 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold border border-white';
+            marker.textContent = '✓';
+            seal.appendChild(marker);
+          } else if (!isUnlocked && marker) {
+            marker.remove();
+          }
+        });
+      };
+
+      const countrySelect = document.getElementById('edit-country');
+      const countryBadge = document.getElementById('user-profile-country');
+      const countryBadgeName = document.getElementById('user-profile-country-name');
+      const countryStorageKey = () => `jt_profile_country_${viewerUid || 'guest'}`;
+      countries.forEach(({ code, name }) => {
+        const option = document.createElement('option');
+        option.value = code;
+        option.textContent = name;
+        countrySelect.appendChild(option);
+      });
+      const renderProfileCountry = (value) => {
+        const code = normalizeCountryCode(value);
+        const country = countries.find((item) => item.code === code);
+        countryBadgeName.textContent = country ? `من ${country.name}` : '';
+        countryBadge.classList.toggle('hidden', !country);
+        countryBadge.classList.toggle('inline-flex', Boolean(country));
+        countrySelect.value = code;
+      };
+
+      let isFollowingViewedProfile = false;
+      const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[char]));
+      const renderFollowStats = async () => {
+        try {
+          const stats = profileUid ? await socialService.getFollowStats(profileUid, viewerUid) : { followers: 0, following: 0, isFollowing: false };
+          document.getElementById('profile-followers-count').textContent = stats.followers;
+          document.getElementById('profile-following-count').textContent = stats.following;
+          isFollowingViewedProfile = stats.isFollowing;
+          const followButton = document.getElementById('profile-follow-toggle');
+          followButton.textContent = isFollowingViewedProfile ? 'إلغاء المتابعة' : '+ متابعة';
+          followButton.classList.toggle('bg-slate-100', isFollowingViewedProfile);
+          followButton.classList.toggle('text-slate-700', isFollowingViewedProfile);
+          followButton.classList.toggle('text-white', !isFollowingViewedProfile);
+          followButton.setAttribute('aria-pressed', String(isFollowingViewedProfile));
+        } catch (error) {
+          console.warn('Could not load follow counts:', error);
+        }
+      };
+      const followListModal = document.getElementById('follow-list-modal');
+      const followListContent = document.getElementById('follow-list-content');
+      const closeFollowList = () => followListModal.classList.add('hidden');
+      const showFollowList = async (listType) => {
+        document.getElementById('follow-list-title').textContent = listType === 'followers' ? 'المتابعون' : 'يتابع';
+        followListModal.classList.remove('hidden');
+        followListContent.innerHTML = '<p class="py-8 text-center text-sm text-slate-500">جارٍ تحميل الحسابات...</p>';
+        try {
+          const people = profileUid ? await socialService.listPeople(profileUid, listType) : [];
+          followListContent.innerHTML = people.length
+            ? people.map((person) => `
+              <a href="profile.html?uid=${encodeURIComponent(person.uid)}" class="flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50 transition-colors">
+                <img src="${escapeHtml(person.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150')}" alt="" class="h-11 w-11 rounded-full object-cover border border-slate-200">
+                <span class="min-w-0">
+                  <strong class="block truncate text-sm text-slate-800">${escapeHtml(person.displayName)}</strong>
+                  <span class="block truncate text-xs text-slate-500">${person.country ? `من ${escapeHtml(countries.find((country) => country.code === normalizeCountryCode(person.country))?.name || '')}` : ''}</span>
+                </span>
+              </a>
+            `).join('')
+            : '<p class="py-8 text-center text-sm text-slate-500">لا توجد حسابات في هذه القائمة بعد.</p>';
+        } catch (error) {
+          followListContent.innerHTML = '<p class="py-8 text-center text-sm text-rose-600">تعذر تحميل القائمة. تحقق من الاتصال.</p>';
+        }
+      };
+      document.getElementById('show-followers-btn').addEventListener('click', () => showFollowList('followers'));
+      document.getElementById('show-following-btn').addEventListener('click', () => showFollowList('following'));
+      document.getElementById('close-follow-list-btn').addEventListener('click', closeFollowList);
+      followListModal.addEventListener('click', (event) => {
+        if (event.target === followListModal) closeFollowList();
+      });
+      document.getElementById('profile-follow-toggle').addEventListener('click', async (event) => {
+        const button = event.currentTarget;
+        if (!viewerUid || !profileUid || viewerUid === profileUid) return;
+        button.disabled = true;
+        try {
+          await socialService.setFollowing(viewerUid, profileUid, !isFollowingViewedProfile);
+          await renderFollowStats();
+        } catch (error) {
+          alert('تعذرت متابعة الحساب: ' + error.message);
+        } finally {
+          button.disabled = false;
+        }
+      });
+      renderFollowStats();
+
+      if (viewedProfile) {
+        document.getElementById('user-profile-name').textContent = viewedProfile.displayName || viewedProfile.name || 'مستكشف الأردن';
+        document.getElementById('user-profile-avatar').src = viewedProfile.avatar || viewedProfile.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250';
+        document.getElementById('user-profile-bio').textContent = viewedProfile.bio || '';
+        document.getElementById('user-profile-handle').textContent = viewedProfile.username ? `@${viewedProfile.username}` : '';
+        if (viewedProfile.xp !== undefined) document.getElementById('user-profile-points').textContent = Number(viewedProfile.xp).toLocaleString();
+        renderProfileCountry(viewedProfile.country);
+      }
+      if (isViewingOther) {
+        if (!viewedProfile) {
+          document.getElementById('user-profile-name').textContent = 'الحساب غير متاح';
+          document.getElementById('user-profile-bio').textContent = 'تعذر العثور على الملف الشخصي المطلوب.';
+          document.getElementById('user-profile-handle').textContent = '';
+          document.getElementById('user-profile-points').parentElement.classList.add('hidden');
+        }
+        document.getElementById('profile-stamp-shelf').classList.add('hidden');
+        document.getElementById('profile-verification-badge').innerHTML = '';
+        document.getElementById('profile-verification-label').classList.add('hidden');
+        document.getElementById('profile-verification-label').classList.remove('inline-flex');
+        document.getElementById('btn-open-edit-profile').classList.add('hidden');
+        document.getElementById('btn-profile-logout').classList.add('hidden');
+        document.getElementById('other-profile-summary').classList.remove('hidden');
+        document.getElementById('other-profile-summary').querySelector('p').textContent = viewedProfile
+          ? 'هذا الملف الشخصي العام لمستكشف الأردن.'
+          : 'الحساب غير موجود أو لم يُنشر ملفه العام بعد.';
+        document.querySelectorAll('.prof-tab-btn, .prof-pane').forEach((element) => element.classList.add('hidden'));
+        if (viewerUid && viewedProfile) document.getElementById('profile-follow-toggle').classList.remove('hidden');
+      }
+
+      // تحديث بيانات المستخدم في الرأس
+      if (store.user && !isViewingOther) {
+        document.getElementById('user-profile-name').textContent = store.user.displayName || store.user.name;
+        document.getElementById('user-profile-avatar').src = store.user.photoURL || store.user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250';
+        document.getElementById('user-profile-points').textContent = (store.user.xp || 1450).toLocaleString();
+      }
+      if (!isViewingOther) renderProfileCountry(store.user?.country || localStorage.getItem(countryStorageKey()));
+
+      const syncProfileVerification = (event) => {
+        const user = event ? event.detail : store.user;
+        if (event) store.user = user;
+        if (isViewingOther) return;
+        renderProfileCountry(user?.country || localStorage.getItem(countryStorageKey()));
+        myUnlockedStamps = user
+          ? (Array.isArray(user.stamps) ? user.stamps : [])
+          : [...defaultExplorerStampIds];
+        const verified = hasCollectedAllOfficialStamps(myUnlockedStamps);
+        const badge = document.getElementById('profile-verification-badge');
+        badge.innerHTML = verified ? renderJordanVerificationBadge('h-9 w-9 drop-shadow-md') : '';
+        document.getElementById('profile-verification-label').classList.toggle('hidden', !verified);
+        document.getElementById('profile-verification-label').classList.toggle('inline-flex', verified);
+        const pct = Math.round((myUnlockedStamps.length / officialStampsData.length) * 100);
+        document.getElementById('stamps-completion-rate').textContent = `${pct}%`;
+        document.getElementById('stamps-count-badge').textContent = `${myUnlockedStamps.length} / ${officialStampsData.length}`;
+        syncStampCollectionUi();
+      };
+      syncProfileVerification();
+      window.addEventListener('user-state-changed', syncProfileVerification);
+
+      // ================= عرض أختام المحافظات الـ 12 بنمط شارات جواكر بجانب الصورة والاسم =================
+      const stripContainer = document.getElementById('profile-stamps-strip');
+      stripContainer.innerHTML = officialStampsData.map(stamp => {
+        const isUnlocked = myUnlockedStamps.includes(stamp.id);
+        return `
+          <div data-profile-stamp-id="${stamp.id}" data-profile-stamp-view="strip" onclick="window.location.href='passport.html'" class="shrink-0 group cursor-pointer flex flex-col items-center transition-transform hover:scale-110" title="${stamp.name.ar} (${stamp.gov})">
+            <div data-profile-stamp-seal class="profile-stamp-seal relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed flex items-center justify-center p-2 shadow-sm ${
+              isUnlocked ? 'border-[#D97706] bg-amber-50 text-[#D97706]' : 'border-slate-300 bg-slate-100 text-slate-400 grayscale opacity-50'
+            }">
+              <i class="fa-solid ${stamp.icon || 'fa-stamp'} text-xl sm:text-2xl"></i>
+              ${isUnlocked ? `<span data-profile-stamp-unlocked="true" class="absolute -top-1 -end-1 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold border border-white">✓</span>` : ''}
+            </div>
+            <span class="text-[10px] font-bold text-[#1E293B] mt-1 truncate max-w-[80px] text-center">${stamp.gov.replace('محافظة ', '')}</span>
+          </div>
+        `;
+      }).join("");
+
+      // شبكة الأختام داخل تبويب الأختام
+      const gridContainer = document.getElementById('profile-stamps-grid');
+      gridContainer.innerHTML = officialStampsData.map(stamp => {
+        const isUnlocked = myUnlockedStamps.includes(stamp.id);
+        return `
+          <div data-profile-stamp-id="${stamp.id}" data-profile-stamp-view="grid" onclick="window.location.href='passport.html'" class="profile-stamp-grid-card bg-white rounded-3xl p-5 border-2 transition-all flex flex-col items-center text-center cursor-pointer select-none ${
+            isUnlocked ? 'border-[#D97706] shadow-md hover:shadow-xl bg-gradient-to-b from-white to-amber-50/30' : 'border-slate-200 grayscale opacity-60'
+          }">
+            <div data-profile-stamp-seal class="relative w-20 h-20 rounded-full border-2 border-dashed flex items-center justify-center mb-2" style="border-color: ${isUnlocked ? '#D97706' : '#CBD5E1'}; color: ${isUnlocked ? '#D97706' : '#94A3B8'};">
+              <i class="fa-solid ${stamp.icon || 'fa-stamp'} text-2xl"></i>
+              ${isUnlocked ? `<span data-profile-stamp-unlocked="true" class="absolute -top-1 -end-1 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold border border-white">✓</span>` : ''}
+            </div>
+            <h4 class="font-extrabold text-xs text-[#1E293B] line-clamp-1">${stamp.name.ar}</h4>
+            <span class="text-[10px] text-slate-500 font-semibold block">${stamp.gov}</span>
+            <span data-profile-stamp-xp class="text-[10px] font-bold mt-2 ${isUnlocked ? 'text-[#D97706]' : 'text-slate-400'}">+${stamp.xp} XP</span>
+          </div>
+        `;
+      }).join("");
+
+      // نسبة الإنجاز
+      const pct = Math.round((myUnlockedStamps.length / officialStampsData.length) * 100);
+      document.getElementById('stamps-completion-rate').textContent = `${pct}%`;
+      document.getElementById('stamps-count-badge').textContent = `${myUnlockedStamps.length} / ${officialStampsData.length}`;
+
+      // تبديل التبويبات
+      window.switchTab = (tabId) => {
+        document.querySelectorAll('.prof-tab-btn').forEach(btn => {
+          const match = btn.getAttribute('data-tab') === tabId;
+          btn.className = `prof-tab-btn px-4 py-3 border-b-2 flex items-center gap-2 cursor-pointer ${match ? 'active border-[#C86D51] text-[#C86D51]' : 'border-transparent text-slate-500 hover:text-slate-800'}`;
+        });
+        document.querySelectorAll('.prof-pane').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`pane-${tabId}`)?.classList.remove('hidden');
+      };
+
+      document.querySelectorAll('.prof-tab-btn').forEach(btn => {
+        btn.onclick = () => switchTab(btn.getAttribute('data-tab'));
+      });
+
+      // نسخ كود الإحالة
+      document.getElementById('btn-copy-ref').onclick = () => {
+        const code = document.getElementById('my-referral-code').textContent.trim();
+        navigator.clipboard.writeText(code);
+        document.getElementById('copy-ref-text').textContent = "تم النسخ بنجاح!";
+        setTimeout(() => document.getElementById('copy-ref-text').textContent = "نسخ رمز الإحالة", 2500);
+      };
+
+      // تفعيل كود إحالة صديق
+      document.getElementById('form-redeem-friend-ref').onsubmit = (e) => {
+        e.preventDefault();
+        const code = document.getElementById('friend-ref-input').value.trim().toUpperCase();
+        if (!code) return;
+        alert(`🎉 مبروك! تم تفعيل رمز الإحالة (${code}) بنجاح. أضيفت +100 نقطة ولاء إلى رصيدك وتم تفعيل خصم 5 دنانير على حجزك القادم!`);
+        document.getElementById('friend-ref-input').value = '';
+      };
+
+      // سجل الحجوزات
+      const bookingsList = document.getElementById('user-bookings-list');
+      bookingsList.innerHTML = initialBookings.map(b => `
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-soft-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-[#C86D51]">#${b.id}</span>
+            <h4 class="font-extrabold text-sm text-[#1E293B] mt-0.5">${b.destinationTitle.ar}</h4>
+            <span class="text-xs text-slate-500">${b.date} • ${b.guests} ضيوف • ${b.paymentMode.toUpperCase()}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-mono font-black text-sm text-[#1E293B]">${b.totalPriceJOD} د.أ</span>
+            <a href="ticket.html?ref=${b.id}&dest=${b.destinationId}" class="bg-[#1E293B] hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold">
+              معاينة التذكرة والـ QR
+            </a>
+          </div>
+        </div>
+      `).join("");
+
+      // سجل النقاط
+      const ledgerList = document.getElementById('user-ledger-list');
+      ledgerList.innerHTML = initialPointsLedger.map(tx => `
+        <div class="p-4 flex items-center justify-between text-xs">
+          <div>
+            <span class="font-bold text-[#1E293B] block">${tx.title.ar}</span>
+            <span class="text-[10px] text-slate-400">${tx.date}</span>
+          </div>
+          <span class="font-mono font-bold text-sm ${tx.type === '+' ? 'text-emerald-600' : 'text-rose-600'}">
+            ${tx.type}${tx.points} XP
+          </span>
+        </div>
+      `).join("");
+
+      // تعديل الملف الشخصي
+      const editModal = document.getElementById('edit-profile-modal');
+      document.getElementById('btn-open-edit-profile').onclick = () => {
+        document.getElementById('edit-name').value = viewedProfile?.displayName || viewedProfile?.name || '';
+        document.getElementById('edit-username').value = viewedProfile?.username || '';
+        document.getElementById('edit-bio').value = viewedProfile?.bio || '';
+        document.getElementById('edit-avatar').value = viewedProfile?.avatar || viewedProfile?.photoURL || '';
+        editAvatarPreview.src = document.getElementById('edit-avatar').value || editAvatarPreview.src;
+        countrySelect.value = normalizeCountryCode(viewedProfile?.country);
+        editModal.classList.remove('hidden');
+      };
+      document.getElementById('btn-close-edit-modal').onclick = () => editModal.classList.add('hidden');
+      document.getElementById('btn-cancel-edit').onclick = () => editModal.classList.add('hidden');
+
+      const editAvatarInput = document.getElementById('edit-avatar');
+      const editAvatarFile = document.getElementById('edit-avatar-file');
+      const editAvatarPreview = document.getElementById('edit-avatar-preview');
+      const editAvatarStatus = document.getElementById('edit-avatar-upload-status');
+      editAvatarInput.addEventListener('input', () => {
+        editAvatarPreview.src = editAvatarInput.value;
+      });
+      editAvatarFile.addEventListener('change', async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        editAvatarStatus.textContent = 'جارٍ رفع الصورة...';
+        try {
+          const uploaded = await uploaderService.uploadFile(file);
+          editAvatarInput.value = uploaded.dataUrl;
+          editAvatarPreview.src = uploaded.dataUrl;
+          editAvatarStatus.textContent = 'تم رفع الصورة.';
+        } catch (error) {
+          editAvatarStatus.textContent = 'تعذر رفع الصورة: ' + error.message;
+        }
+      });
+
+      document.getElementById('form-edit-profile').onsubmit = async (e) => {
+        e.preventDefault();
+        const newName = document.getElementById('edit-name').value;
+        const newUsername = document.getElementById('edit-username').value.trim();
+        const newBio = document.getElementById('edit-bio').value;
+        const newAvatar = document.getElementById('edit-avatar').value;
+        const newCountry = normalizeCountryCode(countrySelect.value);
+        if (!newCountry) return;
+
+        localStorage.setItem(countryStorageKey(), newCountry);
+        const updatedProfile = {
+          uid: viewerUid,
+          displayName: newName,
+          username: newUsername,
+          name: newName,
+          bio: newBio,
+          avatar: newAvatar,
+          photoURL: newAvatar,
+          country: newCountry,
+          xp: store.user?.xp ?? viewedProfile?.xp ?? 0,
+          rank: store.user?.rank || viewedProfile?.rank || '',
+        };
+        if (viewerUid) store.user = { ...(store.user || {}), ...updatedProfile };
+        if (viewedProfile) Object.assign(viewedProfile, updatedProfile);
+        let cloudSaved = true;
+        if (db && viewerUid) {
+          try {
+            await Promise.all([
+              db.collection('users').doc(viewerUid).set({
+                name: newName,
+                username: newUsername,
+                bio: newBio,
+                avatar: newAvatar,
+                country: newCountry,
+              }, { merge: true }),
+              socialService.publishProfile(updatedProfile),
+              firebaseUser ? firebaseUser.updateProfile({ displayName: newName }) : Promise.resolve(),
+            ]);
+          } catch (error) {
+            cloudSaved = false;
+            console.warn('Could not save profile:', error);
+          }
+        }
+
+        document.getElementById('user-profile-name').textContent = newName;
+        document.getElementById('user-profile-handle').textContent = newUsername ? `@${newUsername}` : '';
+        document.getElementById('user-profile-bio').textContent = newBio;
+        document.getElementById('user-profile-avatar').src = newAvatar;
+        renderProfileCountry(newCountry);
+        if (viewerUid) window.dispatchEvent(new CustomEvent('user-state-changed', { detail: store.user }));
+
+        alert(cloudSaved
+          ? 'تم حفظ بيانات الملف الشخصي والبلد.'
+          : 'تم حفظ البلد على هذا الجهاز، لكن تعذرت مزامنته مع الحساب.');
+        editModal.classList.add('hidden');
+      };
+
+      // تسجيل الخروج
+      document.getElementById('btn-profile-logout').onclick = async () => {
+        if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+          await auth.signOut();
+          window.location.href = 'index.html';
+        }
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    // Public catalog and public site settings.
+    match /settings/{documentId} {
+      allow read: if documentId in [
+        'branding',
+        'destinations_data',
+        'governorates_data',
+        'landmarks_data',
+        'map_image',
+        'stamps_data',
+        'points_settings',
+        'category_cards',
+        'leaderboard_data',
+        'community_posts_data',
+        'bookings_data'
+      ];
+      allow write: if isAdmin();
+      // ai_config must not be readable by browsers because it contains the Gemini key.
+      allow read, write: if documentId == 'ai_config' && isAdmin();
+    }
+
+    // Each user can access only their own profile.
+    match /users/{userId} {
+      allow create: if isOwner(userId);
+      allow read, update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /public_profiles/{userId} {
+      allow read: if true;
+      allow create, update: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'uid', 'displayName', 'username', 'avatar', 'bio', 'country', 'xp', 'rank', 'updatedAt'
+        ]);
+      allow delete: if false;
+    }
+
+    match /follows/{followId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['followerUid', 'followedUid', 'createdAt'])
+        && request.resource.data.followerUid == request.auth.uid
+        && request.resource.data.followedUid != request.auth.uid
+        && followId == request.resource.data.followerUid + '_' + request.resource.data.followedUid;
+      allow delete: if signedIn() && resource.data.followerUid == request.auth.uid;
+      allow update: if false;
+    }
+
+    match /bookings/{bookingId} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /community_posts/{postId} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isAdmin() || (signedIn() && resource.data.authorId == request.auth.uid);
+    }
+
+    match /reports/{reportId} {
+      allow create: if signedIn();
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /leaderboard/{documentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /destinations/{destinationId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة الشرف ومتصدرو المملكة | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- رأس الصفحة وبانر المتصدرين -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-[#D97706]/30 text-[#D97706] text-xs font-bold mb-3">
+        <i class="fa-solid fa-trophy text-[#D97706]"></i>
+        <span>لوحة الشرف ومتصدرو المملكة (Leaderboard)</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-[#1E293B] tracking-tight mb-2">
+        متصدرو رحلات وأختام الأردن
+      </h1>
+      <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+        تصنيف رسمي لأبرز مستكشفي الأردن بحسب عدد الرحلات المكتملة، تجميع أختام المحافظات الـ 12، ونقاط الخبرة التنافسية.
+      </p>
+    </div>
+
+    <!-- شريط البحث وفلاتر الفترة الزمنية (هذا الشهر، هذه السنة، طول الفترة) -->
+    <div class="max-w-3xl mx-auto mb-10 bg-white p-4 rounded-3xl border border-[#E2E8F0] shadow-soft-card flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="relative flex-1 w-full">
+        <i class="fa-solid fa-magnifying-glass text-slate-400 absolute start-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+        <input
+          type="text"
+          id="lb-search-input"
+          placeholder="ابحث عن مستكشف بالاسم أو اليوزر..."
+          class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl ps-10 pe-4 py-2 text-xs font-semibold text-[#1E293B] focus:border-[#C86D51]"
+        >
+      </div>
+
+      <div class="flex items-center gap-1.5 bg-[#FAF8F5] p-1 rounded-2xl border border-slate-200 shrink-0">
+        <button data-period="month" class="lb-period-btn active px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer">هذا الشهر</button>
+        <button data-period="year" class="lb-period-btn px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1E293B] cursor-pointer">هذه السنة</button>
+        <button data-period="all" class="lb-period-btn px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1E293B] cursor-pointer">طول الفترة</button>
+      </div>
+    </div>
+
+    <!-- بطاقة رتبة المستخدم الحالي (تحديد المركز بدقة لكل مستخدم) -->
+    <div class="max-w-4xl mx-auto mb-10">
+      <div class="bg-gradient-to-r from-[#1E293B] via-[#2A3B53] to-[#1E293B] text-white p-5 sm:p-6 rounded-3xl shadow-xl border border-[#E5C598]/50 flex flex-col md:flex-row items-center justify-between gap-5 relative overflow-hidden">
+        <div class="flex items-center gap-4 text-start w-full md:w-auto">
+          <div class="relative shrink-0">
+            <img id="my-standing-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-cover border-2 border-[#D97706] shadow-lg">
+            <span id="my-standing-verification-badge" class="absolute -bottom-1 -end-1"></span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-black uppercase tracking-wider bg-[#D97706]/30 text-amber-200 px-2.5 py-0.5 rounded-full border border-[#D97706]/40">مرتبتك الرسمية</span>
+              <span id="my-standing-user" class="text-xs text-slate-300 font-mono">@sh3sher</span>
+            </div>
+            <h3 id="my-standing-name" class="text-base sm:text-lg font-black text-white mt-1">محمد الشوابكة (أنت)</h3>
+            <p id="my-standing-desc" class="text-xs text-slate-300 mt-0.5">أنت حالياً في المركز #12 من بين كافة مستكشفي المملكة المسجلين 🇯🇴</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 sm:gap-4 shrink-0 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-700/60">
+          <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 text-center min-w-[80px]">
+            <span class="text-[10px] text-slate-300 block uppercase font-bold">المرتبة</span>
+            <span id="my-standing-rank" class="text-xl sm:text-2xl font-black font-mono text-amber-300">#12</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 text-center min-w-[90px]">
+            <span class="text-[10px] text-slate-300 block uppercase font-bold">النقاط</span>
+            <span id="my-standing-points" class="text-xl sm:text-2xl font-black font-mono text-white">1,450</span>
+          </div>
+          <a href="explore.html" class="bg-gradient-to-r from-[#C86D51] to-[#D97706] hover:brightness-110 text-white px-4 py-3 rounded-2xl text-xs font-black shadow-md transition-all cursor-pointer whitespace-nowrap">
+            عزّز ترتيبك 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= منصة التتويج الثلاثية (Top 3 Podium) ================= -->
+    <div class="max-w-4xl mx-auto mb-16" id="podium-container">
+      <div class="grid grid-cols-3 gap-3 sm:gap-6 items-end">
+        
+        <!-- المركز الثاني (الفضي) -->
+        <div id="top2-podium-user" class="flex flex-col items-center group">
+          <div class="relative mb-3 flex flex-col items-center">
+            <div class="relative">
+              <img id="top2-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-4 border-slate-300 shadow-md group-hover:scale-105 transition-transform">
+              <div class="absolute -top-3 -end-2 w-7 h-7 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-xs shadow">🥈</div>
+            </div>
+            <h4 id="top2-name" class="mt-2 text-xs sm:text-sm font-bold text-[#1E293B] text-center truncate max-w-[120px]">سارة المجالي</h4>
+            <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500">مستكشف ذهبي</span>
+            <span id="top2-points" class="mt-1 font-mono font-bold text-xs text-[#D97706] bg-amber-50 px-2 py-0.5 rounded-full border border-[#D97706]/20">+2,800 نقطة</span>
+          </div>
+          <div class="w-full h-32 sm:h-40 rounded-t-2xl bg-gradient-to-t from-slate-200 to-slate-100 border-t-4 border-slate-300 flex flex-col items-center justify-center p-3 shadow-sm">
+            <span class="text-3xl sm:text-4xl font-black text-slate-400 font-mono">2</span>
+            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">المركز الثاني</span>
+          </div>
+        </div>
+
+        <!-- المركز الأول (الذهبي مع التاج الملكي) -->
+        <div id="top1-podium-user" class="flex flex-col items-center -mt-6 group">
+          <div class="relative mb-3 flex flex-col items-center">
+            <div class="relative">
+              <i class="fa-solid fa-crown text-3xl text-amber-400 absolute -top-7 left-1/2 -translate-x-1/2 animate-bounce"></i>
+              <img id="top1-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-4 border-[#D97706] shadow-xl ring-4 ring-[#D97706]/30 group-hover:scale-105 transition-transform">
+              <div class="absolute -top-2 -end-2 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-[#D97706] text-white flex items-center justify-center font-bold text-sm shadow-md border-2 border-white">🥇</div>
+            </div>
+            <h4 id="top1-name" class="mt-2 text-sm sm:text-base font-black text-[#1E293B] text-center truncate max-w-[150px]">طارق الهاشمي</h4>
+            <span class="text-xs font-semibold text-[#D97706] flex items-center gap-1">
+              <i class="fa-solid fa-shield-check"></i>
+              <span>بطل المملكة</span>
+            </span>
+            <span id="top1-points" class="mt-1 font-mono font-black text-xs sm:text-sm text-[#D97706] bg-amber-100 px-3 py-0.5 rounded-full border border-[#D97706]/40">+3,500 نقطة</span>
+          </div>
+          <div class="w-full h-40 sm:h-52 rounded-t-2xl bg-gradient-to-t from-amber-300 via-amber-200 to-amber-100 border-t-4 border-[#D97706] flex flex-col items-center justify-center p-3 shadow-md">
+            <span class="text-4xl sm:text-5xl font-black text-amber-700/80 font-mono">1</span>
+            <span class="text-[11px] font-bold text-amber-900 uppercase tracking-wider">بطل المتصدرين</span>
+          </div>
+        </div>
+
+        <!-- المركز الثالث (البرونزي) -->
+        <div id="top3-podium-user" class="flex flex-col items-center group">
+          <div class="relative mb-3 flex flex-col items-center">
+            <div class="relative">
+              <img id="top3-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-4 border-amber-600/50 shadow-md group-hover:scale-105 transition-transform">
+              <div class="absolute -top-3 -end-2 w-7 h-7 rounded-full bg-amber-700 text-white border-2 border-white flex items-center justify-center text-xs shadow">🥉</div>
+            </div>
+            <h4 id="top3-name" class="mt-2 text-xs sm:text-sm font-bold text-[#1E293B] text-center truncate max-w-[120px]">عمر القاسم</h4>
+            <span class="text-[10px] sm:text-[11px] font-semibold text-slate-500">مستكشف فضي</span>
+            <span id="top3-points" class="mt-1 font-mono font-bold text-xs text-[#D97706] bg-amber-50 px-2 py-0.5 rounded-full border border-[#D97706]/20">+2,150 نقطة</span>
+          </div>
+          <div class="w-full h-24 sm:h-32 rounded-t-2xl bg-gradient-to-t from-amber-100 to-amber-50 border-t-4 border-amber-600/40 flex flex-col items-center justify-center p-3 shadow-sm">
+            <span class="text-3xl sm:text-4xl font-black text-amber-700/60 font-mono">3</span>
+            <span class="text-[10px] font-bold text-amber-800 uppercase tracking-wider">المركز الثالث</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- جدول قائمة المستكشفين الكاملة -->
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl border border-[#E2E8F0] shadow-soft-card overflow-hidden">
+      <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+        <h3 class="font-extrabold text-sm sm:text-base text-[#1E293B]">قائمة المستكشفين الكاملة</h3>
+        <span id="lb-total-count" class="text-xs text-slate-500 font-semibold">12 مستكشف</span>
+      </div>
+
+      <div class="divide-y divide-slate-100" id="lb-users-list">
+        <!-- تُولّد السجلات بالكامل برمجياً -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل لوحة الشرف -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { initialLeaderboard } from './js/data/mock.data.js';
+    import { hasCollectedAllOfficialStamps, renderJordanVerificationBadge } from './js/components/jordan-verification-badge.js';
+    import { db } from './js/config/firebase.config.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("leaderboard");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+
+      let currentPeriod = 'month';
+      let users = [...initialLeaderboard];
+      if (db) {
+        try {
+          const publicProfiles = await db.collection('public_profiles').get();
+          const profileUsers = publicProfiles.docs.map((doc) => {
+            const profile = doc.data();
+            return {
+              id: doc.id,
+              profileUid: doc.id,
+              name: profile.displayName || 'مستكشف الأردن',
+              username: profile.username || '',
+              avatar: profile.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+              bio: profile.bio || '',
+              xp: Number(profile.xp) || 0,
+              totalPoints: Number(profile.xp) || 0,
+              monthlyPoints: Number(profile.xp) || 0,
+              yearlyPoints: Number(profile.xp) || 0,
+              completedTrips: 0,
+              level: profile.rank || 'Explorer',
+              levelAr: profile.rank || 'مستكشف الأردن',
+              stamps: [],
+            };
+          });
+          const profileNames = new Set(profileUsers.map((user) => user.username).filter(Boolean));
+          users = [...users.filter((user) => !profileNames.has(user.username)), ...profileUsers];
+        } catch (error) {
+          console.warn('Could not load public profiles for leaderboard:', error);
+        }
+      }
+
+      const syncMyVerificationBadge = (event) => {
+        const currentUser = event ? event.detail : store.user;
+        if (event) store.user = currentUser;
+        const currentEntry = users.find(user => user.isCurrentUser || user.username === currentUser?.username);
+        const verified = hasCollectedAllOfficialStamps(currentUser || currentEntry);
+        const badge = document.getElementById('my-standing-verification-badge');
+        badge.innerHTML = verified ? renderJordanVerificationBadge('h-6 w-6 drop-shadow-sm') : '';
+      };
+      syncMyVerificationBadge();
+
+      const listContainer = document.getElementById('lb-users-list');
+      const searchInput = document.getElementById('lb-search-input');
+
+      // دالة فرز وتحديث القائمة
+      function updateLeaderboard() {
+        const query = searchInput.value.toLowerCase().trim();
+
+        let filtered = users.map(u => {
+          let pts = u.totalPoints;
+          if (currentPeriod === 'month') pts = Math.round(u.totalPoints * 0.28);
+          if (currentPeriod === 'year') pts = Math.round(u.totalPoints * 0.82);
+          return { ...u, displayPoints: pts };
+        });
+
+        filtered.sort((a, b) => b.displayPoints - a.displayPoints);
+        filtered = filtered.map((u, idx) => ({ ...u, dynamicRank: idx + 1 }));
+
+        // تحديث منصة التتويج الثلاثية
+        if (filtered.length >= 3 && !query) {
+          document.getElementById('podium-container').classList.remove('hidden');
+          // 1
+          document.getElementById('top1-name').textContent = filtered[0].name.split('•')[0];
+          document.getElementById('top1-avatar').src = filtered[0].avatar;
+          document.getElementById('top1-points').textContent = `+${filtered[0].displayPoints.toLocaleString()} نقطة`;
+          document.getElementById('top1-podium-user').onclick = filtered[0].profileUid ? () => { window.location.href = `profile.html?uid=${encodeURIComponent(filtered[0].profileUid)}`; } : null;
+          document.getElementById('top1-podium-user').classList.toggle('cursor-pointer', Boolean(filtered[0].profileUid));
+          // 2
+          document.getElementById('top2-name').textContent = filtered[1].name.split('•')[0];
+          document.getElementById('top2-avatar').src = filtered[1].avatar;
+          document.getElementById('top2-points').textContent = `+${filtered[1].displayPoints.toLocaleString()} نقطة`;
+          document.getElementById('top2-podium-user').onclick = filtered[1].profileUid ? () => { window.location.href = `profile.html?uid=${encodeURIComponent(filtered[1].profileUid)}`; } : null;
+          document.getElementById('top2-podium-user').classList.toggle('cursor-pointer', Boolean(filtered[1].profileUid));
+          // 3
+          document.getElementById('top3-name').textContent = filtered[2].name.split('•')[0];
+          document.getElementById('top3-avatar').src = filtered[2].avatar;
+          document.getElementById('top3-points').textContent = `+${filtered[2].displayPoints.toLocaleString()} نقطة`;
+          document.getElementById('top3-podium-user').onclick = filtered[2].profileUid ? () => { window.location.href = `profile.html?uid=${encodeURIComponent(filtered[2].profileUid)}`; } : null;
+          document.getElementById('top3-podium-user').classList.toggle('cursor-pointer', Boolean(filtered[2].profileUid));
+        } else {
+          document.getElementById('podium-container').classList.add('hidden');
+        }
+
+        if (query) {
+          filtered = filtered.filter(u => 
+            u.name.toLowerCase().includes(query) || 
+            (u.username && u.username.toLowerCase().includes(query))
+          );
+        }
+
+        document.getElementById('lb-total-count').textContent = `${filtered.length} مستكشف`;
+
+        // رسم السجلات
+        listContainer.innerHTML = filtered.map(u => {
+          const isMe = u.isCurrentUser || (store.user && u.name.includes(store.user.displayName));
+          const isVerified = hasCollectedAllOfficialStamps(u) || (isMe && hasCollectedAllOfficialStamps(store.user));
+          return `
+            <div class="p-4 sm:p-5 flex items-center justify-between gap-4 transition-all hover:bg-slate-50 ${isMe ? 'bg-amber-50/80 border-s-4 border-s-[#D97706]' : ''}">
+              <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <span class="font-mono font-bold text-sm sm:text-base text-slate-400 w-8 text-center shrink-0">
+                  #${u.dynamicRank}
+                </span>
+
+                <div class="relative shrink-0">
+                  ${u.profileUid ? `<a href="profile.html?uid=${encodeURIComponent(u.profileUid)}" aria-label="عرض ملف ${u.name}"><img src="${u.avatar}" alt="${u.name}" class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl object-cover border ${isMe ? 'border-2 border-[#D97706]' : 'border-slate-200'}"></a>` : `<img src="${u.avatar}" alt="${u.name}" class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl object-cover border ${isMe ? 'border-2 border-[#D97706]' : 'border-slate-200'}">`}
+                  ${isVerified ? renderJordanVerificationBadge('absolute -bottom-1 -end-1 h-5 w-5') : ''}
+                </div>
+
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    ${u.profileUid ? `<a href="profile.html?uid=${encodeURIComponent(u.profileUid)}" class="font-bold text-xs sm:text-sm truncate ${isMe ? 'text-[#C86D51]' : 'text-[#1E293B]'}">${u.name}</a>` : `<h4 class="font-bold text-xs sm:text-sm truncate ${isMe ? 'text-[#C86D51]' : 'text-[#1E293B]'}">${u.name}</h4>`}
+                    ${isMe ? `<span class="text-[10px] font-black bg-[#D97706] text-white px-2 py-0.5 rounded-full flex items-center gap-1"><i class="fa-solid fa-star text-[8px]"></i> أنت</span>` : ''}
+                  </div>
+                  <span class="text-[11px] text-slate-500 block truncate">
+                    @${u.username} • ${u.completedTrips} رحلات مكتملة
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-end shrink-0">
+                <span class="font-mono font-black text-sm sm:text-base text-[#D97706]">
+                  ${u.displayPoints.toLocaleString()} نقطة
+                </span>
+                <span class="text-[11px] font-semibold text-slate-400">
+                  ${u.levelAr}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // البحث اللحظي
+      searchInput.oninput = updateLeaderboard;
+
+      // أزرار الفترات
+      document.querySelectorAll('.lb-period-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.lb-period-btn').forEach(b => b.className = "lb-period-btn px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-[#1E293B] cursor-pointer");
+          btn.className = "lb-period-btn active px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer";
+          currentPeriod = btn.getAttribute('data-period');
+          updateLeaderboard();
+        };
+      });
+
+      // التشغيل المبدئي
+      updateLeaderboard();
+      window.addEventListener('user-state-changed', (event) => {
+        syncMyVerificationBadge(event);
+        updateLeaderboard();
+      });
+    });
+  </script>
+</body>
+</html>

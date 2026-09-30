@@ -1,0 +1,533 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استكشف الرحلات والوجهات | Jordan Tour</title>
+
+  <!-- الخط العربي وأيقونات FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- ملفات التنسيقات -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي الموحد -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
+    
+    <!-- رأس الصفحة وعنوان الاستكشاف -->
+    <div class="mb-8">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-[#1E293B] tracking-tight mb-2">
+        استكشف الرحلات والإقامات في الأردن
+      </h1>
+      <p class="text-sm sm:text-base text-[#64748B] max-w-3xl">
+        أكثر من 18 تجربة ومساراً منتقاة بعناية تشمل جولات البتراء، سفاري وادي رم، ومنتجعات البحر الميت مع دفع كليك الفوري والتذاكر الرسمية.
+      </p>
+
+      <!-- حقل البحث الفوري الحي -->
+      <div class="mt-5 max-w-2xl relative">
+        <i class="fa-solid fa-magnifying-glass text-[#64748B] absolute start-4 top-1/2 -translate-y-1/2 text-base pointer-events-none"></i>
+        <input
+          type="text"
+          id="explore-search-input"
+          placeholder="ابحث عن رحلة، وجهة، أو نشاط (مثل: البتراء، وادي رم، طعام، عجلون)..."
+          class="w-full bg-white border-2 border-[#E2E8F0] focus:border-[#C86D51] focus:ring-2 focus:ring-[#C86D51]/20 rounded-2xl ps-12 pe-10 py-3.5 text-sm sm:text-base text-[#1E293B] shadow-xs outline-none transition-all"
+        >
+        <button id="clear-search-btn" class="hidden absolute end-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-slate-100 text-[#64748B]">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- أشرطة البحث والفلترة النشطة (Active Chips) -->
+      <div id="active-chips-bar" class="flex flex-wrap items-center gap-2 pt-3">
+        <span class="text-xs font-semibold text-[#64748B] me-1">الفلاتر النشطة:</span>
+        <div id="chips-list" class="flex flex-wrap gap-2"></div>
+        <button id="btn-clear-all-chips" class="hidden text-xs text-[#C86D51] hover:underline font-bold px-1 cursor-pointer">مسح الكل</button>
+      </div>
+    </div>
+
+    <!-- شبكة الاستكشاف الرئيسية (Sidebar 280px + Results 1fr) -->
+    <div class="flex items-start gap-8">
+      
+      <!-- الشريط الجانبي للفلاتر المتقدمة (Desktop Sidebar) -->
+      <aside class="hidden lg:block w-[280px] shrink-0 sticky top-24 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-soft-card max-h-[calc(100vh-120px)] overflow-y-auto">
+        <div class="flex flex-col gap-6 text-[#1E293B]">
+          
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-[#C86D51]"></i>
+              <h3 class="text-base font-bold text-[#1E293B]">عوامل التصفية</h3>
+            </div>
+            <button id="btn-reset-filters-side" class="text-xs text-[#C86D51] font-bold hover:underline cursor-pointer">إعادة ضبط</button>
+          </div>
+
+          <!-- 1. نوع التجربة -->
+          <div>
+            <h4 class="text-[11px] uppercase tracking-widest font-bold text-[#64748B] mb-3">نوع التجربة</h4>
+            <div class="space-y-2 text-xs sm:text-sm">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="guided" class="filter-type-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>جولات سياحية مرخصة</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="stays" class="filter-type-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>إقامات ومخيمات صحراوية</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="historic" class="filter-type-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>تذاكر ومواقع أثرية</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. المنطقة الجغرافية -->
+          <div class="pt-4 border-t border-[#E2E8F0]">
+            <h4 class="text-[11px] uppercase tracking-widest font-bold text-[#64748B] mb-3">المنطقة الجغرافية</h4>
+            <div class="space-y-3 text-xs sm:text-sm">
+              <label class="flex items-start gap-2.5 cursor-pointer">
+                <input type="checkbox" value="south" class="filter-region-checkbox accent-[#C86D51] w-4 h-4 rounded mt-0.5">
+                <div>
+                  <span class="font-bold block">جنوب الأردن</span>
+                  <span class="text-[11px] text-[#64748B]">البتراء، وادي رم، العقبة</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 cursor-pointer">
+                <input type="checkbox" value="central" class="filter-region-checkbox accent-[#C86D51] w-4 h-4 rounded mt-0.5">
+                <div>
+                  <span class="font-bold block">وسط الأردن</span>
+                  <span class="text-[11px] text-[#64748B]">عمان، البحر الميت، مادبا</span>
+                </div>
+              </label>
+              <label class="flex items-start gap-2.5 cursor-pointer">
+                <input type="checkbox" value="north" class="filter-region-checkbox accent-[#C86D51] w-4 h-4 rounded mt-0.5">
+                <div>
+                  <span class="font-bold block">شمال الأردن</span>
+                  <span class="text-[11px] text-[#64748B]">جرش، عجلون، أم قيس</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. الاهتمامات -->
+          <div class="pt-4 border-t border-[#E2E8F0]">
+            <h4 class="text-[11px] uppercase tracking-widest font-bold text-[#64748B] mb-3">الاهتمامات</h4>
+            <div class="space-y-2 text-xs sm:text-sm">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="adventure" class="filter-cat-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>المغامرة والصحراء</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="relaxation" class="filter-cat-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>الاسترخاء والعافية</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="archaeology" class="filter-cat-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>التاريخ والآثار</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="culinary" class="filter-cat-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>تجارب الطعام والطهي</span>
+              </label>
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" value="luxury" class="filter-cat-checkbox accent-[#C86D51] w-4 h-4 rounded">
+                <span>إقامات وتخييم فاخر</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 4. نطاق السعر (حاسبة من وإلى وسلايدر) -->
+          <div class="pt-4 border-t border-[#E2E8F0]">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-[11px] uppercase tracking-widest font-bold text-[#64748B]">نطاق السعر (د.أ)</h4>
+              <span id="price-range-label" class="text-xs font-mono font-bold text-[#C86D51] bg-[#C86D51]/10 px-2 py-0.5 rounded-full">
+                0 - 250 د.أ
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-3">
+              <div class="bg-[#FAF8F5] p-2 rounded-xl border border-[#E2E8F0]">
+                <label class="text-[10px] text-[#64748B] font-bold block mb-1">من:</label>
+                <input type="number" id="price-min-input" value="0" min="0" max="240" step="5" class="w-full bg-white border border-[#CBD5E1] rounded-lg px-2 py-1 text-xs font-mono font-bold text-[#1E293B]">
+              </div>
+              <div class="bg-[#FAF8F5] p-2 rounded-xl border border-[#E2E8F0]">
+                <label class="text-[10px] text-[#64748B] font-bold block mb-1">إلى:</label>
+                <input type="number" id="price-max-input" value="250" min="10" max="300" step="5" class="w-full bg-white border border-[#CBD5E1] rounded-lg px-2 py-1 text-xs font-mono font-bold text-[#1E293B]">
+              </div>
+            </div>
+
+            <!-- أزرار النطاقات السريعة -->
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="setPricePreset(0, 50)" class="text-[10px] font-bold px-2 py-1 rounded-lg border border-[#E2E8F0] hover:bg-slate-50 cursor-pointer">0 - 50 د.أ</button>
+              <button onclick="setPricePreset(50, 100)" class="text-[10px] font-bold px-2 py-1 rounded-lg border border-[#E2E8F0] hover:bg-slate-50 cursor-pointer">50 - 100 د.أ</button>
+              <button onclick="setPricePreset(100, 180)" class="text-[10px] font-bold px-2 py-1 rounded-lg border border-[#E2E8F0] hover:bg-slate-50 cursor-pointer">100 - 180 د.أ</button>
+              <button onclick="setPricePreset(180, 250)" class="text-[10px] font-bold px-2 py-1 rounded-lg border border-[#E2E8F0] hover:bg-slate-50 cursor-pointer">180+ د.أ</button>
+            </div>
+          </div>
+
+          <!-- 5. التقييم الأدنى -->
+          <div class="pt-4 border-t border-[#E2E8F0]">
+            <h4 class="text-[11px] uppercase tracking-widest font-bold text-[#64748B] mb-2.5">التقييم الأدنى</h4>
+            <div class="flex flex-wrap gap-1.5" id="rating-filter-pills">
+              <button data-rate="any" class="rating-pill active px-2.5 py-1 rounded-full text-xs font-bold border border-[#C86D51] bg-[#C86D51] text-white">الكل</button>
+              <button data-rate="4.5" class="rating-pill px-2.5 py-1 rounded-full text-xs font-bold border border-[#E2E8F0] bg-[#FAF8F5] text-slate-700">4.5+ ★</button>
+              <button data-rate="4.8" class="rating-pill px-2.5 py-1 rounded-full text-xs font-bold border border-[#E2E8F0] bg-[#FAF8F5] text-slate-700">4.8+ ★</button>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- عمود النتائج والبطاقات (Results 1fr) -->
+      <div class="flex-1 w-full min-w-0">
+        
+        <!-- شريط التحكم العلوي بالنتائج والترتيب -->
+        <div class="flex items-center justify-between gap-4 pb-5 border-b border-[#E2E8F0] mb-6">
+          <div class="flex items-center gap-3">
+            <p class="text-sm text-[#64748B]">
+              عرض <strong id="results-count" class="text-[#1E293B] font-mono text-base">0</strong> تجربة متوفرة
+            </p>
+            <!-- زر فتح الفلاتر على شاشات الموبايل -->
+            <button id="btn-open-mobile-drawer" class="lg:hidden inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3.5 py-1.5 text-xs font-bold text-[#1E293B] shadow-2xs">
+              <i class="fa-solid fa-sliders text-[#C86D51]"></i>
+              <span>الفلاتر</span>
+            </button>
+          </div>
+
+          <!-- قائمة الترتيب الديناميكية -->
+          <div class="relative">
+            <select id="sort-select" class="rounded-full border border-[#E2E8F0] bg-white px-4 py-2 text-xs sm:text-sm font-bold text-[#1E293B] shadow-2xs focus:outline-none focus:border-[#C86D51] cursor-pointer">
+              <option value="popular">الأكثر شعبية وإقبالاً</option>
+              <option value="price-asc">السعر: من الأقل للأعلى</option>
+              <option value="price-desc">السعر: من الأعلى للأقل</option>
+              <option value="rating-desc">الأعلى تقييماً</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- شبكة بطاقات الرحلات (3 أعمدة متجاوبة) -->
+        <div id="explore-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+          <!-- تُولد البطاقات بالكامل من خلال destinations.data.js -->
+        </div>
+
+        <!-- حالة عدم وجود نتائج (Empty State) -->
+        <div id="empty-results-box" class="hidden w-full rounded-2xl border-2 border-dashed border-[#CBD5E1] p-12 text-center bg-white/50">
+          <div class="w-16 h-16 rounded-full bg-amber-500/10 border border-[#D97706]/30 flex items-center justify-center text-[#D97706] mx-auto mb-4 text-2xl">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#1E293B] mb-2">لا توجد نتائج مطابقة لمعايير بحثك</h3>
+          <p class="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto mb-6">جرب توسيع نطاق السعر أو إزالة بعض الفلاتر لعرض مزيد من المغامرات في ربوع الأردن.</p>
+          <button id="btn-reset-empty" class="rounded-full bg-[#C86D51] hover:bg-[#B45A3E] text-white px-6 py-2.5 text-xs font-bold transition-all shadow-sm">
+            إعادة ضبط الفلاتر
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- درج الفلاتر للموبايل (Mobile Drawer) -->
+  <div id="mobile-filter-drawer" class="fixed inset-0 z-50 lg:hidden hidden">
+    <div id="mobile-drawer-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+    <div class="absolute inset-y-0 start-0 max-w-[340px] w-full bg-white shadow-2xl flex flex-col z-10 p-5 overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0] mb-4">
+        <h3 class="font-bold text-base text-[#1E293B] flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-[#C86D51]"></i>
+          <span>الفلاتر والخيارات</span>
+        </h3>
+        <button id="btn-close-mobile-drawer" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">&times;</button>
+      </div>
+      <div id="mobile-filters-content" class="space-y-5 flex-1">
+        <!-- يتم نقل فلاتر السايدبار برمجياً هنا لشاشات الموبايل -->
+      </div>
+      <button id="btn-apply-mobile" class="w-full mt-4 bg-[#C86D51] text-white py-3 rounded-full font-bold text-xs shadow-md">
+        تطبيق الفلاتر وعرض النتائج
+      </button>
+    </div>
+  </div>
+
+  <!-- الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase المتوافقة -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- محرك تشغيل صفحة explore -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { destinationsService } from './js/services/destinations.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("explore");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+      let destinationsData = await destinationsService.getAll();
+
+      // حالة الفلترة
+      const state = {
+        search: '',
+        types: [],
+        regions: [],
+        categories: [],
+        priceMin: 0,
+        priceMax: 250,
+        minRating: 'any',
+        sort: 'popular'
+      };
+
+      // قراءة الباراميترات من الرابط (URL Params)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('dest')) state.search = urlParams.get('dest').replace('-', ' ');
+      if (urlParams.get('cat') && urlParams.get('cat') !== 'all') state.categories.push(urlParams.get('cat'));
+
+      const searchInput = document.getElementById('explore-search-input');
+      const grid = document.getElementById('explore-cards-grid');
+      const countEl = document.getElementById('results-count');
+      const emptyBox = document.getElementById('empty-results-box');
+
+      if (state.search) searchInput.value = state.search;
+
+      // دالة تصفية ورسم البطاقات
+      function renderCards() {
+        let list = [...destinationsData];
+
+        // 1. تصفية النص
+        if (state.search.trim()) {
+          const q = state.search.toLowerCase();
+          list = list.filter(d => 
+            d.title.ar.toLowerCase().includes(q) || 
+            d.region.ar.toLowerCase().includes(q) ||
+            d.description.ar.toLowerCase().includes(q)
+          );
+        }
+
+        // 2. نوع التجربة
+        if (state.types.length > 0) {
+          list = list.filter(d => state.types.includes(d.experienceType));
+        }
+
+        // 3. المنطقة
+        if (state.regions.length > 0) {
+          list = list.filter(d => state.regions.includes(d.regionZone));
+        }
+
+        // 4. الاهتمام / التصنيف
+        if (state.categories.length > 0) {
+          list = list.filter(d => state.categories.includes(d.category));
+        }
+
+        // 5. السعر
+        list = list.filter(d => d.priceJOD >= state.priceMin && d.priceJOD <= state.priceMax);
+
+        // 6. التقييم
+        if (state.minRating !== 'any') {
+          const r = parseFloat(state.minRating);
+          list = list.filter(d => d.rating >= r);
+        }
+
+        // 7. الترتيب
+        if (state.sort === 'price-asc') list.sort((a,b) => a.priceJOD - b.priceJOD);
+        else if (state.sort === 'price-desc') list.sort((a,b) => b.priceJOD - a.priceJOD);
+        else if (state.sort === 'rating-desc') list.sort((a,b) => b.rating - a.rating);
+
+        countEl.textContent = list.length;
+
+        if (list.length === 0) {
+          grid.innerHTML = '';
+          emptyBox.classList.remove('hidden');
+          return;
+        }
+
+        emptyBox.classList.add('hidden');
+        grid.innerHTML = list.map(d => `
+          <div onclick="window.location.href='attraction.html?id=${d.id}'" class="group w-full bg-white rounded-2xl overflow-hidden border border-[#E2E8F0] hover:border-[#E5C598] transition-all duration-300 shadow-soft-card hover:shadow-floating-modal flex flex-col cursor-pointer">
+            <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
+              <img src="${d.imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute top-3 start-3 z-10 flex flex-col gap-1.5">
+                <span class="bg-[#1E293B]/85 backdrop-blur-md text-[#FAF8F5] text-[11px] font-semibold px-2.5 py-1 rounded-full border border-white/10 shadow-xs">
+                  ${d.isUnesco ? 'تراث عالمي (اليونسكو)' : 'تجربة معتمدة'}
+                </span>
+                ${d.discountPercent ? `<span class="bg-[#C86D51] text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-xs">-${d.discountPercent}% خصم</span>` : ''}
+                <span class="bg-amber-100/95 text-[#D97706] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">🪙 +${d.rewardPoints || 150} XP</span>
+              </div>
+            </div>
+
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-3 text-xs text-[#64748B] mb-2 font-medium">
+                  <span class="text-[#C86D51] font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot"></i> ${d.region.ar}
+                  </span>
+                  <span>•</span>
+                  <span><i class="fa-regular fa-clock"></i> ${d.duration.ar}</span>
+                </div>
+
+                <h3 class="text-[17px] font-bold text-[#1E293B] group-hover:text-[#C86D51] transition-colors leading-snug line-clamp-2 mb-2">
+                  ${d.title.ar}
+                </h3>
+
+                <div class="flex items-center gap-1.5 text-xs mb-3 text-[#D97706]">
+                  <i class="fa-solid fa-star"></i>
+                  <span class="font-bold text-[#1E293B] font-mono">${d.rating}</span>
+                  <span class="text-[#64748B]">(${d.reviewsCount} تقييم)</span>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-[#E2E8F0] flex items-end justify-between">
+                <div>
+                  <span class="text-[10px] text-[#64748B] block">ابتداءً من:</span>
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-[20px] font-bold text-[#C86D51] font-mono">${d.priceJOD} د.أ</span>
+                    ${d.originalPriceJOD ? `<span class="text-xs text-[#64748B] line-through font-mono">${d.originalPriceJOD} د.أ</span>` : ''}
+                  </div>
+                </div>
+                <button onclick="event.stopPropagation(); window.location.href='checkout.html?dest=${d.id}'" class="rounded-full bg-[#C86D51] hover:bg-[#B45A3E] text-white px-4 py-2 text-xs font-bold transition-all shadow-xs">
+                  احجز الآن
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // ربط حقول البحث والتصفية
+      searchInput.addEventListener('input', (e) => {
+        state.search = e.target.value;
+        renderCards();
+      });
+
+      document.querySelectorAll('.filter-type-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.types = Array.from(document.querySelectorAll('.filter-type-checkbox:checked')).map(c => c.value);
+          renderCards();
+        });
+      });
+
+      document.querySelectorAll('.filter-region-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.regions = Array.from(document.querySelectorAll('.filter-region-checkbox:checked')).map(c => c.value);
+          renderCards();
+        });
+      });
+
+      document.querySelectorAll('.filter-cat-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => {
+          state.categories = Array.from(document.querySelectorAll('.filter-cat-checkbox:checked')).map(c => c.value);
+          renderCards();
+        });
+      });
+
+      // السعر
+      const minIn = document.getElementById('price-min-input');
+      const maxIn = document.getElementById('price-max-input');
+      const priceLbl = document.getElementById('price-range-label');
+
+      const handlePrice = () => {
+        state.priceMin = parseInt(minIn.value) || 0;
+        state.priceMax = parseInt(maxIn.value) || 250;
+        priceLbl.textContent = `${state.priceMin} - ${state.priceMax >= 250 ? '250+' : state.priceMax} د.أ`;
+        renderCards();
+      };
+      minIn.addEventListener('input', handlePrice);
+      maxIn.addEventListener('input', handlePrice);
+
+      window.setPricePreset = (min, max) => {
+        minIn.value = min;
+        maxIn.value = max;
+        handlePrice();
+      };
+
+      // التقييم
+      document.querySelectorAll('.rating-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.rating-pill').forEach(b => b.classList.remove('active', 'bg-[#C86D51]', 'text-white'));
+          btn.classList.add('active', 'bg-[#C86D51]', 'text-white');
+          state.minRating = btn.getAttribute('data-rate');
+          renderCards();
+        });
+      });
+
+      // الترتيب
+      document.getElementById('sort-select').addEventListener('change', (e) => {
+        state.sort = e.target.value;
+        renderCards();
+      });
+
+      // إعادة الضبط
+      const resetAll = () => {
+        state.search = '';
+        state.types = [];
+        state.regions = [];
+        state.categories = [];
+        state.priceMin = 0;
+        state.priceMax = 250;
+        state.minRating = 'any';
+        searchInput.value = '';
+        minIn.value = 0;
+        maxIn.value = 250;
+        document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+        document.querySelector('.rating-pill[data-rate="any"]').click();
+        handlePrice();
+      };
+      document.getElementById('btn-reset-filters-side')?.addEventListener('click', resetAll);
+      document.getElementById('btn-reset-empty')?.addEventListener('click', resetAll);
+
+      const filterSidebar = document.querySelector('main aside');
+      const mobileFilterDrawer = document.getElementById('mobile-filter-drawer');
+      const mobileFiltersContent = document.getElementById('mobile-filters-content');
+      const desktopFilterParent = filterSidebar?.parentElement;
+      const desktopFilterNextSibling = filterSidebar?.nextSibling;
+      const closeMobileFilters = () => {
+        if (filterSidebar && desktopFilterParent && filterSidebar.parentElement === mobileFiltersContent) {
+          desktopFilterParent.insertBefore(filterSidebar, desktopFilterNextSibling);
+        }
+        filterSidebar?.classList.remove('mobile-filter-sidebar');
+        filterSidebar?.classList.add('hidden', 'lg:block');
+        mobileFilterDrawer?.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+      document.getElementById('btn-open-mobile-drawer')?.addEventListener('click', () => {
+        if (!filterSidebar || !mobileFiltersContent || !mobileFilterDrawer) return;
+        mobileFiltersContent.appendChild(filterSidebar);
+        filterSidebar.classList.remove('hidden', 'lg:block');
+        filterSidebar.classList.add('mobile-filter-sidebar');
+        mobileFilterDrawer.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('btn-close-mobile-drawer')?.focus();
+      });
+      document.getElementById('btn-close-mobile-drawer')?.addEventListener('click', closeMobileFilters);
+      document.getElementById('btn-apply-mobile')?.addEventListener('click', closeMobileFilters);
+      document.getElementById('mobile-drawer-backdrop')?.addEventListener('click', closeMobileFilters);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !mobileFilterDrawer?.classList.contains('hidden')) closeMobileFilters();
+      });
+      window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+        if (event.matches) closeMobileFilters();
+      });
+
+      // تشغيل العرض المبدئي
+      renderCards();
+      destinationsService.subscribe((updatedDestinations) => {
+        destinationsData = updatedDestinations;
+        renderCards();
+      });
+    });
+  </script>
+</body>
+</html>

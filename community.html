@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منتدى السياح وتجارب السفر | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- رأس الصفحة وبانر النشر السريع -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-6 border-b border-[#E2E8F0]">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C86D51]/10 text-[#C86D51] text-xs font-bold mb-2">
+          <i class="fa-solid fa-comments"></i>
+          <span>منتدى السياح وتجارب السفر الحيّة</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B]">
+          شارك تجربتك واستكشف رحلات الآخرين
+        </h1>
+        <p class="text-xs sm:text-sm text-[#64748B] mt-1">
+          تابع المستكشفين المعتمدين، علّق على تجاربهم، وانشر صورك وفيديوهاتك الميدانية لكسب نقاط XP حقيقية.
+        </p>
+      </div>
+
+      <button id="btn-open-composer" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-6 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer shrink-0">
+        <i class="fa-solid fa-camera"></i>
+        <span>نشر تجربة سياحية جديدة</span>
+      </button>
+    </div>
+
+    <!-- شريط البحث والفلترة السريعة -->
+    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-[#E2E8F0] shadow-soft-card mb-8 space-y-4 max-w-4xl mx-auto">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <!-- البحث بالكلمات والهاشتاغ -->
+        <div class="flex-1 relative">
+          <i class="fa-solid fa-magnifying-glass text-slate-400 absolute start-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+          <input
+            type="text"
+            id="forum-search-input"
+            placeholder="ابحث بالاسم، المستكشفين، أو كلمات المنشور مثل (#البتراء، وادي رم)..."
+            class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-2xl ps-10 pe-4 py-3 text-xs sm:text-sm font-semibold text-[#1E293B] focus:border-[#C86D51]"
+          >
+        </div>
+
+        <!-- فلتر المحافظة والوجهة -->
+        <select id="forum-location-filter" class="bg-[#FAF8F5] border border-[#E2E8F0] rounded-2xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#1E293B] focus:border-[#C86D51] shrink-0 cursor-pointer">
+          <option value="all">كل الوجهات والمحافظات</option>
+          <option value="petra-rose-city">البتراء الوردية</option>
+          <option value="wadi-rum-stargazing">وادي رم والنجوم</option>
+          <option value="dead-sea-retreat">البحر الميت والسبا</option>
+          <option value="jerash-roman-glory">آثار جرش الرومانية</option>
+        </select>
+      </div>
+
+      <!-- تبويبات التصفية -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <button data-tab="all" class="forum-tab-btn active px-3.5 py-1.5 rounded-full font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer">جميع المنشورات</button>
+        <button data-tab="popular" class="forum-tab-btn px-3.5 py-1.5 rounded-full font-bold bg-[#FAF8F5] text-slate-600 hover:bg-slate-200 cursor-pointer">الأكثر تفاعلاً 🔥</button>
+      </div>
+    </div>
+
+    <!-- خلاصة المنشورات بنمط فيسبوك الفاخر (Single Column Stream) -->
+    <div class="max-w-2xl mx-auto w-full flex flex-col gap-6" id="forum-posts-stream">
+      <!-- تُولّد المنشورات التفاعلية برمجياً -->
+    </div>
+
+  </main>
+
+  <!-- ================= نافذة منبثقة للتعليقات والردود المتداخلة (Facebook Style Comments Modal) ================= -->
+  <div id="comments-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 animate-in zoom-in-95">
+      <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-base text-[#1E293B]">التعليقات والمناقشات الميدانية</h3>
+          <span id="modal-post-title-preview" class="text-xs text-slate-500 truncate max-w-sm block mt-0.5">عنوان المنشور</span>
+        </div>
+        <button id="btn-close-comments-modal" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-black">&times;</button>
+      </div>
+
+      <!-- شريط التعليقات والردود -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4" id="modal-comments-list"></div>
+
+      <!-- فورم كتابة تعليق جديد -->
+      <form id="modal-comment-form" class="p-4 border-t border-slate-100 flex items-center gap-2 bg-slate-50 rounded-b-3xl">
+        <input type="text" id="modal-comment-input" placeholder="اكتب تعليقاً على هذا المنشور..." class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-[#1E293B] focus:border-[#C86D51]">
+        <button type="submit" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow cursor-pointer">
+          <span>إرسال</span>
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= نافذة الإبلاغ عن محتوى مخالف (Report Modal) ================= -->
+  <div id="report-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-rose-100 animate-in zoom-in-95">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2 text-rose-600 font-extrabold text-sm">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>إبلاغ عن محتوى غير لائق</span>
+        </div>
+        <button id="btn-close-report-modal" class="text-slate-400 hover:text-black">&times;</button>
+      </div>
+
+      <p class="text-xs text-slate-600">سيصل هذا البلاغ مباشرة إلى لوحة تحكم الإدارة لمراجعته وحذف المحتوى إذا كان مخالفاً للسياسات.</p>
+
+      <div class="space-y-2 text-xs">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="report-reason" value="محتوى مسيء أو غير لائق" checked class="accent-[#C86D51]">
+          <span>محتوى مسيء أو غير لائق</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="report-reason" value="معلومات سياحية مضللة أو غير صحيحة" class="accent-[#C86D51]">
+          <span>معلومات سياحية مضللة أو غير صحيحة</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="report-reason" value="إعلانات مزعجة وسبام" class="accent-[#C86D51]">
+          <span>إعلانات مزعجة وسبام (Spam)</span>
+        </label>
+      </div>
+
+      <textarea id="report-notes" rows="2" placeholder="ملاحظات إضافية للأدمن..." class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl p-2.5 text-xs focus:border-[#C86D51]"></textarea>
+
+      <div class="flex justify-end gap-2 pt-2 border-t">
+        <button type="button" id="btn-cancel-report" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">إلغاء</button>
+        <button type="button" id="btn-submit-report" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">إرسال البلاغ للأدمن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= نافذة نشر تجربة جديدة (Post Composer Modal) ================= -->
+  <div id="composer-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-200 animate-in zoom-in-95">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-camera text-[#C86D51]"></i>
+          <h3 class="font-black text-lg text-[#1E293B]">نشر تجربة استكشافية جديدة</h3>
+        </div>
+        <button id="btn-close-composer-modal" class="text-slate-400 hover:text-black">&times;</button>
+      </div>
+
+      <!-- بانر المكافأة وسقف المنشورات -->
+      <div class="bg-amber-50 border border-amber-300 p-3.5 rounded-2xl text-xs text-amber-900 space-y-1">
+        <div class="flex items-center justify-between font-bold">
+          <span><i class="fa-solid fa-coins text-amber-600"></i> مكافأة النشر المعتمدة: +25 نقطة ولاء 🪙</span>
+          <span class="text-[10px] bg-amber-200 px-2 py-0.5 rounded">سقف شهري: 5 منشورات</span>
+        </div>
+        <p class="text-[11px] text-amber-800">يُنشر المنشور مباشرة في المنتدى ويُدرج في سجل المراجعة لكسب النقاط وترقية رتبتك.</p>
+      </div>
+
+      <form id="post-composer-form" class="space-y-4 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">عنوان التجربة:</label>
+          <input type="text" id="comp-title" required placeholder="مثال: صعود الدير في البتراء وقت الغروب..." class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-[#1E293B] focus:border-[#C86D51]">
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">الوجهة السياحية التابعة لها:</label>
+          <select id="comp-dest" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-[#1E293B] focus:border-[#C86D51]">
+            <option value="petra-rose-city">مدينة البتراء الوردية</option>
+            <option value="wadi-rum-stargazing">وادي رم • التخييم الفلكي</option>
+            <option value="dead-sea-retreat">البحر الميت • منتجع الاسترخاء</option>
+            <option value="jerash-roman-glory">جرش • بومبي الشرق وأعمدة الرومان</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">قصتك ونصائحك للمسافرين:</label>
+          <textarea id="comp-content" rows="4" required placeholder="شارك مشاعرك، نصائحك للمسافرين، وأفضل الأوقات للزيارة..." class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl p-3 text-xs text-[#1E293B] focus:border-[#C86D51]"></textarea>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">رابط صورة أو فيديو للتجربة (URL):</label>
+          <input type="url" id="comp-media-url" required placeholder="https://images.unsplash.com/..." class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2 text-xs font-mono">
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">الوسوم والهاشتاغات:</label>
+          <input type="text" id="comp-tags" value="#البتراء #الأردن #سياحة" class="w-full bg-[#FAF8F5] border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold text-[#C86D51]">
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2 border-t">
+          <button type="button" id="btn-cancel-composer" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">إلغاء</button>
+          <button type="submit" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow-md">إرسال ونشر التجربة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل المنتدى والتفاعلات -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { auth, db } from './js/config/firebase.config.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { initialCommunityPosts } from './js/data/mock.data.js';
+    import { hasCollectedAllOfficialStamps, renderJordanVerificationBadge } from './js/components/jordan-verification-badge.js';
+    import { socialService } from './js/services/social.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("community");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+
+      const signedInUser = auth ? await new Promise((resolve) => auth.onAuthStateChanged(resolve)) : null;
+      const viewerUid = signedInUser?.uid || store.user?.uid || null;
+
+      let posts = [...initialCommunityPosts];
+      let activePostForModal = null;
+      const followingUsers = {};
+      if (db && viewerUid) {
+        try {
+          const followed = await db.collection('follows').where('followerUid', '==', viewerUid).get();
+          followed.docs.forEach((doc) => { followingUsers[doc.data().followedUid] = true; });
+        } catch (error) {
+          console.warn('Could not load followed users:', error);
+        }
+      }
+
+      const stream = document.getElementById('forum-posts-stream');
+      stream.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-follow-uid]');
+        if (!button || !viewerUid) return;
+        const followedUid = button.dataset.followUid;
+        try {
+          await socialService.setFollowing(viewerUid, followedUid, !followingUsers[followedUid]);
+          followingUsers[followedUid] = !followingUsers[followedUid];
+          renderStream();
+        } catch (error) {
+          alert('تعذرت متابعة الحساب: ' + error.message);
+        }
+      });
+
+      // دالة رسم المنشورات
+      function renderStream() {
+        const query = document.getElementById('forum-search-input').value.toLowerCase().trim();
+        const loc = document.getElementById('forum-location-filter').value;
+
+        let filtered = posts.filter(p => {
+          if (loc !== 'all' && p.destinationId !== loc) return false;
+          if (query) {
+            const matchAuthor = p.authorName.toLowerCase().includes(query);
+            const matchTitle = p.title.ar.toLowerCase().includes(query);
+            const matchContent = p.content.ar.toLowerCase().includes(query);
+            const matchTags = (p.tags || []).some(t => t.toLowerCase().includes(query));
+            if (!matchAuthor && !matchTitle && !matchContent && !matchTags) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          stream.innerHTML = `
+            <div class="text-center py-16 bg-white rounded-3xl border border-slate-200">
+              <i class="fa-solid fa-comments text-4xl text-slate-300 mb-3"></i>
+              <h3 class="text-base font-bold text-slate-600">لم يتم العثور على منشورات تطابق بحثك</h3>
+            </div>
+          `;
+          return;
+        }
+
+        stream.innerHTML = filtered.map(post => {
+          const authorUid = post.authorId || post.userId || '';
+          const profileUrl = authorUid ? `profile.html?uid=${encodeURIComponent(authorUid)}` : '';
+          const isFollowing = !!followingUsers[authorUid];
+          return `
+            <div class="bg-white rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-soft-card space-y-3">
+              <!-- شريط الكاتب -->
+              <div class="p-4 sm:p-5 flex items-center justify-between gap-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="relative shrink-0">
+                    ${profileUrl ? `<a href="${profileUrl}" aria-label="عرض ملف ${post.authorName}"><img src="${post.authorAvatar}" alt="${post.authorName}" class="w-11 h-11 rounded-full object-cover border border-slate-200"></a>` : `<img src="${post.authorAvatar}" alt="${post.authorName}" class="w-11 h-11 rounded-full object-cover border border-slate-200">`}
+                    ${hasCollectedAllOfficialStamps(post.authorStamps) ? renderJordanVerificationBadge('absolute -bottom-1 -end-1 h-5 w-5') : ''}
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      ${profileUrl ? `<a href="${profileUrl}" class="font-extrabold text-sm text-[#1E293B] hover:text-[#C86D51]">${post.authorName}</a>` : `<span class="font-extrabold text-sm text-[#1E293B]">${post.authorName}</span>`}
+                      ${hasCollectedAllOfficialStamps(post.authorStamps) ? renderJordanVerificationBadge('h-4 w-4') : ''}
+                    </div>
+                    <span class="text-[11px] text-slate-500 font-semibold block">${post.authorLevel} • ${post.createdAt}</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  ${authorUid && viewerUid && authorUid !== viewerUid ? `<button type="button" data-follow-uid="${authorUid}" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all ${isFollowing ? 'bg-slate-100 text-slate-700' : 'bg-[#C86D51] text-white shadow-xs'}">${isFollowing ? 'إلغاء المتابعة' : '+ متابعة'}</button>` : ''}
+                  <button onclick="window.openReportModal('${post.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg" title="إبلاغ">
+                    <i class="fa-regular fa-flag text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- صورة المعلم -->
+              ${post.imageUrl ? `
+                <div class="relative aspect-video w-full bg-slate-900 overflow-hidden">
+                  <img src="${post.imageUrl}" class="w-full h-full object-cover">
+                  <div class="absolute top-3 start-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-location-dot text-[#E5C598]"></i>
+                    <span>${post.destinationName.ar}</span>
+                  </div>
+                </div>
+              ` : ''}
+
+              <!-- محتوى البوست -->
+              <div class="p-5 space-y-3">
+                <h3 class="font-extrabold text-base sm:text-lg text-[#1E293B] leading-snug">${post.title.ar}</h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${post.content.ar}</p>
+
+                <!-- الهاشتاغات -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  ${(post.tags || []).map(t => `<span class="text-[11px] font-bold text-[#C86D51] bg-[#C86D51]/5 px-2 py-0.5 rounded cursor-pointer">${t}</span>`).join("")}
+                </div>
+
+                <!-- أزرار التفاعل والتعليقات -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                  <div class="flex items-center gap-4">
+                    <button onclick="window.likePost('${post.id}')" class="flex items-center gap-1.5 font-bold transition-colors ${post.isLiked ? 'text-rose-600' : 'hover:text-rose-600'}">
+                      <i class="${post.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart text-sm"></i>
+                      <span>${post.likesCount}</span>
+                    </button>
+                    <button onclick="window.openCommentsModal('${post.id}')" class="flex items-center gap-1.5 font-bold hover:text-[#C86D51]">
+                      <i class="fa-regular fa-comment text-sm"></i>
+                      <span>${(post.comments || []).length} تعليقات</span>
+                    </button>
+                  </div>
+                  <a href="attraction.html?id=${post.destinationId}" class="text-[#C86D51] font-bold hover:underline flex items-center gap-1">
+                    <span>احجز هذه الوجهة</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+                </div>
+
+                <!-- آخر تعليقين بنمط فيسبوك -->
+                <div class="space-y-2 pt-2">
+                  ${(post.comments || []).slice(-2).map(c => `
+                    <div class="bg-[#FAF8F5] p-2.5 rounded-2xl border border-slate-100 text-xs">
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="flex items-center gap-1 font-bold text-[#1E293B]">${c.authorId ? `<a href="profile.html?uid=${encodeURIComponent(c.authorId)}" class="hover:text-[#C86D51]">${c.authorName}</a>` : c.authorName}${hasCollectedAllOfficialStamps(c.authorStamps) ? renderJordanVerificationBadge('h-3.5 w-3.5') : ''}</span>
+                        <span class="text-slate-400 text-[10px]">${c.createdAt || 'الآن'}</span>
+                      </div>
+                      <p class="text-slate-700">${c.text}</p>
+                    </div>
+                  `).join("")}
+
+                  <button onclick="window.openCommentsModal('${post.id}')" class="text-[11px] font-bold text-[#C86D51] hover:underline pt-1 block cursor-pointer">
+                    عرض جميع التعليقات والردود (${(post.comments || []).length}) زي الفيسبوك ←
+                  </button>
+                </div>
+
+                <!-- حقل التعليق السريع -->
+                <div class="flex items-center gap-2 pt-2">
+                  <input type="text" id="inline-comment-${post.id}" placeholder="اكتب تعليقك السريع هنا..." class="flex-1 bg-[#FAF8F5] border border-slate-200 rounded-xl px-3 py-2 text-xs text-[#1E293B] focus:border-[#C86D51]">
+                  <button onclick="window.submitInlineComment('${post.id}')" class="p-2 bg-[#1E293B] hover:bg-slate-800 text-white rounded-xl cursor-pointer">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // البحث والفلترة
+      document.getElementById('forum-search-input').oninput = renderStream;
+      document.getElementById('forum-location-filter').onchange = renderStream;
+
+      // الإعجاب بالمنشور
+      window.likePost = (postId) => {
+        const p = posts.find(item => item.id === postId);
+        if (p) {
+          p.isLiked = !p.isLiked;
+          p.likesCount += p.isLiked ? 1 : -1;
+          renderStream();
+        }
+      };
+
+      // التعليق السريع المباشر
+      window.submitInlineComment = (postId) => {
+        const inp = document.getElementById(`inline-comment-${postId}`);
+        const text = inp.value.trim();
+        if (!text) return;
+        const p = posts.find(item => item.id === postId);
+        if (p) {
+          p.comments = p.comments || [];
+          p.comments.push({
+            id: `c-${Date.now()}`,
+            authorId: store.user?.uid || viewerUid || '',
+            authorName: store.user ? (store.user.displayName || 'أنا') : 'محمد الشوابكة (أنت)',
+            authorAvatar: store.user?.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+            authorStamps: store.user?.stamps || [],
+            isVerified: Boolean(store.user?.isVerified || store.user?.emailVerified),
+            text: text,
+            createdAt: 'الآن'
+          });
+          inp.value = '';
+          renderStream();
+        }
+      };
+
+      // نافذة التعليقات الكبيرة (Facebook Style)
+      const commentsModal = document.getElementById('comments-modal');
+      window.openCommentsModal = (postId) => {
+        activePostForModal = posts.find(item => item.id === postId);
+        if (!activePostForModal) return;
+
+        document.getElementById('modal-post-title-preview').textContent = activePostForModal.title.ar;
+        const list = document.getElementById('modal-comments-list');
+        list.innerHTML = (activePostForModal.comments || []).map(c => `
+          <div class="flex items-start gap-3">
+            ${c.authorId ? `<a href="profile.html?uid=${encodeURIComponent(c.authorId)}"><img src="${c.authorAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}" alt="${c.authorName}" class="w-8 h-8 rounded-full object-cover"></a>` : `<img src="${c.authorAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}" alt="${c.authorName}" class="w-8 h-8 rounded-full object-cover">`}
+            <div class="flex-1 bg-[#FAF8F5] p-3 rounded-2xl border border-slate-100 text-xs space-y-1">
+              <div class="flex items-center justify-between">
+                ${c.authorId ? `<a href="profile.html?uid=${encodeURIComponent(c.authorId)}" class="font-bold text-[#1E293B] hover:text-[#C86D51]">${c.authorName}</a>` : `<span class="font-bold text-[#1E293B]">${c.authorName}</span>`}
+                <span class="text-[10px] text-slate-400">${c.createdAt || 'الآن'}</span>
+              </div>
+              <p class="text-slate-700">${c.text}</p>
+            </div>
+          </div>
+        `).join("");
+
+        commentsModal.classList.remove('hidden');
+      };
+
+      document.getElementById('btn-close-comments-modal').onclick = () => commentsModal.classList.add('hidden');
+      document.getElementById('modal-comment-form').onsubmit = (e) => {
+        e.preventDefault();
+        const inp = document.getElementById('modal-comment-input');
+        const text = inp.value.trim();
+        if (!text || !activePostForModal) return;
+
+        activePostForModal.comments.push({
+          id: `c-${Date.now()}`,
+          authorId: store.user?.uid || viewerUid || '',
+          authorName: store.user ? (store.user.displayName || 'أنا') : 'محمد الشوابكة (أنت)',
+          authorAvatar: store.user?.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+          authorStamps: store.user?.stamps || [],
+          isVerified: Boolean(store.user?.isVerified || store.user?.emailVerified),
+          text: text,
+          createdAt: 'الآن'
+        });
+        inp.value = '';
+        window.openCommentsModal(activePostForModal.id);
+        renderStream();
+      };
+
+      // نافذة البلاغ
+      const reportModal = document.getElementById('report-modal');
+      window.openReportModal = (id) => reportModal.classList.remove('hidden');
+      document.getElementById('btn-close-report-modal').onclick = () => reportModal.classList.add('hidden');
+      document.getElementById('btn-cancel-report').onclick = () => reportModal.classList.add('hidden');
+      document.getElementById('btn-submit-report').onclick = () => {
+        alert('تم إرسال بلاغك بنجاح إلى لوحة الإدارة للمراجعة الفورية.');
+        reportModal.classList.add('hidden');
+      };
+
+      // نافذة إنشاء المنشور الجديد (Composer)
+      const compModal = document.getElementById('composer-modal');
+      document.getElementById('btn-open-composer').onclick = () => compModal.classList.remove('hidden');
+      document.getElementById('btn-close-composer-modal').onclick = () => compModal.classList.add('hidden');
+      document.getElementById('btn-cancel-composer').onclick = () => compModal.classList.add('hidden');
+
+      document.getElementById('post-composer-form').onsubmit = (e) => {
+        e.preventDefault();
+        const title = document.getElementById('comp-title').value.trim();
+        const content = document.getElementById('comp-content').value.trim();
+        const destId = document.getElementById('comp-dest').value;
+        const mediaUrl = document.getElementById('comp-media-url').value.trim();
+        const tags = document.getElementById('comp-tags').value.split(' ').filter(Boolean);
+
+        posts.unshift({
+          id: `post-${Date.now()}`,
+          authorId: store.user?.uid || viewerUid || '',
+          authorName: store.user ? (store.user.displayName || 'محمد الشوابكة') : 'محمد الشوابكة (أنت)',
+          authorAvatar: store.user?.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+          authorLevel: 'مستكشف فضي • Silver',
+          destinationId: destId,
+          destinationName: { ar: 'البتراء الوردية' },
+          title: { ar: title },
+          content: { ar: content },
+          imageUrl: mediaUrl,
+          likesCount: 1,
+          isLiked: true,
+          createdAt: 'الآن',
+          tags: tags,
+          comments: []
+        });
+
+        alert('🎉 تم نشر تجربتك السياحية بنجاح! كسبت +25 نقطة ولاء 🪙');
+        compModal.classList.add('hidden');
+        renderStream();
+      };
+
+      // التشغيل المبدئي
+      renderStream();
+    });
+  </script>
+</body>
+</html>

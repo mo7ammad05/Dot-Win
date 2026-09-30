@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خريطة الأردن التفاعلية وأختام المحافظات | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- رأس الصفحة والمقدمة -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C86D51]/10 text-[#C86D51] text-xs font-bold mb-3">
+        <i class="fa-solid fa-compass"></i>
+        <span>الاستكشاف الجغرافي والثقافي لمحافظات المملكة الـ 12</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-[#1E293B] tracking-tight mb-2">
+        خريطة الأردن التفاعلية وأختام المحافظات
+      </h1>
+      <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+        انقر على أي محافظة على الخريطة لتتعرف على تاريخها العريق، أبرز معالمها، ألبوم صورها، والختم التذكاري المعتمد الذي تكسبه عند زيارتها.
+      </p>
+    </div>
+
+    <!-- شريط التبديل السريع للمحافظات الـ 12 -->
+    <div class="mb-8 bg-white p-4 rounded-3xl border border-[#E2E8F0] shadow-soft-card">
+      <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100 text-xs font-bold text-slate-700">
+        <span class="flex items-center gap-1.5">
+          <i class="fa-solid fa-map-pin text-[#C86D51]"></i>
+          <span>محافظات المملكة الـ 12 (انقر للمعاينة الفورية):</span>
+        </span>
+        <span class="text-[11px] text-[#C86D51] font-bold bg-[#C86D51]/10 px-2.5 py-0.5 rounded-full">
+          12 محافظة مكتملة
+        </span>
+      </div>
+      <div class="flex flex-wrap gap-1.5 sm:gap-2" id="gov-quick-chips">
+        <!-- تُولّد الأزرار الـ 12 ديناميكياً -->
+      </div>
+    </div>
+
+    <!-- الشبكة الرئيسية: لوحة الخريطة (5 أعمدة) + لوحة تفاصيل المحافظة (7 أعمدة) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- ================= العمود الأيمن: لوحة الخريطة التفاعلية بدون أي هوامش ميتة ================= -->
+      <div class="lg:col-span-5 relative w-full h-[600px] sm:h-[680px] lg:h-[740px] rounded-3xl overflow-hidden shadow-floating-modal border-2 border-slate-200 bg-slate-900 group select-none" id="map-canvas-container">
+        
+        <!-- صورة خلفية الخريطة الرسمية المعتمدة -->
+        <img
+          id="map-bg-image"
+          src="https://images.unsplash.com/photo-1524850011238-e3d235c7d4c9?w=1200"
+          alt="خريطة الأردن"
+          class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        >
+
+        <!-- التدرج الداكن لضمان وضوح النقاط -->
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-transparent to-slate-950/70 pointer-events-none"></div>
+
+        <!-- الشارات العلوية العائمة -->
+        <div class="absolute top-4 start-4 end-4 flex items-center justify-between pointer-events-none z-20">
+          <div class="bg-slate-900/85 backdrop-blur-md px-3.5 py-1.5 rounded-2xl border border-white/20 flex items-center gap-2 shadow-lg">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-bold text-white">خريطة الأردن الحية</span>
+          </div>
+          <div class="bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-white/20 text-[#E5C598] text-xs font-bold shadow-lg">
+            <span>12 محافظة أردنية</span>
+          </div>
+        </div>
+
+        <!-- دبابيس المحافظات الـ 12 التفاعلية (Interactive Pins) -->
+        <div id="map-pins-layer" class="absolute inset-0">
+          <!-- تُزرع النقاط الـ 12 بنسب مئوية دقيقة هنا -->
+        </div>
+
+        <!-- الشريط السفلي العائم لاسم المحافظة النشطة -->
+        <div class="absolute bottom-4 start-4 end-4 flex items-center justify-between pointer-events-none z-20">
+          <div class="bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-2xl border border-white/20 text-white text-xs flex items-center gap-2 shadow-xl max-w-[70%]">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span class="font-extrabold shrink-0" id="bottom-gov-name">العاصمة عمان</span>
+            <span class="text-slate-400">|</span>
+            <span class="text-[#E5C598] font-bold truncate" id="bottom-gov-title">عمان • عاصمة الأصالة السبعة جبال</span>
+          </div>
+
+          <div class="bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-white/20 text-[#E5C598] text-[11px] font-bold shadow-xl">
+            <span>انقر على النقطة للاستعراض</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= العمود الأيسر: لوحة استعراض المحافظة والختم المكتسب ================= -->
+      <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-soft-card space-y-6">
+        
+        <!-- رأس المحافظة والختم المكتسب -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div>
+            <span id="view-gov-subtitle" class="text-xs font-bold text-[#C86D51] uppercase tracking-wider block mb-1">
+              العاصمة عمان
+            </span>
+            <h2 id="view-gov-title" class="text-2xl sm:text-3xl font-black text-[#1E293B]">
+              عمان • عاصمة الأصالة السبعة جبال
+            </h2>
+          </div>
+
+          <!-- بطاقة الختم التذكاري المكتسب عند الزيارة -->
+          <div class="flex items-center gap-3 bg-[#FAF8F5] p-3 rounded-2xl border border-slate-200 shrink-0">
+            <div id="view-stamp-icon-wrap" class="w-12 h-12 rounded-full border-2 border-dashed border-[#D97706] flex items-center justify-center text-xl text-[#D97706] bg-amber-50">
+              <i class="fa-solid fa-crown" id="view-stamp-icon"></i>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-[#D97706] block">الختم المكتسب عند الزيارة:</span>
+              <span id="view-stamp-name" class="font-extrabold text-xs text-[#1E293B] block leading-tight">ختم نسر فيلادلفيا</span>
+              <span id="view-stamp-rarity" class="text-[10px] text-slate-500 font-mono">Heritage Seal (+150 XP)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- النبذة العامة والتاريخية -->
+        <div class="space-y-4">
+          <div>
+            <h4 class="text-xs font-bold text-[#1E293B] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-sparkles text-[#C86D51]"></i>
+              <span>نبذة عن المحافظة:</span>
+            </h4>
+            <p id="view-gov-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              قلب المملكة النابض، تجمع بين الآثار الرومانية والبيزنطية والأموية مع نبض الحياة العصرية وثقافة المقاهي والفنون في اللويبدة وجبل عمان.
+            </p>
+          </div>
+
+          <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/80">
+            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-book-open text-[#D97706]"></i>
+              <span>تاريخها وأصالتها العريقة:</span>
+            </h4>
+            <p id="view-gov-history" class="text-xs text-amber-950 leading-relaxed font-arabic">
+              عُرفت قديماً باسم "ربة عمون" عاصمة العمونيين، ثم أطلق عليها بطليموس اسم "فيلادلفيا". احتضنت الحضارة الرومانية وأقيم فيها المدرج الضخم ومعبد هرقل الشاهق فوق جبل القلعة.
+            </p>
+          </div>
+        </div>
+
+        <!-- أبرز الأماكن والمعالم السياحية في المحافظة -->
+        <div class="space-y-3 pt-2">
+          <h4 class="font-extrabold text-sm text-[#1E293B] flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-[#C86D51]"></i>
+            <span>أبرز الأماكن والمعالم الأثرية في المحافظة:</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="view-gov-landmarks">
+            <!-- تُولّد بطاقات المعالم البارزة ديناميكياً -->
+          </div>
+        </div>
+
+        <!-- ألبوم الصور والفيديو الترويجي وزر حجز الرحلات -->
+        <div class="pt-2 border-t border-slate-100 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button type="button" id="tab-btn-photos" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer">
+                <i class="fa-regular fa-image me-1"></i>
+                <span>ألبوم الصور</span>
+              </button>
+              <button type="button" id="tab-btn-video" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer">
+                <i class="fa-solid fa-video me-1"></i>
+                <span>فيديو استكشافي</span>
+              </button>
+            </div>
+
+            <a id="btn-explore-gov" href="explore.html" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all">
+              <span>تصفح رحلات هذه المحافظة</span>
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+          </div>
+
+          <!-- حاوية الصور -->
+          <div id="media-photos-container" class="grid grid-cols-3 gap-2"></div>
+
+          <!-- حاوية الفيديو -->
+          <div id="media-video-container" class="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-md hidden">
+            <video id="gov-video-player" controls class="w-full h-full object-cover"></video>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل صفحة الخريطة ونغمة الصوت Web Audio API -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { governoratesData as defaultGovernoratesData } from './js/data/governorates.data.js';
+    import { officialStampsData } from './js/data/stamps.data.js';
+    import { firebaseService } from './js/services/firebase.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("map");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+
+      let governoratesData = [...defaultGovernoratesData];
+      const [governoratesSettings, landmarkSettings, mapImageSettings] = await Promise.all([
+        firebaseService.getSettingsDocument('governorates_data'),
+        firebaseService.getSettingsDocument('landmarks_data'),
+        firebaseService.getSettingsDocument('map_image')
+      ]);
+      if (Array.isArray(governoratesSettings?.list)) {
+        const mergedGovernorates = new Map(defaultGovernoratesData.map(gov => [gov.id, gov]));
+        governoratesSettings.list.forEach(gov => {
+          const base = mergedGovernorates.get(gov.id) || {};
+          mergedGovernorates.set(gov.id, { ...base, ...gov, landmarks: gov.landmarks || base.landmarks || [] });
+        });
+        governoratesData = [...mergedGovernorates.values()];
+      }
+      if (Array.isArray(landmarkSettings?.list)) {
+        governoratesData = governoratesData.map(gov => {
+          const managed = landmarkSettings.list.filter(item => item.governorateId === gov.id);
+          const landmarks = new Map((gov.landmarks || []).map(item => [item.id, item]));
+          managed.forEach(item => landmarks.set(item.id, item));
+          return { ...gov, landmarks: [...landmarks.values()] };
+        });
+      }
+      if (mapImageSettings?.url) {
+        const mapImage = document.getElementById('map-bg-image');
+        if (mapImage) mapImage.src = mapImageSettings.url;
+      }
+
+      // دالة تشغيل نغمة الصوت التفاعلية الرسمية عبر Web Audio API (D5 -> A5)
+      function playPinChime() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime); // نغمة D5
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // نغمة A5
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.35);
+        } catch (e) {
+          // المتصفح يمنع الصوت التلقائي قبل أول نقرة
+        }
+      }
+
+      let activeGovId = 'amman';
+
+      // 1. توليد أزرار الشريط العلوي السريع للمحافظات الـ 12
+      const quickChipsContainer = document.getElementById('gov-quick-chips');
+      quickChipsContainer.innerHTML = governoratesData.map(g => `
+        <button type="button" class="gov-chip-btn ${g.id === activeGovId ? 'bg-gradient-to-r from-[#C86D51] to-[#B45A3E] text-white shadow-sm ring-2 ring-[#C86D51]/30 scale-105' : 'bg-[#FAF8F5] text-slate-700 border-slate-200'} px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border" data-id="${g.id}">
+          <span class="w-2 h-2 rounded-full ${g.id === activeGovId ? 'bg-amber-300 animate-pulse' : 'bg-slate-400'}"></span>
+          <span>${g.name.ar}</span>
+        </button>
+      `).join("");
+
+      // 2. زرع دبابيس المحافظات الـ 12 على الخريطة بإحداثيات النسبة المئوية
+      const pinsLayer = document.getElementById('map-pins-layer');
+      pinsLayer.innerHTML = governoratesData.map(g => `
+        <button type="button" class="map-pin-btn absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none transition-transform z-20 cursor-pointer ${g.id === activeGovId ? 'scale-125 z-30' : 'hover:scale-110'}" style="top: ${g.pinPosition.top}; left: ${g.pinPosition.left};" data-id="${g.id}">
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-xl transition-all ${g.id === activeGovId ? 'bg-[#C86D51] text-white ring-4 ring-[#C86D51]/50 scale-110 shadow-lg' : 'bg-white text-[#1E293B] border border-slate-300'}">
+              <i class="fa-solid fa-location-dot text-xs"></i>
+            </div>
+            <span class="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap ${g.id === activeGovId ? 'bg-[#D97706] text-white font-black ring-2 ring-white/50 scale-105' : 'bg-slate-900/90 text-white border border-white/20'}">
+              ${g.name.ar}
+            </span>
+          </div>
+        </button>
+      `).join("");
+
+      // 3. دالة تحديث بيانات المحافظة المعروضة بالكامل
+      function updateGovernorateView(id) {
+        activeGovId = id;
+        playPinChime();
+
+        const gov = governoratesData.find(g => g.id === id) || governoratesData[0];
+        const stamp = officialStampsData.find(s => s.gov.includes(gov.name.ar) || s.id === gov.stampId) || officialStampsData[0];
+
+        // تحديث النصوص
+        document.getElementById('bottom-gov-name').textContent = gov.name.ar;
+        document.getElementById('bottom-gov-title').textContent = gov.title.ar;
+        document.getElementById('view-gov-subtitle').textContent = gov.name.ar;
+        document.getElementById('view-gov-title').textContent = gov.title.ar;
+        document.getElementById('view-gov-desc').textContent = gov.description.ar;
+        document.getElementById('view-gov-history').textContent = gov.history.ar;
+
+        // تحديث الختم
+        document.getElementById('view-stamp-name').textContent = stamp.name;
+        document.getElementById('view-stamp-rarity').textContent = `${stamp.rarity || 'Heritage'} Seal (+${stamp.xp} XP)`;
+        document.getElementById('view-stamp-icon').className = `fa-solid ${stamp.icon || 'fa-stamp'}`;
+
+        // رابط استكشاف رحلات المحافظة
+        document.getElementById('btn-explore-gov').href = `explore.html?dest=${encodeURIComponent(gov.name.ar)}`;
+
+        // تحديث المعالم البارزة
+        const lmContainer = document.getElementById('view-gov-landmarks');
+        lmContainer.innerHTML = (gov.landmarks || []).map(l => `
+          <div class="bg-[#FAF8F5] p-3 rounded-2xl border border-slate-200 flex items-start gap-3">
+            <img src="${l.image}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+            <div class="min-w-0">
+              <h5 class="font-bold text-xs text-[#1E293B] truncate leading-tight">${l.name.ar}</h5>
+              <p class="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-snug">${l.desc.ar}</p>
+            </div>
+          </div>
+        `).join("");
+
+        // تحديث ألبوم الصور
+        const photosContainer = document.getElementById('media-photos-container');
+        photosContainer.innerHTML = (gov.photos || []).map(url => `
+          <div class="relative aspect-video rounded-xl overflow-hidden shadow-xs bg-slate-900 group">
+            <img src="${url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+          </div>
+        `).join("");
+
+        // تحديث الفيديو
+        const videoPlayer = document.getElementById('gov-video-player');
+        if (gov.videoUrl) {
+          videoPlayer.src = gov.videoUrl;
+          document.getElementById('tab-btn-video').classList.remove('hidden');
+        } else {
+          document.getElementById('tab-btn-video').classList.add('hidden');
+        }
+
+        // تحديث حالة أزرار الدبابيس والشريط
+        document.querySelectorAll('.gov-chip-btn').forEach(btn => {
+          const match = btn.getAttribute('data-id') === id;
+          btn.className = `gov-chip-btn ${match ? 'bg-gradient-to-r from-[#C86D51] to-[#B45A3E] text-white shadow-sm ring-2 ring-[#C86D51]/30 scale-105' : 'bg-[#FAF8F5] text-slate-700 border-slate-200'} px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border`;
+          btn.querySelector('span').className = `w-2 h-2 rounded-full ${match ? 'bg-amber-300 animate-pulse' : 'bg-slate-400'}`;
+        });
+
+        document.querySelectorAll('.map-pin-btn').forEach(btn => {
+          const match = btn.getAttribute('data-id') === id;
+          btn.className = `map-pin-btn absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none transition-transform z-20 cursor-pointer ${match ? 'scale-125 z-30' : 'hover:scale-110'}`;
+          const circle = btn.querySelector('div > div');
+          const tag = btn.querySelector('div > span');
+          if (circle && tag) {
+            circle.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-xl transition-all ${match ? 'bg-[#C86D51] text-white ring-4 ring-[#C86D51]/50 scale-110 shadow-lg' : 'bg-white text-[#1E293B] border border-slate-300'}`;
+            tag.className = `mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap ${match ? 'bg-[#D97706] text-white font-black ring-2 ring-white/50 scale-105' : 'bg-slate-900/90 text-white border border-white/20'}`;
+          }
+        });
+      }
+
+      // ربط أحداث النقر للشريط والدبابيس
+      document.querySelectorAll('.gov-chip-btn').forEach(btn => {
+        btn.onclick = () => updateGovernorateView(btn.getAttribute('data-id'));
+      });
+      document.querySelectorAll('.map-pin-btn').forEach(btn => {
+        btn.onclick = () => updateGovernorateView(btn.getAttribute('data-id'));
+      });
+
+      // تبديل الميديا (صور / فيديو)
+      const tabPhotos = document.getElementById('tab-btn-photos');
+      const tabVideo = document.getElementById('tab-btn-video');
+      const boxPhotos = document.getElementById('media-photos-container');
+      const boxVideo = document.getElementById('media-video-container');
+
+      tabPhotos.onclick = () => {
+        tabPhotos.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer";
+        tabVideo.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
+        boxPhotos.classList.remove('hidden');
+        boxVideo.classList.add('hidden');
+      };
+
+      tabVideo.onclick = () => {
+        tabVideo.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#1E293B] text-white shadow-xs cursor-pointer";
+        tabPhotos.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 cursor-pointer";
+        boxVideo.classList.remove('hidden');
+        boxPhotos.classList.add('hidden');
+      };
+
+      // تشغيل العرض المبدئي لمحافظة عمان
+      updateGovernorateView('amman');
+    });
+  </script>
+</body>
+</html>

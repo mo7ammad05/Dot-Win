@@ -1,0 +1,662 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة الحجز والدفع الفوري عبر كليك | Jordan Tour</title>
+
+  <!-- الخطوط الرسمية والأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي (يتم إخفاؤه تلقائياً عند الطباعة عبر custom.css) -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full print:hidden"></header>
+
+  <main class="max-w-[1440px] mx-auto px-4 md:px-8 py-8 md:py-12 w-full flex-1">
+    
+    <!-- مسار التنقل -->
+    <div class="flex items-center gap-2 text-xs font-semibold text-[#64748B] mb-6 print:hidden">
+      <a href="explore.html" class="hover:text-[#C86D51] transition-colors">الرحلات والوجهات</a>
+      <span>/</span>
+      <span id="ck-trip-title" class="truncate max-w-[200px]">مدينة البتراء الوردية</span>
+      <span>/</span>
+      <span class="text-[#C86D51] font-bold">الدفع وكليك</span>
+    </div>
+
+    <!-- مؤشر خطوات الحجز الأربعة (Stepper Indicator) -->
+    <div class="mb-10 max-w-3xl mx-auto print:hidden">
+      <div class="flex items-center justify-between relative">
+        <div class="absolute top-1/2 left-0 right-0 h-1 bg-[#E2E8F0] -translate-y-1/2 -z-10"></div>
+        <div id="stepper-progress-bar" class="absolute top-1/2 left-0 h-1 bg-[#C86D51] -translate-y-1/2 -z-10 transition-all duration-300 w-0"></div>
+
+        <!-- الخطوة 1 -->
+        <div class="flex flex-col items-center">
+          <button id="step-btn-1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-[#C86D51] text-white ring-4 ring-[#C86D51]/20 scale-110 shadow-md">1</button>
+          <span class="mt-2 text-xs font-bold text-[#C86D51]">الموعد والضيوف</span>
+        </div>
+        <!-- الخطوة 2 -->
+        <div class="flex flex-col items-center">
+          <button id="step-btn-2" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-white text-slate-400 border border-[#E2E8F0] shadow-md">2</button>
+          <span class="mt-2 text-xs font-bold text-slate-500">بيانات المسافر</span>
+        </div>
+        <!-- الخطوة 3 -->
+        <div class="flex flex-col items-center">
+          <button id="step-btn-3" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-white text-slate-400 border border-[#E2E8F0] shadow-md">3</button>
+          <span class="mt-2 text-xs font-bold text-slate-500">الدفع وكليك</span>
+        </div>
+        <!-- الخطوة 4 -->
+        <div class="flex flex-col items-center">
+          <button id="step-btn-4" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-white text-slate-400 border border-[#E2E8F0] shadow-md">4</button>
+          <span class="mt-2 text-xs font-bold text-slate-500">التذكرة والـ QR</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- شبكة الحجز الرئيسية (النموذج 8 أعمدة + الملخص 4 أعمدة) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- منطقة الخطوات (8 Cols) -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- ================= الخطوة 1: الموعد، الانطلاق، وعدد المسافرين ================= -->
+        <div id="step-pane-1" class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-soft-card space-y-6">
+          <div class="border-b border-[#E2E8F0] pb-4">
+            <span class="text-xs font-bold text-[#C86D51] uppercase tracking-wider block">الخطوة 1 من 4</span>
+            <h3 class="text-xl font-black text-[#1E293B]">اختر تاريخ الرحلة والموعد وعدد الضيوف</h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-[#64748B] block mb-2">تاريخ الرحلة المفضل:</label>
+              <input type="date" id="ck-date-input" value="2026-10-15" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-semibold text-[#1E293B] focus:border-[#C86D51]">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-[#64748B] block mb-2">فترة الانطلاق المعتمدة:</label>
+              <select id="ck-time-select" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-semibold text-[#1E293B] focus:border-[#C86D51]">
+                <option value="08:00 ص">08:00 ص (موصى به - الصباح الباكر)</option>
+                <option value="10:30 ص">10:30 ص (صباحي مريح)</option>
+                <option value="01:00 م">01:00 م (بعد الظهر والغروب)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- عدادات المسافرين (بالغين وأطفال) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-[#E2E8F0]">
+            <div class="p-4 bg-[#FAF8F5] rounded-2xl border border-[#E2E8F0] flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-[#1E293B] block">البالغين (+12 سنة)</span>
+                <span id="ck-adult-rate" class="text-xs text-[#64748B]">65 د.أ / فرد</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" id="btn-adult-minus" class="w-8 h-8 rounded-full bg-white border border-slate-200 font-bold hover:border-[#C86D51] cursor-pointer">-</button>
+                <span id="ck-adult-count" class="font-bold font-mono text-base">2</span>
+                <button type="button" id="btn-adult-plus" class="w-8 h-8 rounded-full bg-white border border-slate-200 font-bold hover:border-[#C86D51] cursor-pointer">+</button>
+              </div>
+            </div>
+
+            <div class="p-4 bg-[#FAF8F5] rounded-2xl border border-[#E2E8F0] flex items-center justify-between">
+              <div>
+                <span class="font-bold text-sm text-[#1E293B] block">الأطفال (أقل من 12 سنة)</span>
+                <span id="ck-child-rate" class="text-xs text-emerald-600 font-bold">35 د.أ (-40% خصم)</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" id="btn-child-minus" class="w-8 h-8 rounded-full bg-white border border-slate-200 font-bold hover:border-[#C86D51] cursor-pointer">-</button>
+                <span id="ck-child-count" class="font-bold font-mono text-base">0</span>
+                <button type="button" id="btn-child-plus" class="w-8 h-8 rounded-full bg-white border border-slate-200 font-bold hover:border-[#C86D51] cursor-pointer">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 flex justify-end border-t border-[#E2E8F0]">
+            <button type="button" onclick="goToStep(2)" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-8 py-3.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-md cursor-pointer">
+              <span>متابعة لبيانات المسافر</span>
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= الخطوة 2: بيانات المسافر الرئيسي ================= -->
+        <div id="step-pane-2" class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-soft-card space-y-6 hidden">
+          <div class="border-b border-[#E2E8F0] pb-4">
+            <span class="text-xs font-bold text-[#C86D51] uppercase tracking-wider block">الخطوة 2 من 4</span>
+            <h3 class="text-xl font-black text-[#1E293B]">بيانات المسافر الرئيسي ومعلومات التواصل</h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs font-bold text-[#64748B] block mb-1">الاسم الكامل (كما في الهوية أو الجواز):</label>
+              <input type="text" id="traveler-name" value="محمد الشوابكة" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-bold text-[#1E293B] focus:border-[#C86D51]">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-bold text-[#64748B] block mb-1">البريد الإلكتروني (لاستلام التذكرة):</label>
+                <input type="email" id="traveler-email" value="sh3sher@domain.jo" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-bold text-[#1E293B] focus:border-[#C86D51]">
+              </div>
+              <div>
+                <label class="text-xs font-bold text-[#64748B] block mb-1">رقم الهاتف والواتساب (+962):</label>
+                <input type="tel" id="traveler-phone" value="+962 7 9123 4567" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm font-bold text-[#1E293B] focus:border-[#C86D51]">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-[#64748B] block mb-1">ملاحظات أو طلبات خاصة (وجبات نباتية، مقاعد أمامية...):</label>
+              <textarea id="traveler-notes" rows="3" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl p-3 text-sm text-[#1E293B] focus:border-[#C86D51]" placeholder="اكتب أي ملاحظة خاصة هنا..."></textarea>
+            </div>
+          </div>
+
+          <div class="pt-4 flex items-center justify-between border-t border-[#E2E8F0]">
+            <button type="button" onclick="goToStep(1)" class="text-xs font-bold text-[#64748B] hover:text-[#1E293B] cursor-pointer">← السابق</button>
+            <button type="button" onclick="goToStep(3)" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-8 py-3.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-md cursor-pointer">
+              <span>متابعة إلى الدفع وكليك</span>
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= الخطوة 3: الدفع، CliQ، وبطاقة الفيزا ================= -->
+        <div id="step-pane-3" class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-soft-card space-y-6 hidden">
+          <div class="border-b border-[#E2E8F0] pb-4">
+            <span class="text-xs font-bold text-[#C86D51] uppercase tracking-wider block">الخطوة 3 من 4</span>
+            <h3 class="text-xl font-black text-[#1E293B]">الدفع وتفعيل كليك ورفع الإثبات أو البطاقة</h3>
+          </div>
+
+          <!-- بانر خصم نقاط المستكشف الولائية -->
+          <div class="bg-gradient-to-r from-[#1E293B] to-[#2A3B53] text-white rounded-2xl p-4 sm:p-5 border border-[#E5C598]/40 shadow-soft-card flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#D97706]/20 border border-[#D97706] text-[#FDE68A] flex items-center justify-center font-bold text-base">🪙</div>
+              <div>
+                <span class="text-xs font-bold text-[#E5C598] block">رصيد نقاط المستكشف الترحيبية</span>
+                <span class="text-sm font-black">خصم فوري 5 دنانير أردنية متاح لك</span>
+              </div>
+            </div>
+            <button type="button" id="btn-toggle-points" class="px-4 py-2 rounded-full text-xs font-bold bg-[#D97706] text-white shadow cursor-pointer">تم تطبيق الخصم ✓</button>
+          </div>
+
+          <!-- تبويبات وسائل الدفع -->
+          <div class="space-y-3">
+            <label class="text-xs font-bold text-[#1E293B] block">اختر وسيلة الدفع المعتمدة:</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" id="tab-btn-cliq" onclick="setPayMethod('cliq')" class="p-3.5 rounded-2xl text-center font-bold text-xs border border-[#D97706] bg-[#D97706]/10 text-[#B45309] ring-2 ring-[#D97706]/30 cursor-pointer">
+                <i class="fa-solid fa-shield-check text-[#D97706] text-base block mb-1"></i>
+                <span class="block font-black">CliQ Jordan</span>
+                <span class="text-[10px] text-[#D97706]">كليك الأردني الفوري</span>
+              </button>
+              <button type="button" id="tab-btn-card" onclick="setPayMethod('card')" class="p-3.5 rounded-2xl text-center font-bold text-xs border border-[#E2E8F0] bg-[#FAF8F5] text-[#64748B] cursor-pointer">
+                <i class="fa-solid fa-credit-card text-base block mb-1"></i>
+                <span class="block">Visa / Master</span>
+                <span class="text-[10px] text-slate-400">بطاقة بنكية فاخرة</span>
+              </button>
+              <button type="button" id="tab-btn-apple" onclick="setPayMethod('apple')" class="p-3.5 rounded-2xl text-center font-bold text-xs border border-[#E2E8F0] bg-[#FAF8F5] text-[#64748B] cursor-pointer">
+                <i class="fa-brands fa-apple text-base block mb-1"></i>
+                <span class="block">Apple Pay</span>
+                <span class="text-[10px] text-slate-400">تأكيد بنقرة واحدة</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- تفاصيل دفع CliQ (المعرف الرسمي، واتساب، ورفع الإشعار) -->
+          <div id="cliq-content-box" class="border-2 border-[#D97706] bg-[#FFFBEB] rounded-2xl p-5 sm:p-6 space-y-5">
+            <!-- الاسم المستعار الرسمي -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-amber-200">
+              <div>
+                <span class="text-[11px] font-bold text-[#B45309] block">الاسم المستعار للحساب البنكي الرسمي (CliQ Alias):</span>
+                <span class="font-mono text-2xl font-black text-[#1E293B] tracking-wider block mt-0.5">JORDANEXPLORER</span>
+              </div>
+              <button type="button" id="btn-copy-alias" class="bg-white border-2 border-[#D97706] text-[#B45309] hover:bg-amber-50 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="fa-regular fa-copy"></i>
+                <span id="copy-alias-text">نسخ الاسم المستعار</span>
+              </button>
+            </div>
+
+            <!-- زر واتساب للدعم الفوري والمساعدة -->
+            <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center text-lg shrink-0 shadow">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-sm text-emerald-900">تواصل عبر واتساب للمساعدة وتأكيد الحجز</h4>
+                  <p class="text-xs text-emerald-700">فريقنا متاح على مدار الساعة لتأكيد إيداع كليك وتفعيل تذكرتك فوراً.</p>
+                </div>
+              </div>
+              <a href="https://wa.me/962791234567?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%82%D9%85%D8%AA%20%D8%A8%D8%A7%D9%84%D8%AD%D8%AC%D8%B2%20%D9%88%D8%A3%D9%88%D8%AF%20%D8%AA%D8%A3%D9%83%D9%8A%D8%AF%20%D8%AA%D8%AD%D9%88%D9%8A%D9%84%20%D9%83%D9%84%D9%8A%D9%83." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow shrink-0">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>مراسلة واتساب الآن</span>
+              </a>
+            </div>
+
+            <!-- رفع إشعار تحويل كليك -->
+            <div class="bg-white p-4 sm:p-5 rounded-xl border border-amber-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-[#1E293B] flex items-center gap-2">
+                  <i class="fa-solid fa-arrow-up-from-bracket text-[#D97706]"></i>
+                  <span>رفع إشعار تحويل كليك (صورة الإشعار / Screenshot):</span>
+                </label>
+                <span class="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-full">يصل للوحة الأدمن مباشرة</span>
+              </div>
+              <input type="file" id="cliq-proof-file" accept="image/*" class="sr-only">
+              <label for="cliq-proof-file" class="inline-flex items-center gap-2 rounded-xl border border-amber-300 bg-[#FAF8F5] px-4 py-3 text-xs font-bold text-amber-900 cursor-pointer hover:bg-amber-50">
+                <i class="fa-solid fa-upload" aria-hidden="true"></i>
+                <span>اختيار صورة إشعار التحويل</span>
+              </label>
+              <span id="cliq-proof-file-name" class="ms-2 text-[11px] text-slate-500" aria-live="polite"></span>
+            </div>
+
+            <!-- الرقم المرجعي للتحويل -->
+            <div class="bg-white p-4 rounded-xl border border-amber-200 space-y-2">
+              <label class="text-xs font-bold text-[#64748B] block">الرقم المرجعي للحوالة (Transaction Reference):</label>
+              <input type="text" id="cliq-ref-input" value="CLIQ-REF-8921" class="w-full bg-[#FAF8F5] border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm font-mono font-bold uppercase text-[#1E293B] focus:border-[#C86D51]">
+            </div>
+          </div>
+
+          <!-- تفاصيل الدفع بالفيزا مع معاينة البطاقة الفاخرة المعتمدة -->
+          <div id="card-content-box" class="space-y-6 hidden">
+            <!-- المعاينة البصرية الحية للبطاقة الفاخرة (Realistic Card Preview) -->
+            <div class="relative w-full max-w-sm mx-auto h-52 rounded-3xl p-6 text-white shadow-2xl overflow-hidden bg-gradient-to-tr from-[#0F172A] via-[#1E293B] to-[#334155] border border-[#E5C598]/50">
+              <div class="relative z-10 flex flex-col justify-between h-full">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <img src="https://cdn-icons-png.flaticon.com/512/8212/8212607.png" class="dynamic-logo w-8 h-8 rounded-lg bg-white p-0.5 object-contain">
+                    <span class="text-xs font-black text-[#E5C598] dynamic-site-name">Jordan Tour</span>
+                  </div>
+                  <span class="text-xl font-black italic tracking-wider text-white">VISA</span>
+                </div>
+                <div class="font-mono text-lg font-bold tracking-widest text-[#FAF8F5]" id="preview-card-num">4242 •••• •••• 4242</div>
+                <div class="flex items-center justify-between text-xs font-mono">
+                  <div>
+                    <span class="text-[9px] text-slate-400 block">CARD HOLDER</span>
+                    <span class="font-bold tracking-wider" id="preview-card-holder">MOHAMMAD SH3SHER</span>
+                  </div>
+                  <div>
+                    <span class="text-[9px] text-slate-400 block">EXPIRES</span>
+                    <span class="font-bold" id="preview-card-exp">12/28</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- حقول إدخال بيانات البطاقة -->
+            <div class="p-5 bg-[#FAF8F5] rounded-2xl border border-[#E2E8F0] space-y-3 text-xs">
+              <div>
+                <label class="font-bold text-slate-600 block mb-1">رقم البطاقة (16 رقم):</label>
+                <input type="text" id="inp-card-num" value="4242 4242 4242 4242" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-2.5 font-mono text-sm font-bold text-[#1E293B]">
+              </div>
+              <div>
+                <label class="font-bold text-slate-600 block mb-1">اسم حامل البطاقة (بالإنجليزية):</label>
+                <input type="text" id="inp-card-holder" value="MOHAMMAD SH3SHER" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-2.5 font-bold text-[#1E293B]">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="font-bold text-slate-600 block mb-1">تاريخ الانتهاء:</label>
+                  <input type="text" id="inp-card-exp" value="12/28" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-2.5 font-mono text-center font-bold">
+                </div>
+                <div>
+                  <label class="font-bold text-slate-600 block mb-1">رمز الأمان (CVV):</label>
+                  <input type="password" value="889" maxlength="3" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-2.5 font-mono text-center font-bold">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 flex items-center justify-between border-t border-[#E2E8F0]">
+            <button type="button" onclick="goToStep(2)" class="text-xs font-bold text-[#64748B] hover:text-[#1E293B] cursor-pointer">← السابق</button>
+            <button type="button" id="btn-submit-booking" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-8 py-3.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer">
+              <span>تثبيت الحجز وإصدار التذكرة الرسمية</span>
+              <i class="fa-solid fa-circle-check"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= الخطوة 4: التذكرة الرسمية المعتمدة ورمز الـ QR ================= -->
+        <div id="step-pane-4" class="space-y-6 hidden">
+          <!-- شريط الإشعار العلوي -->
+          <div class="text-center space-y-3 bg-white p-6 sm:p-8 rounded-3xl border border-[#E2E8F0] shadow-soft-card print:hidden">
+            <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-inner animate-pulse text-2xl">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-[#1E293B]">تم إرسال طلب الحجز والدفع بنجاح! ⏳</h2>
+            <p class="text-xs sm:text-sm text-[#64748B] max-w-lg mx-auto leading-relaxed">
+              طلبك الآن قيد المراجعة والتدقيق لدى الإدارة للتأكد من بصمة الدفع بكليك وتفعيل التذكرة. فور اعتماد الإدارة، ستتلقى كود تفعيل الرحلة الرسمي عبر الإشعارات والبريد الإلكتروني.
+            </p>
+
+            <!-- أزرار الطباعة ومشاركة التذكرة -->
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <button type="button" onclick="window.print()" class="bg-[#1E293B] hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow cursor-pointer">
+                <i class="fa-solid fa-print"></i>
+                <span>طباعة التذكرة PDF فعلياً</span>
+              </button>
+              <button type="button" onclick="alert('تم إرسال نسخة منسقة من التذكرة وكود الصعود إلى بريدك الإلكتروني بنجاح!');" class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow cursor-pointer">
+                <i class="fa-regular fa-envelope"></i>
+                <span>إرسال نسخة للإيميل</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- بطاقة التذكرة الإلكترونية الرسمية المطبوعة (A4 Printable Boarding Pass Voucher) -->
+          <div id="printable-ticket" class="bg-white rounded-3xl overflow-hidden border-2 border-[#E5C598] shadow-warm relative">
+            
+            <!-- رأس التذكرة الرسمي -->
+            <div class="bg-[#1E293B] text-white p-6 rounded-t-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/8212/8212607.png" class="dynamic-logo w-12 h-12 rounded-2xl bg-white p-1 object-contain shadow">
+                <div>
+                  <h3 class="font-black text-lg text-white flex items-center gap-2">
+                    <span class="dynamic-site-name">Jordan Tour</span>
+                    <span class="text-[#E5C598] text-xs font-normal">| Official Entry Voucher</span>
+                  </h3>
+                  <p class="text-xs text-[#FAF8F5]/70">تصريح سياحي رسمي معتمد - وزارة السياحة والآثار الأردنية</p>
+                </div>
+              </div>
+              <span class="px-3.5 py-1.5 rounded-full bg-amber-500 text-white text-xs font-bold uppercase tracking-wider shadow">
+                PENDING AUDIT / قيد المراجعة
+              </span>
+            </div>
+
+            <!-- تفاصيل الحجز وقسيمة الصعود والباركود -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div class="md:col-span-8 space-y-4">
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-[#64748B] block mb-1">الوجهة السياحية المحجوزة</span>
+                  <h4 id="ticket-dest-name" class="text-xl font-black text-[#1E293B]">مدينة البتراء الوردية وكنز الأنباط</h4>
+                  <span id="ticket-dest-region" class="text-xs font-bold text-[#C86D51] block mt-1">جنوب الأردن • معان (اليونسكو)</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-3 border-t border-[#E2E8F0] text-xs">
+                  <div>
+                    <span class="text-[10px] text-[#64748B] uppercase font-bold block">التاريخ والانطلاق:</span>
+                    <p id="ticket-datetime" class="font-extrabold text-[#1E293B] font-mono mt-0.5">2026-10-15 • 08:00 ص</p>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-[#64748B] uppercase font-bold block">المسافر الرئيسي:</span>
+                    <p id="ticket-traveler" class="font-bold text-[#1E293B] mt-0.5 truncate">محمد الشوابكة</p>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-[#64748B] uppercase font-bold block">عدد التذاكر المشمولة:</span>
+                    <p id="ticket-guests" class="font-bold text-[#1E293B] mt-0.5">2 بالغين</p>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-[#64748B] uppercase font-bold block">المبلغ الإجمالي المسدد:</span>
+                    <p id="ticket-amount" class="font-black text-[#C86D51] font-mono text-base mt-0.5">125 د.أ (+150 XP 🪙)</p>
+                  </div>
+                </div>
+
+                <div class="bg-[#FAF8F5] p-3 rounded-2xl border border-[#E2E8F0] text-[11px] text-[#64748B] flex items-center justify-between">
+                  <span>نقطة التجمع: بوابة مركز زوار البتراء الرئيسي قبل الموعد بـ 15 دقيقة.</span>
+                  <span class="font-mono text-[#D97706] font-bold">GATE A-1</span>
+                </div>
+              </div>
+
+              <!-- قسم الباركود المسحي الـ QR المعتمد -->
+              <div class="md:col-span-4 flex flex-col items-center justify-center p-4 bg-[#FAF8F5] rounded-2xl border border-[#E2E8F0] text-center space-y-3">
+                <span class="text-[10px] uppercase font-mono tracking-widest text-[#64748B] font-bold">BOARDING PASS</span>
+                <div class="w-32 h-32 bg-white p-1.5 rounded-2xl border-2 border-[#E2E8F0] shadow-sm flex items-center justify-center overflow-hidden">
+                  <img id="ticket-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=JOR-TOUR-CONFIRMED-2026" class="w-full h-full object-contain">
+                </div>
+                <div class="space-y-0.5">
+                  <span id="ticket-ref-code" class="text-xs font-mono font-bold text-[#1E293B] block">#JO-EXP-2026-9812</span>
+                  <span class="text-[10px] text-[#64748B] block">امسح الرمز عند بوابة الدخول</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ملخص الحجز الجانبي الثابت (4 Cols) - يختفي في الخطوة 4 -->
+      <div id="checkout-sidebar-summary" class="lg:col-span-4 bg-white rounded-3xl p-6 border border-[#E2E8F0] shadow-soft-card space-y-6 sticky top-28 print:hidden">
+        <h4 class="font-extrabold text-base text-[#1E293B] pb-3 border-b border-[#E2E8F0]">ملخص الرحلة والتكلفة</h4>
+
+        <div class="flex items-center gap-3">
+          <img id="sum-dest-img" src="https://images.unsplash.com/photo-1579606032822-6b99be7f73db?w=600" class="w-16 h-16 rounded-xl object-cover">
+          <div>
+            <h5 id="sum-dest-title" class="font-bold text-sm text-[#1E293B] leading-tight">مدينة البتراء الوردية</h5>
+            <span id="sum-dest-duration" class="text-xs text-[#C86D51] font-semibold mt-0.5 block">يومان / ليلة واحدة</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs text-[#64748B] pt-3 border-t border-[#E2E8F0]">
+          <div class="flex justify-between">
+            <span>البالغين:</span>
+            <span id="sum-adults-calc" class="font-bold text-[#1E293B]">2 × 65 د.أ</span>
+          </div>
+          <div class="flex justify-between" id="sum-children-row">
+            <span>الأطفال:</span>
+            <span id="sum-children-calc" class="font-bold text-[#1E293B]">0 × 35 د.أ</span>
+          </div>
+          <div class="flex justify-between text-emerald-600 font-bold" id="sum-discount-row">
+            <span>خصم نقاط الولاء:</span>
+            <span id="sum-discount-val">-5 د.أ</span>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-[#E2E8F0] flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold text-[#64748B] block">المجموع النهائي:</span>
+            <span id="sum-final-total" class="text-2xl font-black text-[#C86D51] font-mono">125 د.أ</span>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">شامل كافة الضرائب</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 3. الفوتر الموحد -->
+  <div id="footer-mount" class="print:hidden"></div>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- مشغل نظام الحجز والـ Stepper وربط Firebase -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { auth, db } from './js/config/firebase.config.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { destinationsService } from './js/services/destinations.service.js';
+    import { firebaseService } from './js/services/firebase.service.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderHeader("explore");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+      store.applyBranding();
+      const destinationsData = await destinationsService.getAll();
+      const pointsSettings = await firebaseService.getPointsSettings() || {};
+      const pointsDiscount = Number(pointsSettings.referralDiscountJOD) || 5;
+
+      // قراءة باراميترات الرابط
+      const urlParams = new URLSearchParams(window.location.search);
+      const destId = urlParams.get('dest') || 'petra-rose-city';
+      const trip = destinationsData.find(d => d.id === destId) || destinationsData[0];
+
+      // إعداد البيانات الأولية
+      let currentStep = 1;
+      let adults = parseInt(urlParams.get('guests')) || 2;
+      let children = 0;
+      let selectedDate = urlParams.get('date') || '2026-10-15';
+      let selectedTime = urlParams.get('time') || '08:00 ص';
+      let payMethod = 'cliq';
+      let isPointsDiscount = true;
+
+      const adultPrice = trip.priceJOD;
+      const childPrice = Number(trip.childPriceJOD) || Math.round(adultPrice * 0.6);
+
+      // تحديث عناصر الملخص
+      document.getElementById('ck-trip-title').textContent = trip.title.ar;
+      document.getElementById('sum-dest-title').textContent = trip.title.ar;
+      document.getElementById('sum-dest-img').src = trip.imageUrl;
+      document.getElementById('sum-dest-duration').textContent = trip.duration.ar;
+      document.getElementById('ck-adult-rate').textContent = `${adultPrice} د.أ / فرد`;
+      document.getElementById('ck-child-rate').textContent = `${childPrice} د.أ (-40% خصم)`;
+      document.getElementById('ck-date-input').value = selectedDate;
+      document.getElementById('btn-toggle-points').textContent = `تطبيق الخصم (${pointsDiscount} د.أ)`;
+
+      // دالة حساب الأسعار التفاعلية
+      const updateTotals = () => {
+        document.getElementById('ck-adult-count').textContent = adults;
+        document.getElementById('ck-child-count').textContent = children;
+        document.getElementById('sum-adults-calc').textContent = `${adults} × ${adultPrice} د.أ`;
+        document.getElementById('sum-children-calc').textContent = `${children} × ${childPrice} د.أ`;
+
+        const baseTotal = (adults * adultPrice) + (children * childPrice);
+        const discount = isPointsDiscount ? pointsDiscount : 0;
+        const finalTotal = Math.max(5, baseTotal - discount);
+
+        document.getElementById('sum-discount-val').textContent = `-${discount} د.أ`;
+        document.getElementById('sum-final-total').textContent = `${finalTotal} د.أ`;
+        return finalTotal;
+      };
+
+      updateTotals();
+
+      // أزرار التحكم بالضيوف
+      document.getElementById('btn-adult-plus').onclick = () => { adults++; updateTotals(); };
+      document.getElementById('btn-adult-minus').onclick = () => { if (adults > 1) adults--; updateTotals(); };
+      document.getElementById('btn-child-plus').onclick = () => { children++; updateTotals(); };
+      document.getElementById('btn-child-minus').onclick = () => { if (children > 0) children--; updateTotals(); };
+
+      // خصم النقاط
+      document.getElementById('btn-toggle-points').onclick = () => {
+        isPointsDiscount = !isPointsDiscount;
+        const btn = document.getElementById('btn-toggle-points');
+        btn.textContent = isPointsDiscount ? 'تم تطبيق الخصم ✓' : `تطبيق الخصم (${pointsDiscount} د.أ)`;
+        btn.className = `px-4 py-2 rounded-full text-xs font-bold ${isPointsDiscount ? 'bg-[#D97706] text-white shadow' : 'bg-white/10 text-white/70 border border-white/20'}`;
+        updateTotals();
+      };
+
+      // الانتقال بين الخطوات
+      window.goToStep = (step) => {
+        currentStep = step;
+        for (let i = 1; i <= 4; i++) {
+          const pane = document.getElementById(`step-pane-${i}`);
+          const btn = document.getElementById(`step-btn-${i}`);
+          if (pane) pane.classList.toggle('hidden', i !== step);
+          if (btn) {
+            if (i === step) {
+              btn.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-[#C86D51] text-white ring-4 ring-[#C86D51]/20 scale-110 shadow-md";
+            } else if (i < step) {
+              btn.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-emerald-600 text-white shadow-md";
+              btn.textContent = "✓";
+            } else {
+              btn.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm bg-white text-slate-400 border border-[#E2E8F0] shadow-md";
+              btn.textContent = i;
+            }
+          }
+        }
+        document.getElementById('stepper-progress-bar').style.width = `${((step - 1) / 3) * 100}%`;
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+      };
+
+      // وسائل الدفع
+      window.setPayMethod = (method) => {
+        payMethod = method;
+        document.getElementById('cliq-content-box').classList.toggle('hidden', method !== 'cliq');
+        document.getElementById('card-content-box').classList.toggle('hidden', method !== 'card');
+
+        ['cliq', 'card', 'apple'].forEach(m => {
+          const btn = document.getElementById(`tab-btn-${m}`);
+          if (m === method) {
+            btn.className = "p-3.5 rounded-2xl text-center font-bold text-xs border border-[#D97706] bg-[#D97706]/10 text-[#B45309] ring-2 ring-[#D97706]/30 cursor-pointer";
+          } else {
+            btn.className = "p-3.5 rounded-2xl text-center font-bold text-xs border border-[#E2E8F0] bg-[#FAF8F5] text-[#64748B] cursor-pointer";
+          }
+        });
+      };
+
+      // نسخ الاسم المستعار
+      document.getElementById('btn-copy-alias').onclick = () => {
+        navigator.clipboard.writeText('JORDANEXPLORER');
+        document.getElementById('copy-alias-text').textContent = "تم النسخ بنجاح!";
+        setTimeout(() => document.getElementById('copy-alias-text').textContent = "نسخ الاسم المستعار", 2500);
+      };
+
+      // مزامنة مدخلات الفيزا في المعاينة الحية
+      document.getElementById('inp-card-num').oninput = (e) => document.getElementById('preview-card-num').textContent = e.target.value || '•••• •••• •••• ••••';
+      document.getElementById('inp-card-holder').oninput = (e) => document.getElementById('preview-card-holder').textContent = (e.target.value || 'MOHAMMAD SH3SHER').toUpperCase();
+      document.getElementById('inp-card-exp').oninput = (e) => document.getElementById('preview-card-exp').textContent = e.target.value || '12/28';
+
+      // تثبيت الحجز وحفظه في Firebase Firestore
+      document.getElementById('btn-submit-booking').onclick = async () => {
+        const signedInUser = store.user || auth?.currentUser;
+        if (!signedInUser) {
+          window.authModal?.show('login');
+          return;
+        }
+        const finalPrice = updateTotals();
+        const travelerName = document.getElementById('traveler-name').value.trim() || 'محمد الشوابكة';
+        const travelerEmail = document.getElementById('traveler-email').value.trim() || 'sh3sher@domain.jo';
+        const travelerPhone = document.getElementById('traveler-phone').value.trim() || '+962 7 9123 4567';
+        const travelerNotes = document.getElementById('traveler-notes').value.trim();
+        const cliqRef = document.getElementById('cliq-ref-input').value.trim() || 'CLIQ-ALIAS';
+
+        const bookingRefCode = `JO-EXP-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const bookingPayload = {
+          bookingRef: bookingRefCode,
+          userId: signedInUser.uid,
+          customerName: travelerName,
+          customerEmail: travelerEmail,
+          customerPhone: travelerPhone,
+          specialRequests: travelerNotes,
+          destinationId: trip.id,
+          destinationTitle: { ar: trip.title.ar, en: trip.title.en },
+          date: document.getElementById('ck-date-input').value,
+          timeSlot: document.getElementById('ck-time-select').value,
+          adultsCount: adults,
+          childrenCount: children,
+          guests: adults + children,
+          totalPriceJOD: finalPrice,
+          paymentMode: payMethod,
+          cliqRef: cliqRef,
+          status: 'pending',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        try {
+          // حفظ الحجز في Firestore
+          await db.collection("bookings").add(bookingPayload);
+
+          // إخفاء الشريط الجانبي في الخطوة 4 للطباعة النظيفة
+          document.getElementById('checkout-sidebar-summary').classList.add('hidden');
+
+          // تعبئة التذكرة
+          document.getElementById('ticket-dest-name').textContent = trip.title.ar;
+          document.getElementById('ticket-dest-region').textContent = `${trip.region.ar} ${trip.isUnesco ? '(اليونسكو)' : ''}`;
+          document.getElementById('ticket-datetime').textContent = `${bookingPayload.date} • ${bookingPayload.timeSlot}`;
+          document.getElementById('ticket-traveler').textContent = travelerName;
+          document.getElementById('ticket-guests').textContent = `${adults} بالغين ${children > 0 ? `+ ${children} أطفال` : ''}`;
+          document.getElementById('ticket-amount').textContent = `${finalPrice} د.أ (+150 XP 🪙)`;
+          document.getElementById('ticket-ref-code').textContent = `#${bookingRefCode}`;
+
+          // توليد باركود QR حقيقي
+          const qrData = encodeURIComponent(`https://jordan-tour.jo/verify?ref=${bookingRefCode}&name=${travelerName}&dest=${trip.title.ar}`);
+          document.getElementById('ticket-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
+
+          // الانتقال للخطوة 4
+          goToStep(4);
+        } catch (err) {
+          alert('خطأ أثناء حفظ الحجز: ' + err.message);
+        }
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,585 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jordan Tour | المنصة الوطنية الذكية لاكتشاف الأردن</title>
+
+  <!-- الخط العربي الرسمي (Tajawal) وأيقونات FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- ملفات التنسيقات الكاملة المعتمدة للمشروع -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="auth/auth.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-arabic antialiased min-h-screen flex flex-col selection:bg-[#C86D51] selection:text-white">
+
+  <!-- 1. شريط التنقل العلوي الموحد (يتم توليده عبر js/components/header.js) -->
+  <header id="navbar-mount" class="sticky top-0 z-50 w-full"></header>
+
+  <main id="app-viewport" class="flex-1 w-full">
+
+    <!-- ==================================================================== -->
+    <!-- 2. قسم الهيرو الرئيسي الفاخر (Cinematic Hero Section)                 -->
+    <!-- ==================================================================== -->
+    <section class="relative w-full overflow-hidden bg-[#1E293B] min-h-[92vh] lg:min-h-[100svh] flex flex-col justify-end pb-12 sm:pb-16 lg:pb-20">
+  
+  <!-- خلفية الميديا السينمائية (فيديو / صورة) -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" id="hero-media-container">
+    <img
+      id="hero-image-element"
+      class="hidden w-full h-full object-cover select-none pointer-events-none"
+      src="https://images.unsplash.com/photo-1544971587-b842c27f8e14?w=1600&auto=format&fit=crop&q=80"
+      alt="Jordan Tour Hero"
+    >
+    <video
+      id="hero-video-element"
+      class="w-full h-full object-cover select-none pointer-events-none"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="auto"
+      poster="https://images.unsplash.com/photo-1544971587-b842c27f8e14?w=1600&auto=format&fit=crop&q=80"
+      src="media/video.mp4"
+      onerror="this.src='https://www.w3schools.com/html/mov_bbb.mp4'; this.load(); this.play().catch(() => {});"
+    >
+      <source src="media/video.mp4" type="video/mp4">
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+
+    <!-- التدرج الداكن الخفيف غير المبالغ فيه -->
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background: linear-gradient(180deg, rgba(15, 23, 42, 0.40) 0%, rgba(15, 23, 42, 0.08) 45%, rgba(15, 23, 42, 0.65) 100%);"
+    ></div>
+  </div>
+
+  <!-- زر كتم / تشغيل صوت الهيرو -->
+  <button
+    type="button"
+    id="hero-sound-toggle"
+    class="absolute top-24 end-6 z-30 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all border border-white/20 shadow-md cursor-pointer"
+    title="كتم / تشغيل الصوت"
+  >
+    <i class="fa-solid fa-volume-xmark text-sm" id="hero-sound-icon"></i>
+  </button>
+
+  <!-- التوهج الديكوري الدافئ الخفيف -->
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-[#D97706]/15 via-[#C86D51]/10 to-transparent blur-3xl pointer-events-none"></div>
+
+  <!-- محتوى الهيرو -->
+  <div class="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+    
+    <!-- وسم الفخامة الأردني -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-400/40 bg-[#1E293B]/70 backdrop-blur-md text-amber-200 text-xs font-bold tracking-wider mb-5 shadow-lg">
+      <i class="fa-solid fa-crown text-amber-400"></i>
+      <span class="dynamic-hero-tag">🇯🇴 البوابة الوطنية للسياحة والتجارب الأردنية الـ 12</span>
+    </div>
+
+    <!-- العنوان الرئيسي: تم حل القص بالكامل بإضافة مساحة أمان سفلية وارتفاع سطر مريح -->
+    <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-[62px] xl:text-[68px] font-black tracking-tight leading-[1.35] max-w-6xl mb-4 drop-shadow-md">
+      <!-- السطر الأول: أبيض ناصع في سطر لحاله -->
+      <span id="hero-title-first" class="block text-white pb-1">
+        اكتشف سحر الأردن الخالد
+      </span>
+
+      <!-- السطر الثاني: بالتدرج الذهبي مع مساحة أمان سفلية تمنع قص الراء والياء والميم نهائياً -->
+      <span
+  id="hero-title-second"
+  class="block"
+  style="
+    background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #E29578 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    padding-bottom: 0.25em;
+    padding-top: 0.05em;
+    line-height: 1.35;
+    filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.45));
+  "
+>
+  من البتراء إلى وادي رم
+</span>
+    </h1>
+
+    <!-- النص التعريفي الفرعي -->
+    <p id="hero-subtitle" class="text-base sm:text-lg md:text-[18px] text-white/95 max-w-2xl leading-relaxed mb-8 text-balance font-normal drop-shadow-sm">
+      احجز جولاتك الأثرية والطبيعية فوراً عبر كليك الأردني (CliQ)، واجمع أختام المحافظات الـ 12 في جواز سفرك الرقمي.
+    </p>
+
+    <!-- شريط البحث السريع الزجاجي العائم (5-Column Glassmorphic Bar) -->
+    <div class="w-full max-w-5xl bg-white/40 hover:bg-white/45 backdrop-blur-3xl rounded-[28px] sm:rounded-3xl p-3.5 sm:p-4.5 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.5),inset_0_1.5px_2px_rgba(255,255,255,0.8)] border border-white/60 transition-all">
+      <form id="hero-search-form" class="grid grid-cols-1 md:grid-cols-[1.3fr_1fr_0.8fr_1.1fr_auto] gap-3 items-center">
+        
+        <!-- 1. الوجهة السياحية -->
+        <div class="text-start relative">
+          <label for="hero-dest-select" class="block text-[11px] font-black text-[#1E293B] mb-1 px-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-location-dot text-[#C86D51]"></i>
+            <span>الوجهة السياحية</span>
+          </label>
+          <select id="hero-dest-select" class="w-full bg-white/80 border border-white/70 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#1E293B] focus:outline-none focus:border-[#C86D51] cursor-pointer shadow-sm">
+            <option value="all">جميع الوجهات الأردنية</option>
+            <option value="petra-rose-city">البتراء الوردية (معان)</option>
+            <option value="wadi-rum-stargazing">وادي رم ومخيمات المريخ</option>
+            <option value="dead-sea-retreat">البحر الميت والسبا الطبيعي</option>
+            <option value="jerash-roman-glory">آثار جرش وأعمدة الرومان</option>
+            <option value="amman-citadel-heritage">جبل القلعة ووسط البلد (عمان)</option>
+            <option value="aqaba-red-sea">شواطئ العقبة ومرجان البحر الأحمر</option>
+          </select>
+        </div>
+
+        <!-- 2. تاريخ الرحلة -->
+        <div class="text-start">
+          <label for="hero-date-input" class="block text-[11px] font-black text-[#1E293B] mb-1 px-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-calendar-days text-[#C86D51]"></i>
+            <span>تاريخ الرحلة</span>
+          </label>
+          <input type="date" id="hero-date-input" value="2026-10-15" class="w-full bg-white/80 border border-white/70 rounded-2xl px-3 py-2 text-xs sm:text-sm font-bold text-[#1E293B] focus:outline-none focus:border-[#C86D51] cursor-pointer shadow-sm">
+        </div>
+
+        <!-- 3. عدد المسافرين -->
+        <div class="text-start">
+          <span class="block text-[11px] font-black text-[#1E293B] mb-1 px-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-users text-[#C86D51]"></i>
+            <span>المسافرين</span>
+          </span>
+          <div class="flex items-center justify-between bg-white/80 border border-white/70 rounded-2xl px-2 py-1.5 shadow-sm">
+            <button type="button" id="btn-guest-minus" class="w-7 h-7 rounded-xl bg-white text-[#1E293B] font-bold flex items-center justify-center hover:bg-slate-100 cursor-pointer shadow-2xs">-</button>
+            <span id="hero-guests-count" class="font-black text-xs sm:text-sm text-[#1E293B] font-mono px-2">2</span>
+            <button type="button" id="btn-guest-plus" class="w-7 h-7 rounded-xl bg-white text-[#1E293B] font-bold flex items-center justify-center hover:bg-slate-100 cursor-pointer shadow-2xs">+</button>
+          </div>
+        </div>
+
+        <!-- 4. نوع التجربة -->
+        <div class="text-start">
+          <label for="hero-category-select" class="block text-[11px] font-black text-[#1E293B] mb-1 px-1 flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-compass text-[#C86D51]"></i>
+            <span>نوع التجربة</span>
+          </label>
+          <select id="hero-category-select" class="w-full bg-white/80 border border-white/70 rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#1E293B] focus:outline-none focus:border-[#C86D51] cursor-pointer shadow-sm">
+            <option value="all">جميع التجارب</option>
+            <option value="adventure">مغامرة وصحراء</option>
+            <option value="relaxation">استرخاء وعافية</option>
+            <option value="archaeology">تاريخ وآثار</option>
+            <option value="eco">طعام وتراث شعبي</option>
+            <option value="luxury">إقامات فاخرة</option>
+          </select>
+        </div>
+
+        <!-- 5. زر البحث وزر النرد -->
+        <div class="flex items-center gap-2 pt-1 md:pt-5">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-[#C86D51] via-[#B85D42] to-[#9E452B] hover:brightness-110 text-white py-2.5 px-5 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+            <span>بحث عن رحلات</span>
+          </button>
+
+          <button type="button" id="hero-btn-dice" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#C86D51] flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-sm cursor-pointer" title="فاجئني بوجهة أردنية ساحرة!">
+            <i class="fa-solid fa-dice text-lg"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- أزرار الوجهات الأكثر طلباً -->
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-white/95">
+      <span class="font-bold text-amber-300 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-amber-400/30">
+        <span>🔥 الأكثر طلباً:</span>
+      </span>
+      <button type="button" onclick="window.location.href='explore.html?dest=petra-rose-city'" class="px-3.5 py-1 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur-md text-white transition-all text-xs font-semibold cursor-pointer">البتراء الوردية</button>
+      <button type="button" onclick="window.location.href='explore.html?dest=wadi-rum-stargazing'" class="px-3.5 py-1 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur-md text-white transition-all text-xs font-semibold cursor-pointer">وادي رم والنجوم</button>
+      <button type="button" onclick="window.location.href='explore.html?dest=dead-sea-retreat'" class="px-3.5 py-1 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur-md text-white transition-all text-xs font-semibold cursor-pointer">طين البحر الميت</button>
+      <button type="button" onclick="window.location.href='explore.html?dest=jerash-roman-glory'" class="px-3.5 py-1 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur-md text-white transition-all text-xs font-semibold cursor-pointer">أعمدة جرش</button>
+      <button type="button" onclick="window.location.href='explore.html?dest=aqaba-red-sea'" class="px-3.5 py-1 rounded-full bg-white/15 hover:bg-white/30 backdrop-blur-md text-white transition-all text-xs font-semibold cursor-pointer">شواطئ العقبة</button>
+    </div>
+
+  </div>
+</section>
+    <!-- ==================================================================== -->
+    <!-- 3. تصنيفات الاستكشاف الـ 5 (Category Showcase Cards)                  -->
+    <!-- ==================================================================== -->
+    <section class="max-w-[1440px] mx-auto px-4 md:px-8 py-12 md:py-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D97706]/10 border border-[#D97706]/30 text-[#D97706] text-xs font-bold mb-2">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>تصنيفات وتجارب مختارة</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E293B] tracking-tight">تصفح حسب التجربة والاهتمام</h2>
+          <p class="text-xs sm:text-sm text-[#64748B] mt-1">اختر نوع المغامرة التي تناسب ذوقك واستكشف أروع معالم المملكة الهاشمية.</p>
+        </div>
+      </div>
+
+      <!-- شبكة البطاقات الخمسة الرأسية -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5" id="home-category-cards-container">
+        <!-- تُولّد ديناميكياً لتتيح التعديل المباشر من لوحة الإدارة -->
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- 4. شبكة بينتو للوجهات الأيقونية الست (Trending Bento Grid)           -->
+    <!-- ==================================================================== -->
+    <section class="max-w-[1440px] mx-auto px-4 md:px-8 py-12 md:py-16">
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C86D51]/10 border border-[#C86D51]/30 text-[#C86D51] text-xs font-bold mb-2">
+            <i class="fa-solid fa-fire text-amber-500"></i>
+            <span>المعالم الأيقونية الأكثر طلباً</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E293B] tracking-tight">وجهات الأردن التاريخية والطبيعية</h2>
+        </div>
+        <a href="explore.html" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C86D51] hover:text-[#B45A3E] transition-colors">
+          <span>عرض كافة الرحلات (18+)</span>
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="home-bento-grid-container">
+        <!-- تُولّد عبر كود الصفحة لتعرض: البتراء الكبيرة (2 Rows)، وادي رم، البحر الميت، جرش، عمان، والعقبة -->
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- 5. شريط عروض وتخفيضات الرحلات (Handpicked Deals Carousel)            -->
+    <!-- ==================================================================== -->
+    <section class="max-w-[1440px] mx-auto px-4 md:px-8 py-12 md:py-16">
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C86D51]/10 text-[#C86D51] text-xs font-bold mb-2">
+            <i class="fa-solid fa-tag text-[#C86D51]"></i>
+            <span>عروض وتخفيضات حصرية</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E293B] tracking-tight">رحلات وباقات بخصم خاص لفترة محدودة</h2>
+          <p class="text-xs sm:text-sm text-[#64748B] mt-1">احجز مقعدك فوراً مع دفع كليك الآمن واستلم تذكرتك الإلكترونية برمز QR معتمد.</p>
+        </div>
+
+        <!-- أسهم التنقل للشريط -->
+        <div class="flex items-center gap-2">
+          <button id="deal-scroll-right" class="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] hover:border-[#C86D51] text-[#1E293B] hover:text-[#C86D51] flex items-center justify-center transition-all shadow-xs cursor-pointer">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
+          <button id="deal-scroll-left" class="w-10 h-10 rounded-full bg-white border border-[#E2E8F0] hover:border-[#C86D51] text-[#1E293B] hover:text-[#C86D51] flex items-center justify-center transition-all shadow-xs cursor-pointer">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- الحاوية الأفقية للبطاقات -->
+      <div id="home-deals-slider" class="flex items-stretch gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory no-scrollbar" style="scrollbar-width: none;">
+        <!-- تُولّد بطاقات العروض مع شارات الخصم والـ XP هنا -->
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- 6. قسم آراء وتجارب السياح الحقيقية وضمانات الثقة                    -->
+    <!-- ==================================================================== -->
+    <section class="max-w-[1440px] mx-auto px-4 md:px-8 py-12 md:py-16">
+      <div class="bg-[#1E293B] text-[#F8FAFC] rounded-[2rem] p-6 sm:p-10 lg:p-12 shadow-2xl border border-white/10 relative overflow-hidden">
+        
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10 mb-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-[#D97706]/30 text-amber-300 text-xs font-bold mb-2">
+              <i class="fa-solid fa-shield-check"></i>
+              <span>تجارب حقيقية وتقييمات موثقة</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">ماذا يقول المستكشفون عن Jordan Tour؟</h2>
+            <p class="text-xs sm:text-sm text-white/70 mt-1">آراء وتجارب حقيقية من سياح ومغامرين وثقوا بنا في رحلاتهم عبر محافظات الأردن الـ 12.</p>
+          </div>
+
+          <!-- شارة التقييم الإجمالي -->
+          <div class="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 backdrop-blur-md shrink-0">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#D97706] to-[#C86D51] flex items-center justify-center text-white shadow-md">
+              <i class="fa-solid fa-star text-lg"></i>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-2xl sm:text-3xl font-black text-white font-mono">4.9</span>
+                <span class="text-sm font-semibold text-white/60">/ 5.0</span>
+              </div>
+              <p class="text-xs text-white/70">من أكثر من 18,400+ تقييم موثق لمسافرين</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- شبكة بطاقات التقييم الثلاثية -->
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <!-- مراجعة 1 -->
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between backdrop-blur-sm hover:border-[#E5C598]/40 transition-all">
+            <div class="space-y-4">
+              <div class="flex text-[#D97706] gap-1 text-sm">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-sm text-white/95 leading-relaxed italic">
+                "الدفع عبر كليك كان فورياً وسلساً للغاية. استلمنا تذكرة الـ QR خلال دقيقتين ودخلنا سيق البتراء دون أي طوابير انتظار. أفضل منصة حجز محلية جربتها."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-white/10 mt-6">
+              <div class="w-10 h-10 rounded-full bg-[#C86D51] text-white flex items-center justify-center font-bold text-xs">ط ح</div>
+              <div>
+                <h4 class="font-bold text-sm text-white">طارق حداد</h4>
+                <span class="text-[11px] text-white/60">الأردن 🇯🇴 • زار البتراء</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- مراجعة 2 -->
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between backdrop-blur-sm hover:border-[#E5C598]/40 transition-all">
+            <div class="space-y-4">
+              <div class="flex text-[#D97706] gap-1 text-sm">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-sm text-white/95 leading-relaxed italic">
+                "مخيم القبة المريخية في وادي رم فاق كل توقعاتنا! المنسف البدوي، رحلة رصد النجوم بالليزر، والأهم أن المرشد كان مرخصاً رسمياً ومحترفاً جداً."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-white/10 mt-6">
+              <div class="w-10 h-10 rounded-full bg-[#1E293B] border border-[#E5C598] text-[#E5C598] flex items-center justify-center font-bold text-xs">EK</div>
+              <div>
+                <h4 class="font-bold text-sm text-white">Elena Kovacs</h4>
+                <span class="text-[11px] text-white/60">ألمانيا 🇩🇪 • وادي رم</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- مراجعة 3 -->
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between backdrop-blur-sm hover:border-[#E5C598]/40 transition-all">
+            <div class="space-y-4">
+              <div class="flex text-[#D97706] gap-1 text-sm">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="text-sm text-white/95 leading-relaxed italic">
+                "تجربة البحر الميت والسبا كانت استثنائية. جمعت نقاط استكشاف واستخدمتها كخصم في رحلة جرش في اليوم التالي. نظام المكافآت والأختام رائع وحقيقي."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-white/10 mt-6">
+              <div class="w-10 h-10 rounded-full bg-[#D97706] text-white flex items-center justify-center font-bold text-xs">ف ش</div>
+              <div>
+                <h4 class="font-bold text-sm text-white">د. فيصل الشمري</h4>
+                <span class="text-[11px] text-white/60">السعودية 🇸🇦 • البحر الميت</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ضمانات الثقة والأمان الأربعة -->
+        <div class="relative z-10 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-white/10 text-[#E5C598] flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-award text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">مرشدون معتمدون ومرخصون</h4>
+              <p class="text-xs text-white/70 mt-1">طواقم إرشادية مرخصة رسمياً من وزارة السياحة والآثار الأردنية.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-white/10 text-[#E5C598] flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-money-bill-transfer text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">دفع فوري عبر CliQ الأردني</h4>
+              <p class="text-xs text-white/70 mt-1">تأكيد مباشر خلال ثوانٍ عبر المعرف الوطني الرسمي JORDANEXPLORER.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-white/10 text-[#E5C598] flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-rotate-left text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">إلغاء واسترداد مرن</h4>
+              <p class="text-xs text-white/70 mt-1">استرداد كامل حتى 48 ساعة قبل موعد انطلاق أي رحلة.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-white/10 text-[#E5C598] flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-headset text-lg"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">دعم سياحي مباشر 24/7</h4>
+              <p class="text-xs text-white/70 mt-1">فريق محلي مقره عمان لمساعدتك عبر واتساب والمحادثة الحية.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 7. الفوتر الموحد (يتم توليده عبر js/components/footer.js) -->
+  <div id="footer-mount"></div>
+
+  <!-- مكتبات Firebase المتوافقة (Compat v9) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- تشغيل البوابة الرئيسية عبر Vanilla JS Modules -->
+  <script type="module">
+    import { store } from './js/state/store.js';
+    import { renderHeader } from './js/components/header.js';
+    import { renderFooter } from './js/components/footer.js';
+    import { renderChatWidget } from './js/components/chat-widget.js';
+    import { AuthModalManager } from './js/components/auth-modal.js';
+    import { destinationsService } from './js/services/destinations.service.js';
+    import { defaultHomeCategoryCards } from './js/data/home-cards.data.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // 1. تثبيت الهيدر والفوتر والدردشة الذكية والمودال
+      renderHeader("home");
+      renderFooter();
+      renderChatWidget("ar");
+      window.authModal = new AuthModalManager();
+
+      // 2. مزامنة الشعار واسم الموقع اللحظية
+      store.applyBranding();
+      const destinationsData = await destinationsService.getAll();
+
+      // 3. توليد بطاقات التصنيفات الخمسة
+      const catContainer = document.getElementById("home-category-cards-container");
+      if (catContainer) {
+        const categorySettings = await destinationsService.getSettingsDocument?.('category_cards');
+        let localCategories = null;
+        try { localCategories = JSON.parse(localStorage.getItem('jt_home_category_cards') || 'null'); } catch (error) {}
+        const categories = Array.isArray(categorySettings?.list) && categorySettings.list.length
+          ? categorySettings.list
+          : Array.isArray(localCategories) && localCategories.length ? localCategories : defaultHomeCategoryCards;
+        const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+        catContainer.innerHTML = categories.map(c => `
+          <div onclick="window.location.href='explore.html?cat=${encodeURIComponent(c.category || c.id)}'" class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl border border-[#E2E8F0] hover:border-[#E5C598] transition-all flex flex-col justify-between p-4 bg-slate-900">
+            <img src="${escapeHtml(c.image || c.img)}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${escapeHtml(c.title)}">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+            <div class="relative z-10 flex justify-between items-center">
+              <span class="text-[10px] font-mono font-bold text-white bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20">${escapeHtml(c.count)} رحلة</span>
+            </div>
+            <div class="relative z-10 text-white">
+              <h3 class="text-base font-extrabold text-white group-hover:text-amber-200 transition-colors leading-tight">${escapeHtml(c.title)}</h3>
+              <p class="text-[11px] text-white/80 line-clamp-1 mt-0.5">${escapeHtml(c.description || c.sub)}</p>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // 4. توليد شبكة بينتو للوجهات الأيقونية
+      const bentoContainer = document.getElementById("home-bento-grid-container");
+      if (bentoContainer) {
+        const bentoTripIds = ['petra-rose-city', 'wadi-rum-stargazing', 'dead-sea-retreat', 'jerash-roman-glory', 'aqaba-red-sea'];
+        const bentoTrips = bentoTripIds
+          .map((id) => destinationsData.find((trip) => trip.id === id))
+          .filter(Boolean);
+        const bentoEscape = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+        const bentoLink = (trip) => `attraction.html?id=${encodeURIComponent(trip.id)}`;
+        const bentoImage = (trip) => bentoEscape(trip.imageUrl || '');
+        const bentoTitle = (trip) => bentoEscape(trip.title?.ar || 'رحلة سياحية');
+        const bentoRegion = (trip) => bentoEscape(trip.region?.ar || 'الأردن');
+        const bentoDescription = (trip) => bentoEscape(trip.subtitle?.ar || trip.description?.ar || 'اكتشف تفاصيل الرحلة الكاملة');
+
+        bentoContainer.innerHTML = bentoTrips.map((trip, index) => {
+          const isFeatured = index === 0;
+          return `
+            <div onclick="window.location.href='${bentoLink(trip)}'" class="group relative ${isFeatured ? 'md:col-span-2 lg:col-span-1 lg:row-span-2 min-h-[440px] p-6 shadow-lg' : 'min-h-[210px] p-5 shadow-md'} rounded-3xl overflow-hidden cursor-pointer hover:shadow-2xl border border-slate-200 transition-all flex flex-col justify-between bg-slate-900">
+              <img src="${bentoImage(trip)}" alt="${bentoTitle(trip)}" class="absolute inset-0 w-full h-full object-cover ${isFeatured ? 'transition-transform duration-700' : 'group-hover:scale-110 transition-transform duration-500'}">
+              <div class="absolute inset-0 bg-gradient-to-t ${isFeatured ? 'from-black/95 via-black/40' : 'from-black/90 via-black/40'} to-transparent"></div>
+              <div class="relative z-10 flex justify-between items-center">
+                <span class="${isFeatured ? 'bg-[#1E293B]/90 text-[#FAF8F5] px-3 py-1' : 'bg-black/40 text-amber-200 px-2.5 py-0.5'} backdrop-blur-md rounded-full border border-white/20 text-xs font-bold">
+                  ${trip.isUnesco ? '<i class="fa-solid fa-crown text-amber-400"></i> تراث عالمي (اليونسكو)' : bentoRegion(trip)}
+                </span>
+              </div>
+              <div class="relative z-10 text-white">
+                ${isFeatured ? `<span class="text-xs uppercase font-mono text-amber-300 font-bold block mb-1">${bentoRegion(trip)}</span>` : ''}
+                <h3 class="${isFeatured ? 'text-3xl' : 'text-xl'} font-black ${isFeatured ? 'mb-2' : ''} leading-tight">${bentoTitle(trip)}</h3>
+                <p class="${isFeatured ? 'text-xs text-white/80 mb-2' : 'hidden'} line-clamp-1">${bentoDescription(trip)}</p>
+                <div class="flex items-center gap-2 text-xs text-amber-300 font-bold">
+                  <i class="fa-solid fa-star"></i> ${Number(trip.rating || 0).toFixed(2)} • ${Number(trip.reviewsCount || 0).toLocaleString('ar-JO')} تقييم
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 5. توليد بطاقات عروض الخصم
+      const dealsSlider = document.getElementById("home-deals-slider");
+      if (dealsSlider) {
+        dealsSlider.innerHTML = destinationsData.slice(0, 4).map(d => `
+          <div onclick="window.location.href='attraction.html?id=${d.id}'" class="snap-start shrink-0 w-[300px] sm:w-[330px] bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between">
+            <div class="relative aspect-[4/3] w-full bg-slate-900">
+              <img src="${d.imageUrl}" class="w-full h-full object-cover">
+              <span class="absolute top-3 start-3 bg-[#C86D51] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow">-15% خصم</span>
+              <span class="absolute top-3 end-3 bg-white/90 text-[#D97706] text-[11px] font-black px-2 py-0.5 rounded-full shadow">🪙 +150 XP</span>
+            </div>
+            <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-bold text-[#C86D51] block">${d.region.ar}</span>
+                <h4 class="font-extrabold text-sm text-[#1E293B] line-clamp-2">${d.title.ar}</h4>
+              </div>
+              <div class="pt-3 border-t border-slate-100 flex items-end justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 line-through">${d.priceJOD + 15} د.أ</span>
+                  <div class="text-lg font-black text-[#C86D51] font-mono leading-none">${d.priceJOD} د.أ</div>
+                </div>
+                <button class="bg-[#C86D51] hover:bg-[#B45A3E] text-white px-3.5 py-1.5 rounded-full text-xs font-bold">احجز بكليك</button>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // 6. أحداث شريط التمرير للعروض
+      document.getElementById("deal-scroll-left")?.addEventListener("click", () => {
+        dealsSlider.scrollBy({ left: -340, behavior: 'smooth' });
+      });
+      document.getElementById("deal-scroll-right")?.addEventListener("click", () => {
+        dealsSlider.scrollBy({ left: 340, behavior: 'smooth' });
+      });
+
+      // 7. زر النرد (فاجئني)
+      document.getElementById("hero-btn-dice")?.addEventListener("click", () => {
+        const rand = destinationsData[Math.floor(Math.random() * destinationsData.length)];
+        alert(`🎯 وجهتك المفاجئة اليوم هي: ${rand.title.ar}!\nجارِ نقلك لتفاصيل التجربة...`);
+        window.location.href = `attraction.html?id=${rand.id}`;
+      });
+
+      // 8. التحكم في صوت فيديو الهيرو
+      const soundBtn = document.getElementById("hero-sound-toggle");
+      const videoEl = document.getElementById("hero-video-element");
+      const soundIcon = document.getElementById("hero-sound-icon");
+      soundBtn?.addEventListener("click", () => {
+        if (videoEl) {
+          videoEl.muted = !videoEl.muted;
+          soundIcon.className = videoEl.muted ? "fa-solid fa-volume-xmark text-sm" : "fa-solid fa-volume-high text-sm";
+        }
+      });
+
+      // 9. فورم البحث في الهيرو
+      document.getElementById("hero-search-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const dest = document.getElementById("hero-dest-select").value;
+        const cat = document.getElementById("hero-category-select").value;
+        window.location.href = `explore.html?dest=${dest}&cat=${cat}`;
+      });
+
+      // 10. عداد الضيوف
+      let guests = 2;
+      const countEl = document.getElementById("hero-guests-count");
+      document.getElementById("btn-guest-plus")?.addEventListener("click", () => {
+        if (guests < 12) guests++;
+        countEl.textContent = guests;
+      });
+      document.getElementById("btn-guest-minus")?.addEventListener("click", () => {
+        if (guests > 1) guests--;
+        countEl.textContent = guests;
+      });
+    });
+  </script>
+</body>
+</html>
